@@ -1,0 +1,29 @@
+# Backend Secrets & Config
+.env
+.env.*
+*.env
+!.env.example
+
+# Local SQLite Database
+*.sqlite3
+*.sqlite3-journal
+db.sqlite3
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Django Static & Media uploads
+staticfiles/
+media/
+
+# Logs
+*.log
