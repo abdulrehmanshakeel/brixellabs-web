@@ -96,7 +96,7 @@ export const BackgroundEffects = () => {
       {/* Interactive Particle Constellation Canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-60 pointer-events-none will-change-transform" />
 
-      {/* Radial neon cyan orb top-center */}
+      {/* Radial neon cyan orb top-center (Desktop only to prevent mobile GPU overdraw) */}
       <motion.div
         animate={{
           scale: [1, 1.15, 1],
@@ -107,7 +107,7 @@ export const BackgroundEffects = () => {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute -top-36 left-1/2 -translate-x-1/2 w-[650px] h-[480px] bg-gradient-to-b from-cyan-400/25 via-teal-500/10 to-transparent blur-[120px] rounded-full will-change-transform"
+        className="hidden md:block absolute -top-36 left-1/2 -translate-x-1/2 w-[650px] h-[480px] bg-gradient-to-b from-cyan-400/25 via-teal-500/10 to-transparent blur-[120px] rounded-full will-change-transform"
       />
 
       {/* Ambient teal glow right side */}
@@ -123,7 +123,7 @@ export const BackgroundEffects = () => {
           ease: "easeInOut",
           delay: 1,
         }}
-        className="absolute top-1/3 -right-48 w-[550px] h-[550px] bg-gradient-to-l from-teal-500/20 via-cyan-600/10 to-transparent blur-[130px] rounded-full will-change-transform"
+        className="hidden md:block absolute top-1/3 -right-48 w-[550px] h-[550px] bg-gradient-to-l from-teal-500/20 via-cyan-600/10 to-transparent blur-[130px] rounded-full will-change-transform"
       />
 
       {/* Ambient cyan glow bottom left */}
@@ -139,7 +139,7 @@ export const BackgroundEffects = () => {
           ease: "easeInOut",
           delay: 2,
         }}
-        className="absolute bottom-20 -left-48 w-[550px] h-[550px] bg-gradient-to-r from-cyan-600/15 via-blue-600/10 to-transparent blur-[130px] rounded-full will-change-transform"
+        className="hidden md:block absolute bottom-20 -left-48 w-[550px] h-[550px] bg-gradient-to-r from-cyan-600/15 via-blue-600/10 to-transparent blur-[130px] rounded-full will-change-transform"
       />
 
       {/* Traveling Circuit Trace SVG */}

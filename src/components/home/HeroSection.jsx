@@ -9,14 +9,14 @@ export const HeroSection = ({ navigate, openConsultation, openShowreel }) => {
     <section className="relative pt-32 sm:pt-40 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10 min-h-[95vh] flex flex-col justify-center overflow-hidden">
       
       {/* BACKGROUND VIDEO & GRADIENT LAYER */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden flex items-center justify-center">
-        {/* Giant Pulsing Gradient Aurora Blobs */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[850px] h-[600px] bg-gradient-to-br from-cyan-500/20 via-teal-400/15 to-indigo-600/10 blur-[140px] rounded-full animate-pulse-slow"></div>
-        <div className="absolute top-1/3 -right-20 w-[600px] h-[600px] bg-gradient-to-l from-fuchsia-600/10 via-cyan-500/15 to-transparent blur-[160px] rounded-full"></div>
-        <div className="absolute -bottom-20 -left-20 w-[600px] h-[600px] bg-gradient-to-r from-blue-600/15 via-teal-500/10 to-transparent blur-[150px] rounded-full"></div>
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden flex items-center justify-center [transform:translateZ(0)]">
+        {/* Giant Pulsing Gradient Aurora Blobs (Responsive blur to avoid mobile GPU fillrate bottleneck) */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[350px] sm:w-[650px] lg:w-[850px] h-[350px] sm:h-[500px] lg:h-[600px] bg-gradient-to-br from-cyan-500/20 via-teal-400/15 to-indigo-600/10 blur-2xl sm:blur-[100px] lg:blur-[140px] rounded-full animate-pulse-slow"></div>
+        <div className="absolute top-1/3 -right-20 w-[300px] sm:w-[500px] lg:w-[600px] h-[300px] sm:h-[500px] lg:h-[600px] bg-gradient-to-l from-fuchsia-600/10 via-cyan-500/15 to-transparent blur-2xl sm:blur-[100px] lg:blur-[160px] rounded-full"></div>
+        <div className="absolute -bottom-20 -left-20 w-[300px] sm:w-[500px] lg:w-[600px] h-[300px] sm:h-[500px] lg:h-[600px] bg-gradient-to-r from-blue-600/15 via-teal-500/10 to-transparent blur-2xl sm:blur-[100px] lg:blur-[150px] rounded-full"></div>
 
-        {/* Ambient Neural Background Rings & Laser Scan */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-40">
+        {/* Ambient Neural Background Rings (Hidden on mobile to save GPU compositing passes) */}
+        <div className="absolute inset-0 hidden lg:flex items-center justify-center opacity-35 pointer-events-none">
           <div className="w-[800px] h-[800px] rounded-full border border-cyan-400/15 animate-spin" style={{ animationDuration: '40s' }} />
           <div className="w-[600px] h-[600px] rounded-full border border-dashed border-teal-300/20 animate-spin" style={{ animationDuration: '25s' }} />
         </div>

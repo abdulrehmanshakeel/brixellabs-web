@@ -139,21 +139,21 @@
   animation: shimmer 2.5s infinite;
 }
 
-/* Audio wave bar animation */
+/* Audio wave bar animation - 100% GPU Composited */
 @keyframes waveBar {
   0%, 100% {
-    height: 4px;
+    transform: scaleY(0.25);
   }
   50% {
-    height: 24px;
+    transform: scaleY(1.1);
   }
 }
 
-.animate-wave-1 { animation: waveBar 1.2s ease-in-out infinite; }
-.animate-wave-2 { animation: waveBar 0.9s ease-in-out infinite 0.15s; }
-.animate-wave-3 { animation: waveBar 1.4s ease-in-out infinite 0.3s; }
-.animate-wave-4 { animation: waveBar 1.1s ease-in-out infinite 0.45s; }
-.animate-wave-5 { animation: waveBar 0.8s ease-in-out infinite 0.2s; }
+.animate-wave-1 { animation: waveBar 1.2s ease-in-out infinite; transform-origin: bottom; will-change: transform; }
+.animate-wave-2 { animation: waveBar 0.9s ease-in-out infinite 0.15s; transform-origin: bottom; will-change: transform; }
+.animate-wave-3 { animation: waveBar 1.4s ease-in-out infinite 0.3s; transform-origin: bottom; will-change: transform; }
+.animate-wave-4 { animation: waveBar 1.1s ease-in-out infinite 0.45s; transform-origin: bottom; will-change: transform; }
+.animate-wave-5 { animation: waveBar 0.8s ease-in-out infinite 0.2s; transform-origin: bottom; will-change: transform; }
 
 /* Pulse Glow & Halo */
 @keyframes cyberGlow {
@@ -169,26 +169,49 @@
   animation: cyberGlow 3s ease-in-out infinite;
 }
 
-/* Laser Scan Sweep */
+/* Laser Scan Sweep - 100% GPU Composited translate3d */
 @keyframes laserSweep {
   0% {
-    top: -5%;
+    transform: translateY(-10%) translateZ(0);
     opacity: 0;
   }
-  20% {
-    opacity: 1;
+  15% {
+    opacity: 0.95;
   }
-  80% {
-    opacity: 1;
+  85% {
+    opacity: 0.95;
   }
   100% {
-    top: 105%;
+    transform: translateY(110%) translateZ(0);
     opacity: 0;
   }
 }
 
 .animate-laser-scan {
   animation: laserSweep 2.8s linear infinite;
+  will-change: transform, opacity;
+}
+
+/* High-Performance 60 FPS Floating Keyframe */
+@keyframes heroFloating {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0) scale(1.015);
+  }
+}
+
+.animate-hero-float {
+  animation: heroFloating 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
 }
 
 /* Card Floating Subtle Animation */
