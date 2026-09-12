@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Pause, Terminal, Cpu, Users, Activity, ShieldCheck, Maximize2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import teamBgImg from '../../assets/team_working_video_bg.jpg';
 
 export const TeamVideoShowcase = () => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -31,7 +32,7 @@ export const TeamVideoShowcase = () => {
         
         {/* The Team Working on Laptops Background Image / Video Feed */}
         <motion.img 
-          src="/assets/icons/team_working_video_bg.jpg" 
+          src={teamBgImg} 
           alt="BrixelLabs Engineering Team Working on Laptops in AI Lab"
           loading="lazy"
           decoding="async"

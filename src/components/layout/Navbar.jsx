@@ -13,6 +13,7 @@ import {
   Activity
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logoImg from '../../assets/logo.png';
 
 export const Navbar = ({ currentPath, navigate, openConsultation, openShowreel }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -65,7 +66,7 @@ export const Navbar = ({ currentPath, navigate, openConsultation, openShowreel }
               <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-md group-hover:bg-cyan-400/50 transition-all"></div>
               
               <img 
-                src="/assets/logo/logo.png" 
+                src={logoImg} 
                 alt="BrixelLabs Logo" 
                 className="w-8 h-8 object-contain relative z-10 drop-shadow-[0_0_10px_rgba(0,240,255,0.7)] group-hover:scale-110 transition-transform duration-300"
               />

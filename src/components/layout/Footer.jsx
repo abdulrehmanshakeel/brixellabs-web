@@ -15,6 +15,7 @@ import {
 
 import { motion } from 'framer-motion';
 import { apiClient } from '../../api/client';
+import logoImg from '../../assets/logo.png';
 
 export const Footer = ({ navigate }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -87,7 +88,7 @@ export const Footer = ({ navigate }) => {
                 <div className="relative w-10 h-10 flex items-center justify-center">
                   <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-md"></div>
                   <img 
-                    src="/assets/logo/logo.png" 
+                    src={logoImg} 
                     alt="BrixelLabs" 
                     className="w-9 h-9 object-contain relative z-10 drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]"
                   />

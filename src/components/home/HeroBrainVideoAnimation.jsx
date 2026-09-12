@@ -14,6 +14,7 @@ import {
   Flame
 } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import heroSectionImg from '../../assets/HeroSection.png';
 
 export const HeroBrainVideoAnimation = () => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -180,7 +181,7 @@ export const HeroBrainVideoAnimation = () => {
           >
             {/* Image with dynamic thermal/optical filters */}
             <img 
-              src="/assets/icons/HeroSection.png" 
+              src={heroSectionImg} 
               alt="BrixelLabs AI Neural Processor Architecture"
               loading="eager"
               decoding="async"
