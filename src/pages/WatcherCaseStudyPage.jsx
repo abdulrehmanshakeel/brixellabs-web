@@ -14,10 +14,12 @@ import {
   ArrowRight,
   Filter,
   Layers,
-  FileText
+  FileText,
+  Play
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { TiltCard } from '../components/common/TiltCard';
+import { VideoPlayer } from '../components/common/VideoPlayer';
 import { projectImages } from '../assets/projects';
 
 export const WatcherCaseStudyPage = ({ openConsultation }) => {
@@ -116,6 +118,34 @@ export const WatcherCaseStudyPage = ({ openConsultation }) => {
             </span>
           ))}
         </div>
+      </div>
+
+      {/* Live Video Demonstration Showcase */}
+      <div className="mb-16">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="text-2xl font-bold text-white flex items-center gap-2.5">
+              <Play className="w-5 h-5 text-emerald-400" />
+              Live Mobile Platform & ML Activity Video Demo
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+              Production screen capture of The Watcher Flutter client and LangGraph backend in action
+            </p>
+          </div>
+          <span className="text-xs font-mono text-emerald-400 bg-emerald-950/70 px-3 py-1 rounded border border-emerald-500/30">
+            FLUTTER · 60 FPS
+          </span>
+        </div>
+
+        <VideoPlayer
+          src="/assets/videos/watcher-demo.mp4"
+          poster={projectImages.watcherBrowsing}
+          title="The Watcher Mobile Client & Agent Telemetry"
+          badge="MOBILE ML"
+          autoPlay={true}
+          loop={true}
+          muted={true}
+        />
       </div>
 
       {/* Production Video Screenshots Gallery */}

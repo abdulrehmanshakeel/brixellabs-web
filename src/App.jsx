@@ -1,23 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BackgroundEffects } from './components/layout/BackgroundEffects';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { ConsultationModal } from './components/common/ConsultationModal';
 import { CyberSpotlight } from './components/common/CyberSpotlight';
 
-// Pages
-import { HomePage } from './pages/HomePage';
-import { ServicesPage } from './pages/ServicesPage';
-import { ProcessPage } from './pages/ProcessPage';
-import { OurWorkPage } from './pages/OurWorkPage';
-import { NoesisCaseStudyPage } from './pages/NoesisCaseStudyPage';
-import { WatcherCaseStudyPage } from './pages/WatcherCaseStudyPage';
-import { FrontDeskAICaseStudyPage } from './pages/FrontDeskAICaseStudyPage';
-import { ThreadEyeCaseStudyPage } from './pages/ThreadEyeCaseStudyPage';
-import { GetScryCaseStudyPage } from './pages/GetScryCaseStudyPage';
-import { AboutPage } from './pages/AboutPage';
-import { ContactPage } from './pages/ContactPage';
-import AdminPage from './pages/AdminPage';
+// Lazy-loaded route components for instant initial page loading & minimal JS payload
+const HomePage = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
+const ServicesPage = lazy(() => import('./pages/ServicesPage').then(m => ({ default: m.ServicesPage })));
+const ProcessPage = lazy(() => import('./pages/ProcessPage').then(m => ({ default: m.ProcessPage })));
+const OurWorkPage = lazy(() => import('./pages/OurWorkPage').then(m => ({ default: m.OurWorkPage })));
+const NoesisCaseStudyPage = lazy(() => import('./pages/NoesisCaseStudyPage').then(m => ({ default: m.NoesisCaseStudyPage })));
+const WatcherCaseStudyPage = lazy(() => import('./pages/WatcherCaseStudyPage').then(m => ({ default: m.WatcherCaseStudyPage })));
+const FrontDeskAICaseStudyPage = lazy(() => import('./pages/FrontDeskAICaseStudyPage').then(m => ({ default: m.FrontDeskAICaseStudyPage })));
+const ThreadEyeCaseStudyPage = lazy(() => import('./pages/ThreadEyeCaseStudyPage').then(m => ({ default: m.ThreadEyeCaseStudyPage })));
+const GetScryCaseStudyPage = lazy(() => import('./pages/GetScryCaseStudyPage').then(m => ({ default: m.GetScryCaseStudyPage })));
+const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
+
+// Futuristic Lightweight Loading Fallback
+const PageLoader = () => (
+  <div className="min-h-[65vh] flex flex-col items-center justify-center gap-4 z-20">
+    <div className="relative w-12 h-12 flex items-center justify-center">
+      <div className="absolute inset-0 rounded-full border-2 border-cyan-400/20 border-t-cyan-400 animate-spin" />
+      <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_12px_#00f0ff] animate-ping" />
+    </div>
+    <span className="font-mono text-xs text-cyan-300/80 uppercase tracking-widest animate-pulse">
+      Loading System Module...
+    </span>
+  </div>
+);
 
 export function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
@@ -39,7 +52,11 @@ export function App() {
 
   // If on Admin Portal route, render standalone Admin Command Center
   if (currentPath === '/admin') {
-    return <AdminPage />;
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <AdminPage />
+      </Suspense>
+    );
   }
 
   const renderPage = () => {
@@ -92,9 +109,11 @@ export function App() {
         openConsultation={() => setIsConsultationOpen(true)} 
       />
 
-      {/* Dynamic Page Body */}
+      {/* Dynamic Page Body with Lazy Suspense */}
       <main className="flex-grow z-10">
-        {renderPage()}
+        <Suspense fallback={<PageLoader />}>
+          {renderPage()}
+        </Suspense>
       </main>
 
       {/* Global Footer */}

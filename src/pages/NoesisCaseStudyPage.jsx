@@ -15,15 +15,17 @@ import {
   Maximize2, 
   X,
   Zap,
-  Code2
+  Code2,
+  Play
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TiltCard } from '../components/common/TiltCard';
+import { VideoPlayer } from '../components/common/VideoPlayer';
 import { projectImages } from '../assets/projects';
 import { NoesisAgentFlowchart } from '../components/case-studies/NoesisAgentFlowchart';
 
 export const NoesisCaseStudyPage = ({ openConsultation }) => {
-  const [activeTab, setActiveTab] = useState('hero'); // 'hero' | 'notes' | 'quiz' | 'result'
+  const [activeTab, setActiveTab] = useState('video'); // 'video' | 'hero' | 'notes' | 'quiz' | 'result'
   const [selectedImageModal, setSelectedImageModal] = useState(null);
 
   // 5-Step Pipeline Steps
@@ -152,6 +154,18 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
           {/* Tab Switcher */}
           <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#041624] border border-cyan-500/30 self-start md:self-auto overflow-x-auto">
             <button
+              onClick={() => setActiveTab('video')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+                activeTab === 'video'
+                  ? 'bg-gradient-to-r from-cyan-400 to-teal-300 text-[#031525] shadow-[0_0_15px_rgba(0,240,255,0.5)] font-extrabold'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Play className="w-4 h-4" />
+              <span>1. Live Video Demo</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('hero')}
               className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
                 activeTab === 'hero'
@@ -160,7 +174,7 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
               }`}
             >
               <Search className="w-4 h-4" />
-              <span>1. Adaptive Intent Prompt</span>
+              <span>2. Adaptive Intent</span>
             </button>
 
             <button
@@ -172,7 +186,7 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
               }`}
             >
               <FileText className="w-4 h-4" />
-              <span>2. Synthesized Notes</span>
+              <span>3. Synthesized Notes</span>
             </button>
 
             <button
@@ -184,7 +198,7 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
               }`}
             >
               <HelpCircle className="w-4 h-4" />
-              <span>3. Dynamic Quiz & Checker</span>
+              <span>4. Dynamic Quiz</span>
             </button>
 
             <button
@@ -196,7 +210,7 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
               }`}
             >
               <Award className="w-4 h-4" />
-              <span>4. Score & Mastery Loop</span>
+              <span>5. Mastery Loop</span>
             </button>
           </div>
         </div>
@@ -204,6 +218,41 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
         {/* Large Prominent Display Card */}
         <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-cyan-500/30 shadow-2xl overflow-hidden relative">
           
+          {/* TAB 0: VIDEO LIVE DEMO */}
+          {activeTab === 'video' && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="space-y-6"
+            >
+              <VideoPlayer
+                src="/assets/videos/noesis-demo.mp4"
+                poster={projectImages.noesisHero}
+                title="Noesis Multi-Agent Study Assistant"
+                badge="LANGGRAPH LLM"
+                autoPlay={true}
+                loop={true}
+                muted={true}
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div className="p-4 rounded-2xl bg-[#061e31] border border-cyan-500/25 space-y-1">
+                  <div className="text-xs font-mono text-cyan-300 font-bold uppercase">1. Dual-Engine Web Research</div>
+                  <p className="text-xs text-slate-300">Wikipedia and Tavily deep research routing in under 38ms.</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-[#061e31] border border-cyan-500/25 space-y-1">
+                  <div className="text-xs font-mono text-teal-300 font-bold uppercase">2. StateGraph Orchestration</div>
+                  <p className="text-xs text-slate-300">LangGraph nodes preserve memory, checkpoint state, and enable HITL review.</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-[#061e31] border border-cyan-500/25 space-y-1">
+                  <div className="text-xs font-mono text-emerald-300 font-bold uppercase">3. Groq LLaMA 3.3 70B</div>
+                  <p className="text-xs text-slate-300">Sub-second generation of calibrated MCQs and level-adapted study summaries.</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* TAB 1: ADAPTIVE INTENT PROMPT */}
           {activeTab === 'hero' && (
             <motion.div

@@ -20,14 +20,16 @@ import {
   Zap,
   Activity,
   Check,
-  UploadCloud
+  UploadCloud,
+  Play
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TiltCard } from '../components/common/TiltCard';
+import { VideoPlayer } from '../components/common/VideoPlayer';
 import { projectImages } from '../assets/projects';
 
 export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
-  const [activeTab, setActiveTab] = useState('inspection'); // 'inspection' | 'preview'
+  const [activeTab, setActiveTab] = useState('video'); // 'video' | 'inspection' | 'preview'
   const [selectedImageModal, setSelectedImageModal] = useState(null);
 
   // 5-Step Pipeline Steps
@@ -154,6 +156,18 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
           {/* Tab Switcher */}
           <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#041624] border border-cyan-500/30 self-start md:self-auto overflow-x-auto">
             <button
+              onClick={() => setActiveTab('video')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+                activeTab === 'video'
+                  ? 'bg-gradient-to-r from-cyan-400 to-teal-300 text-[#031525] shadow-[0_0_15px_rgba(0,240,255,0.5)] font-extrabold'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Play className="w-4 h-4" />
+              <span>1. Live Video Demo</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('inspection')}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
                 activeTab === 'inspection'
@@ -162,7 +176,7 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
               }`}
             >
               <Target className="w-4 h-4" />
-              <span>1. Defect Segmentation Result</span>
+              <span>2. Defect Segmentation</span>
             </button>
 
             <button
@@ -174,7 +188,7 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
               }`}
             >
               <SlidersHorizontal className="w-4 h-4" />
-              <span>2. Operator Interface & Sensitivity Controls</span>
+              <span>3. Sensitivity Controls</span>
             </button>
           </div>
         </div>
@@ -182,6 +196,41 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
         {/* Large Prominent Display Card */}
         <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-cyan-500/30 shadow-2xl overflow-hidden relative">
           
+          {/* TAB 0: VIDEO LIVE DEMO */}
+          {activeTab === 'video' && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="space-y-6"
+            >
+              <VideoPlayer
+                src="/assets/videos/threadeye-demo.mp4"
+                poster={projectImages.threadeyeInspection}
+                title="ThreadEye YOLOv8 Inference Run"
+                badge="4K · 60 FPS"
+                autoPlay={true}
+                loop={true}
+                muted={true}
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div className="p-4 rounded-2xl bg-[#061e31] border border-cyan-500/25 space-y-1">
+                  <div className="text-xs font-mono text-cyan-300 font-bold uppercase">1. Instant Segmentation</div>
+                  <p className="text-xs text-slate-300">Continuous 60 FPS real-time segmentation isolating yarn breaks under 14ms.</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-[#061e31] border border-cyan-500/25 space-y-1">
+                  <div className="text-xs font-mono text-teal-300 font-bold uppercase">2. YOLOv8n-seg Core</div>
+                  <p className="text-xs text-slate-300">Lightweight instance segmentation architecture optimized for NVIDIA Jetson.</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-[#061e31] border border-cyan-500/25 space-y-1">
+                  <div className="text-xs font-mono text-emerald-300 font-bold uppercase">3. Production Streamlit UI</div>
+                  <p className="text-xs text-slate-300">Real-time threshold tuning and live defect visualization for mill operators.</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* TAB 1: DEFECT SEGMENTATION RESULT */}
           {activeTab === 'inspection' && (
             <motion.div

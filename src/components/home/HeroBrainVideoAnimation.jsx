@@ -180,8 +180,10 @@ export const HeroBrainVideoAnimation = () => {
           >
             {/* Image with dynamic thermal/optical filters */}
             <img 
-              src="/icons/HeroSection.png" 
+              src="/assets/icons/HeroSection.png" 
               alt="BrixelLabs AI Neural Processor Architecture"
+              loading="eager"
+              decoding="async"
               className={`w-full h-auto object-contain transition-all duration-700 ${
                 hudMode === 'thermal'
                   ? 'filter hue-rotate-180 contrast-125 brightness-110 drop-shadow-[0_0_40px_rgba(245,158,11,0.7)]'

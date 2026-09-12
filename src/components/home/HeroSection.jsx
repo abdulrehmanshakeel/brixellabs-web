@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { HeroBrainVideoAnimation } from './HeroBrainVideoAnimation';
 import { AnimatedCounter } from '../common/AnimatedCounter';
 
-export const HeroSection = ({ navigate, openConsultation }) => {
+export const HeroSection = ({ navigate, openConsultation, openShowreel }) => {
   return (
     <section className="relative pt-32 sm:pt-40 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10 min-h-[95vh] flex flex-col justify-center overflow-hidden">
       
@@ -68,22 +68,34 @@ export const HeroSection = ({ navigate, openConsultation }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-wrap items-center gap-4 pt-1"
+            className="flex flex-wrap items-center gap-3 pt-1"
           >
             <button
               onClick={() => {
                 navigate('/services');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031525] font-extrabold text-sm transition-all duration-300 shadow-[0_0_30px_rgba(0,240,255,0.65)] hover:shadow-[0_0_45px_rgba(0,240,255,0.95)] hover:scale-[1.03] active:scale-95 cursor-pointer flex items-center gap-2"
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031525] font-extrabold text-sm transition-all duration-300 shadow-[0_0_30px_rgba(0,240,255,0.65)] hover:shadow-[0_0_45px_rgba(0,240,255,0.95)] hover:scale-[1.03] active:scale-95 cursor-pointer flex items-center gap-2"
             >
-              <span>View Our Services</span>
+              <span>View Services</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
+            {openShowreel && (
+              <button
+                onClick={() => openShowreel(0)}
+                className="px-5 py-3.5 rounded-xl bg-[#092a47]/90 hover:bg-[#0e3b63] text-white border border-cyan-400/50 hover:border-cyan-300 font-bold text-sm transition-all shadow-[0_0_20px_rgba(0,240,255,0.35)] cursor-pointer flex items-center gap-2 group"
+              >
+                <div className="w-5 h-5 rounded-full bg-cyan-400 text-[#031422] flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_10px_#00f0ff]">
+                  <Play className="w-2.5 h-2.5 ml-0.5" />
+                </div>
+                <span>Watch Showreel</span>
+              </button>
+            )}
+
             <button
               onClick={openConsultation}
-              className="px-6 py-3.5 rounded-xl bg-[#08233b] hover:bg-[#0c3150] text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 font-bold text-sm transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] cursor-pointer"
+              className="px-5 py-3.5 rounded-xl bg-[#051a2d]/80 hover:bg-[#092640] text-slate-300 hover:text-white border border-cyan-500/30 hover:border-cyan-400/60 font-semibold text-sm transition-all cursor-pointer"
             >
               Get Free Consultation
             </button>

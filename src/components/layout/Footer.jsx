@@ -87,7 +87,7 @@ export const Footer = ({ navigate }) => {
                 <div className="relative w-10 h-10 flex items-center justify-center">
                   <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-md"></div>
                   <img 
-                    src="/logo + Banner/logo without background.png" 
+                    src="/assets/logo/logo.png" 
                     alt="BrixelLabs" 
                     className="w-9 h-9 object-contain relative z-10 drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]"
                   />

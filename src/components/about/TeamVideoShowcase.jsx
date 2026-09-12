@@ -31,8 +31,10 @@ export const TeamVideoShowcase = () => {
         
         {/* The Team Working on Laptops Background Image / Video Feed */}
         <motion.img 
-          src="/icons/team_working_video_bg.jpg" 
+          src="/assets/icons/team_working_video_bg.jpg" 
           alt="BrixelLabs Engineering Team Working on Laptops in AI Lab"
+          loading="lazy"
+          decoding="async"
           animate={{
             scale: isPlaying ? [1, 1.03, 1] : 1,
           }}

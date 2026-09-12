@@ -30,14 +30,16 @@ import {
   Clock,
   Send,
   Radio,
-  FileCheck
+  FileCheck,
+  Play
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TiltCard } from '../components/common/TiltCard';
+import { VideoPlayer } from '../components/common/VideoPlayer';
 import { projectImages } from '../assets/projects';
 
 export const GetScryCaseStudyPage = ({ openConsultation }) => {
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' | 'sessions' | 'storefront'
+  const [activeTab, setActiveTab] = useState('video'); // 'video' | 'dashboard' | 'sessions' | 'storefront'
   const [selectedImageModal, setSelectedImageModal] = useState(null);
   const [selectedPersona, setSelectedPersona] = useState('high_buyer');
 
@@ -232,6 +234,18 @@ export const GetScryCaseStudyPage = ({ openConsultation }) => {
           {/* Tab Selection */}
           <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#041624] border border-cyan-500/30 self-start md:self-auto overflow-x-auto">
             <button
+              onClick={() => setActiveTab('video')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+                activeTab === 'video'
+                  ? 'bg-gradient-to-r from-cyan-400 to-teal-300 text-[#031525] shadow-[0_0_15px_rgba(0,240,255,0.5)] font-extrabold'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Play className="w-4 h-4" />
+              <span>1. Live Video Demo</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('dashboard')}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
                 activeTab === 'dashboard'
@@ -240,7 +254,7 @@ export const GetScryCaseStudyPage = ({ openConsultation }) => {
               }`}
             >
               <BarChart3 className="w-4 h-4" />
-              <span>1. Live Analytics Dashboard</span>
+              <span>2. Live Analytics Dashboard</span>
             </button>
 
             <button
@@ -252,7 +266,7 @@ export const GetScryCaseStudyPage = ({ openConsultation }) => {
               }`}
             >
               <Users className="w-4 h-4" />
-              <span>2. SHAP Sessions & Lead Linking</span>
+              <span>3. SHAP Sessions & Leads</span>
             </button>
 
             <button
@@ -264,7 +278,7 @@ export const GetScryCaseStudyPage = ({ openConsultation }) => {
               }`}
             >
               <ShoppingBag className="w-4 h-4" />
-              <span>3. Trailhead Demo Storefront</span>
+              <span>4. Storefront Demo</span>
             </button>
           </div>
         </div>
@@ -272,6 +286,41 @@ export const GetScryCaseStudyPage = ({ openConsultation }) => {
         {/* Large Prominent Display Card */}
         <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-cyan-500/30 shadow-2xl overflow-hidden relative">
           
+          {/* TAB 0: VIDEO LIVE DEMO */}
+          {activeTab === 'video' && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="space-y-6"
+            >
+              <VideoPlayer
+                src="/assets/videos/getscry-demo.mp4"
+                poster={projectImages.getscryDashboard}
+                title="GetScry Real-Time Shopper Inference & SHAP Analytics"
+                badge="REAL-TIME XGBOOST"
+                autoPlay={true}
+                loop={true}
+                muted={true}
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div className="p-4 rounded-2xl bg-[#061e31] border border-cyan-500/25 space-y-1">
+                  <div className="text-xs font-mono text-cyan-300 font-bold uppercase">1. Sub-35ms Scoring</div>
+                  <p className="text-xs text-slate-300">FastAPI backend computes buying probability from live clickstream events.</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-[#061e31] border border-cyan-500/25 space-y-1">
+                  <div className="text-xs font-mono text-teal-300 font-bold uppercase">2. SHAP Explainability</div>
+                  <p className="text-xs text-slate-300">Deconstructs probability score into human-readable conversion reasons.</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-[#061e31] border border-cyan-500/25 space-y-1">
+                  <div className="text-xs font-mono text-emerald-300 font-bold uppercase">3. Real-Time Intervention</div>
+                  <p className="text-xs text-slate-300">Dispatches targeted incentives or sales alerts at peak conversion moments.</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* TAB 1: DASHBOARD OVERVIEW */}
           {activeTab === 'dashboard' && (
             <motion.div
