@@ -94,16 +94,19 @@ def send_mail_universal(subject, message, recipient_list, from_email=None, html_
             print(f"[EMAIL-HTTP ERROR] Brevo Request Exception: {str(e)}")
             logger.error(f"Brevo Request Exception: {str(e)}")
 
-    # --- Option 3: Fallback to Django Standard SMTP ---
-    print(f"[EMAIL-SMTP] Attempting SMTP delivery to {recipient_list}...")
-    return send_mail(
-        subject=subject,
-        message=message,
-        from_email=sender,
-        recipient_list=recipient_list if isinstance(recipient_list, list) else [recipient_list],
-        html_message=html_message,
-        fail_silently=False
-    )
+    # --- Option 3: Fallback to Django Standard SMTP (Only if no HTTP API configured) ---
+    if not resend_key and not brevo_key:
+        print(f"[EMAIL-SMTP] Attempting SMTP delivery to {recipient_list}...")
+        return send_mail(
+            subject=subject,
+            message=message,
+            from_email=sender,
+            recipient_list=recipient_list if isinstance(recipient_list, list) else [recipient_list],
+            html_message=html_message,
+            fail_silently=False
+        )
+    return False
+
 
 
 def _send_lead_notifications_sync(inquiry):
@@ -112,6 +115,17 @@ def _send_lead_notifications_sync(inquiry):
     """
     admin_recipient = getattr(settings, 'ADMIN_NOTIFICATION_EMAIL', 'brixellabs@gmail.com')
     from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', getattr(settings, 'EMAIL_HOST_USER', 'brixellabs@gmail.com'))
+
+    # Calculate GMT+5 (Asia/Karachi) submission timestamp
+    from datetime import datetime, timezone as dt_tz, timedelta
+    pkt_tz = dt_tz(timedelta(hours=5))
+    if hasattr(inquiry, 'created_at') and inquiry.created_at:
+        dt = inquiry.created_at
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=dt_tz.utc)
+        submission_time_str = dt.astimezone(pkt_tz).strftime('%d %b %Y, %I:%M %p (GMT+5)')
+    else:
+        submission_time_str = datetime.now(pkt_tz).strftime('%d %b %Y, %I:%M %p (GMT+5)')
 
     # =========================================================================
     # 1. ADMIN NOTIFICATION EMAIL
@@ -172,7 +186,7 @@ def _send_lead_notifications_sync(inquiry):
                 </tr>
                 <tr>
                     <td class="label">Submission Date:</td>
-                    <td class="val">{inquiry.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') if hasattr(inquiry, 'created_at') and inquiry.created_at else 'Just now'}</td>
+                    <td class="val" style="color: #38bdf8; font-weight: 600;">{submission_time_str}</td>
                 </tr>
             </table>
 
@@ -198,10 +212,12 @@ Company: {inquiry.company or 'N/A'}
 Service: {inquiry.service}
 Budget: {inquiry.budget or 'Undisclosed'}
 Source: {inquiry.source}
+Date: {submission_time_str}
 
 Project Brief:
 {inquiry.project_brief or 'None provided'}
     """
+
 
     try:
         if admin_recipient:
