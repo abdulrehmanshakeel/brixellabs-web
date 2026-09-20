@@ -159,32 +159,52 @@ export const Footer = ({ navigate }) => {
             </div>
             <ul className="space-y-2 text-sm text-slate-400">
               <li>
-                <button onClick={() => handleNav('/case-studies/noesis')} className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer">
+                <button 
+                  onClick={() => handleNav('/case-studies/noesis')} 
+                  className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+                  title="Noesis — AI Study Assistant Case Study"
+                >
                   <span className="group-hover:text-cyan-300 transition-colors">Noesis — AI Study Assistant</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0 ml-1" />
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('/case-studies/the-watcher')} className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer">
+                <button 
+                  onClick={() => handleNav('/case-studies/the-watcher')} 
+                  className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+                  title="The Watcher — Child Safety AI Case Study"
+                >
                   <span className="group-hover:text-cyan-300 transition-colors">The Watcher — Child Safety AI</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0 ml-1" />
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('/case-studies/frontdesk-ai')} className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer">
-                  <span className="group-hover:text-cyan-300 transition-colors">FrontDesk AI WhatsApp Bot</span>
+                <button 
+                  onClick={() => handleNav('/case-studies/frontdesk-ai')} 
+                  className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+                  title="FrontDesk AI — WhatsApp Booking Bot Case Study"
+                >
+                  <span className="group-hover:text-cyan-300 transition-colors">FrontDesk AI — WhatsApp Bot</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0 ml-1" />
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('/case-studies/threadeye')} className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer">
-                  <span className="group-hover:text-cyan-300 transition-colors">ThreadEye — Fabric Defect AI</span>
+                <button 
+                  onClick={() => handleNav('/case-studies/threadeye')} 
+                  className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+                  title="ThreadEye — Fabric Defect Detection Case Study"
+                >
+                  <span className="group-hover:text-cyan-300 transition-colors">ThreadEye — Fabric Defect Detection</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0 ml-1" />
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNav('/case-studies/getscry')} className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer">
-                  <span className="group-hover:text-cyan-300 transition-colors">GetScry — Predictive Intent ML</span>
+                <button 
+                  onClick={() => handleNav('/case-studies/getscry')} 
+                  className="hover:text-cyan-300 transition-colors text-left flex items-center justify-between w-full group cursor-pointer"
+                  title="GetScry — Visitor Intent Intelligence Case Study"
+                >
+                  <span className="group-hover:text-cyan-300 transition-colors">GetScry — Visitor Intent Intelligence</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0 ml-1" />
                 </button>
               </li>
