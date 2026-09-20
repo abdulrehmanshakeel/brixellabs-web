@@ -1,17 +1,38 @@
 import logging
+import socket
 import threading
 from django.conf import settings
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
 
+# Ensure IPv4 resolution in background threads on Render cloud
+try:
+    _orig_getaddrinfo = socket.getaddrinfo
+    def _ipv4_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+        if family == 0 or family == getattr(socket, 'AF_INET6', 23):
+            family = socket.AF_INET
+        try:
+            return _orig_getaddrinfo(host, port, family, type, proto, flags)
+        except Exception:
+            return _orig_getaddrinfo(host, port, 0, type, proto, flags)
+    socket.getaddrinfo = _ipv4_getaddrinfo
+except Exception:
+    pass
+
 logger = logging.getLogger(__name__)
+
 
 def _send_lead_notifications_sync(inquiry):
     """
     Synchronous worker to send both Admin Notification and Client Auto-Responder.
     """
+    if not getattr(settings, 'EMAIL_HOST_USER', None) or not getattr(settings, 'EMAIL_HOST_PASSWORD', None):
+        print("[EMAIL CONFIG WARNING] EMAIL_HOST_USER or EMAIL_HOST_PASSWORD is not set in Environment Variables! Emails cannot be sent without SMTP credentials on Render.")
+        logger.warning("EMAIL_HOST_USER or EMAIL_HOST_PASSWORD is missing in Django settings.")
+
     admin_recipient = getattr(settings, 'ADMIN_NOTIFICATION_EMAIL', 'brixellabs@gmail.com')
-    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'brixellabs@gmail.com')
+    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', getattr(settings, 'EMAIL_HOST_USER', 'brixellabs@gmail.com'))
+
 
     # =========================================================================
     # 1. ADMIN NOTIFICATION EMAIL
@@ -203,7 +224,8 @@ def send_inquiry_emails_async(inquiry):
 
 def _send_newsletter_emails_sync(subscriber):
     admin_recipient = getattr(settings, 'ADMIN_NOTIFICATION_EMAIL', 'brixellabs@gmail.com')
-    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'brixellabs@gmail.com')
+    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', getattr(settings, 'EMAIL_HOST_USER', 'brixellabs@gmail.com'))
+
 
     # 1. Notify Admin
     admin_subject = f"📬 [New Newsletter Subscriber] {subscriber.email}"

@@ -198,10 +198,30 @@ SIMPLE_JWT = {
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER', 'brixellabs@gmail.com')
-ADMIN_NOTIFICATION_EMAIL = os.environ.get('ADMIN_NOTIFICATION_EMAIL', EMAIL_HOST_USER or 'brixellabs@gmail.com')
-EMAIL_TIMEOUT = 10
+
+# Auto-detect TLS vs SSL based on port if not explicitly set
+_use_tls_env = os.environ.get('EMAIL_USE_TLS')
+_use_ssl_env = os.environ.get('EMAIL_USE_SSL')
+
+if _use_ssl_env is not None:
+    EMAIL_USE_SSL = _use_ssl_env.lower() in ('true', '1', 'yes')
+    EMAIL_USE_TLS = False if EMAIL_USE_SSL else (_use_tls_env.lower() in ('true', '1', 'yes') if _use_tls_env else False)
+elif _use_tls_env is not None:
+    EMAIL_USE_TLS = _use_tls_env.lower() in ('true', '1', 'yes')
+    EMAIL_USE_SSL = False
+else:
+    # Defaults: Port 465 uses SSL, Port 587 uses TLS
+    if EMAIL_PORT == 465:
+        EMAIL_USE_SSL = True
+        EMAIL_USE_TLS = False
+    else:
+        EMAIL_USE_TLS = True
+        EMAIL_USE_SSL = False
+
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '').strip()
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '').strip()
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'brixellabs@gmail.com').strip()
+ADMIN_NOTIFICATION_EMAIL = os.environ.get('ADMIN_NOTIFICATION_EMAIL', EMAIL_HOST_USER or 'brixellabs@gmail.com').strip()
+EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT', 15))
+
 
