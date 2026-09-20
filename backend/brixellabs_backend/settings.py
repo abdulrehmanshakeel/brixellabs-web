@@ -224,4 +224,9 @@ DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'br
 ADMIN_NOTIFICATION_EMAIL = os.environ.get('ADMIN_NOTIFICATION_EMAIL', EMAIL_HOST_USER or 'brixellabs@gmail.com').strip()
 EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT', 15))
 
+# HTTP-based Email APIs (Bypasses Render Free Tier SMTP port blocks completely)
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '').strip()
+BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '').strip()
+
+
 

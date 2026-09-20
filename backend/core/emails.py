@@ -1,6 +1,9 @@
+import json
 import logging
 import socket
 import threading
+import urllib.request
+import urllib.error
 from django.conf import settings
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
@@ -22,17 +25,93 @@ except Exception:
 logger = logging.getLogger(__name__)
 
 
+def send_mail_universal(subject, message, recipient_list, from_email=None, html_message=None):
+    """
+    Universal email dispatcher:
+    1. If RESEND_API_KEY is configured, sends via Resend REST HTTPS API (Port 443 - 100% bypasses Render Free Tier SMTP block).
+    2. If BREVO_API_KEY is configured, sends via Brevo REST HTTPS API (Port 443).
+    3. Otherwise falls back to Django standard SMTP send_mail.
+    """
+    resend_key = getattr(settings, 'RESEND_API_KEY', '') or ''
+    brevo_key = getattr(settings, 'BREVO_API_KEY', '') or ''
+    default_from = getattr(settings, 'DEFAULT_FROM_EMAIL', 'brixellabs@gmail.com')
+    sender = from_email or default_from
+
+    # --- Option 1: Resend HTTPS API (Recommended on Cloud) ---
+    if resend_key:
+        try:
+            print(f"[EMAIL-HTTP] Sending via Resend API to {recipient_list}...")
+            url = "https://api.resend.com/emails"
+            # In free testing without custom domain, Resend requires onboarding@resend.dev as sender
+            resend_sender = "BrixelLabs <onboarding@resend.dev>" if "@gmail.com" in sender.lower() else sender
+            headers = {
+                "Authorization": f"Bearer {resend_key.strip()}",
+                "Content-Type": "application/json",
+                "User-Agent": "BrixelLabs-Platform/1.0"
+            }
+            payload = {
+                "from": resend_sender,
+                "to": recipient_list if isinstance(recipient_list, list) else [recipient_list],
+                "subject": subject,
+                "html": html_message or f"<pre>{message}</pre>",
+                "text": message
+            }
+            req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=12) as response:
+                result = json.loads(response.read().decode('utf-8'))
+                print(f"[EMAIL-HTTP SUCCESS] Resend delivered email ID: {result.get('id')}")
+                return True
+        except urllib.error.HTTPError as he:
+            err_body = he.read().decode('utf-8')
+            print(f"[EMAIL-HTTP ERROR] Resend API Error {he.code}: {err_body}")
+            logger.error(f"Resend API Error: {err_body}")
+        except Exception as e:
+            print(f"[EMAIL-HTTP ERROR] Resend Request Exception: {str(e)}")
+            logger.error(f"Resend Request Exception: {str(e)}")
+
+    # --- Option 2: Brevo HTTPS API ---
+    if brevo_key:
+        try:
+            print(f"[EMAIL-HTTP] Sending via Brevo API to {recipient_list}...")
+            url = "https://api.brevo.com/v3/smtp/email"
+            headers = {
+                "api-key": brevo_key.strip(),
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+            payload = {
+                "sender": {"name": "BrixelLabs AI", "email": default_from},
+                "to": [{"email": r} for r in (recipient_list if isinstance(recipient_list, list) else [recipient_list])],
+                "subject": subject,
+                "htmlContent": html_message or f"<pre>{message}</pre>",
+                "textContent": message
+            }
+            req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=12) as response:
+                print(f"[EMAIL-HTTP SUCCESS] Brevo delivered email successfully.")
+                return True
+        except Exception as e:
+            print(f"[EMAIL-HTTP ERROR] Brevo Request Exception: {str(e)}")
+            logger.error(f"Brevo Request Exception: {str(e)}")
+
+    # --- Option 3: Fallback to Django Standard SMTP ---
+    print(f"[EMAIL-SMTP] Attempting SMTP delivery to {recipient_list}...")
+    return send_mail(
+        subject=subject,
+        message=message,
+        from_email=sender,
+        recipient_list=recipient_list if isinstance(recipient_list, list) else [recipient_list],
+        html_message=html_message,
+        fail_silently=False
+    )
+
+
 def _send_lead_notifications_sync(inquiry):
     """
     Synchronous worker to send both Admin Notification and Client Auto-Responder.
     """
-    if not getattr(settings, 'EMAIL_HOST_USER', None) or not getattr(settings, 'EMAIL_HOST_PASSWORD', None):
-        print("[EMAIL CONFIG WARNING] EMAIL_HOST_USER or EMAIL_HOST_PASSWORD is not set in Environment Variables! Emails cannot be sent without SMTP credentials on Render.")
-        logger.warning("EMAIL_HOST_USER or EMAIL_HOST_PASSWORD is missing in Django settings.")
-
     admin_recipient = getattr(settings, 'ADMIN_NOTIFICATION_EMAIL', 'brixellabs@gmail.com')
     from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', getattr(settings, 'EMAIL_HOST_USER', 'brixellabs@gmail.com'))
-
 
     # =========================================================================
     # 1. ADMIN NOTIFICATION EMAIL
@@ -127,13 +206,12 @@ Project Brief:
     try:
         if admin_recipient:
             print(f"[EMAIL] Dispatching Lead Notification for inquiry #{inquiry.id} to Admin: {admin_recipient}...")
-            send_mail(
+            send_mail_universal(
                 subject=admin_subject,
                 message=admin_plain_message,
                 from_email=from_email,
                 recipient_list=[admin_recipient],
-                html_message=admin_html_message,
-                fail_silently=False
+                html_message=admin_html_message
             )
             print(f"[EMAIL SUCCESS] Admin notification delivered to {admin_recipient}")
             logger.info(f"Successfully sent admin notification email for inquiry #{inquiry.id}")
@@ -198,13 +276,12 @@ https://brixellabs.com
         """
         try:
             print(f"[EMAIL] Dispatching Auto-Reply to client: {inquiry.email}...")
-            send_mail(
+            send_mail_universal(
                 subject=client_subject,
                 message=client_plain,
                 from_email=from_email,
                 recipient_list=[inquiry.email],
-                html_message=client_html_message,
-                fail_silently=False
+                html_message=client_html_message
             )
             print(f"[EMAIL SUCCESS] Client auto-confirmation sent to {inquiry.email}")
             logger.info(f"Successfully sent confirmation email to client {inquiry.email}")
@@ -226,18 +303,16 @@ def _send_newsletter_emails_sync(subscriber):
     admin_recipient = getattr(settings, 'ADMIN_NOTIFICATION_EMAIL', 'brixellabs@gmail.com')
     from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', getattr(settings, 'EMAIL_HOST_USER', 'brixellabs@gmail.com'))
 
-
     # 1. Notify Admin
     admin_subject = f"📬 [New Newsletter Subscriber] {subscriber.email}"
     admin_msg = f"New subscriber joined the BrixelLabs newsletter list:\nEmail: {subscriber.email}\nSource: {subscriber.source}"
     try:
         if admin_recipient:
-            send_mail(
+            send_mail_universal(
                 subject=admin_subject,
                 message=admin_msg,
                 from_email=from_email,
-                recipient_list=[admin_recipient],
-                fail_silently=True
+                recipient_list=[admin_recipient]
             )
             print(f"[EMAIL] Newsletter notification sent to Admin for {subscriber.email}")
     except Exception as e:
@@ -277,13 +352,12 @@ def _send_newsletter_emails_sync(subscriber):
         """
         sub_plain = "Welcome to BrixelLabs Engineering Insights!\nThank you for subscribing to our updates on AI, Machine Learning, and Full-Stack Engineering."
         try:
-            send_mail(
+            send_mail_universal(
                 subject=sub_subject,
                 message=sub_plain,
                 from_email=from_email,
                 recipient_list=[subscriber.email],
-                html_message=sub_html,
-                fail_silently=True
+                html_message=sub_html
             )
             print(f"[EMAIL] Welcome newsletter email sent to subscriber: {subscriber.email}")
         except Exception as e:
