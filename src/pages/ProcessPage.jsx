@@ -107,6 +107,7 @@ export const ProcessPage = ({ openConsultation }) => {
 
       {/* 4 Process Cards Stack: All Cards Slide In and Stay Visible Together on Screen */}
       <div className="relative space-y-8">
+        <h2 className="sr-only">4-Stage Iterative Delivery Methodology</h2>
         
         {/* Vertical glowing connector line */}
         <div className="hidden md:block absolute left-12 top-10 bottom-10 w-[2px] bg-gradient-to-b from-cyan-400 via-teal-400 to-indigo-500 opacity-40 z-0"></div>

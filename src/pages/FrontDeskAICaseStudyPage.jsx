@@ -1,92 +1,69 @@
 import React, { useState } from 'react';
 import { 
+  Bot, 
   MessageSquare, 
-  Brain, 
-  CalendarCheck, 
-  CheckCircle2, 
-  Bell, 
+  Clock, 
   Send, 
-  Smartphone, 
-  User, 
-  Bot,
+  Calendar, 
+  ShieldCheck, 
+  Sparkles, 
+  ArrowRight,
   RefreshCw,
-  Phone,
-  Mic,
-  Volume2,
   GitBranch,
   Layers,
-  ShieldCheck,
   Zap,
-  Clock,
-  ArrowRight
+  PhoneCall,
+  Activity,
+  Brain
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { TiltCard } from '../components/common/TiltCard';
+import { motion } from 'framer-motion';
 
 export const FrontDeskAICaseStudyPage = ({ openConsultation }) => {
   const [messages, setMessages] = useState([
     { sender: 'bot', text: 'Assalam-o-Alaikum! Welcome to Luxe Medical & Aesthetics 🌿 How can I assist you with your booking today?', time: '10:02 AM' },
-    { sender: 'user', text: 'Hi! Mujhe doctor consultation book krni hai Friday ko sham 4 baje.', time: '10:02 AM' },
-    { sender: 'bot', text: 'Zaroor! Friday 4:00 PM par Dr. Sarah kay pass slot available hai. Kya main ye slot confirm kar doon?', time: '10:03 AM' },
+    { sender: 'user', text: 'Hi, I need an appointment for HydraFacial this Friday afternoon with Dr. Sarah.', time: '10:03 AM' },
+    { sender: 'bot', text: 'Dr. Sarah has two openings this Friday (Oct 10):\n• 2:30 PM\n• 4:00 PM\n\nWhich time suits you best?', time: '10:03 AM' }
   ]);
   const [inputVal, setInputVal] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
   const quickReplies = [
-    "Haan, please Friday 4 PM confirm kar dein!",
-    "Can you check Saturday morning instead?",
-    "Consultation fee aur procedures ki price kya hai?",
-    "Mujhe clinic manager se baat krni hai."
+    'Friday 4:00 PM please',
+    'What is the pricing for HydraFacial?',
+    'Doctor consultation reschedule krni hai',
+    'Where is your clinic located?'
   ];
 
-  const handleSendMessage = (textToSend) => {
+  const handleSendMessage = (textToSend = null) => {
     const text = textToSend || inputVal;
     if (!text.trim()) return;
 
-    const userMsg = {
-      sender: 'user',
-      text: text,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
+    const newMsg = { sender: 'user', text, time: 'Just now' };
+    setMessages(prev => [...prev, newMsg]);
     setInputVal('');
     setIsTyping(true);
 
+    // Dynamic AI Response Simulation
     setTimeout(() => {
-      let botResponse = "✓ Confirmed! Friday at 4:00 PM slot locked in calendar for Dr. Sarah. SMS & WhatsApp reminder will be sent 2 hours prior.";
-      const t = text.toLowerCase();
-      if (t.includes('saturday') || t.includes('hafta')) {
-        botResponse = "Saturday ko hamare pass 10:30 AM aur 11:45 AM kay slots available hain. Konsa time aapke liye behtar rahay ga?";
-      } else if (t.includes('price') || t.includes('fee') || t.includes('charges')) {
-        botResponse = "Initial Specialist Consultation fee Rs. 2,500 hai. Diagnostic & aesthetic treatments will be customized as per assessment.";
-      } else if (t.includes('manager') || t.includes('staff') || t.includes('human') || t.includes('baat')) {
-        botResponse = "⚠️ [Human-in-the-Loop Escalation]: Main ne clinic front-desk supervisor ko alert kar diya hai. Senior staff member 3 minutes mein aap se rabta karega.";
+      setIsTyping(false);
+      let replyText = '✓ Got it! Your booking request has been processed. Dr. Sarah is reserved.';
+      if (text.toLowerCase().includes('4:00') || text.toLowerCase().includes('friday')) {
+        replyText = '🎉 Perfect! Reserved HydraFacial with Dr. Sarah for Friday at 4:00 PM.\n\nPlease reply with your Full Name & Phone Number to finalize your confirmation SMS.';
+      } else if (text.toLowerCase().includes('pricing') || text.toLowerCase().includes('price')) {
+        replyText = '🌿 Our Signature Medical HydraFacial is $120 (includes deep ultrasonic cleanse, active serum infusion, and LED phototherapy).';
+      } else if (text.toLowerCase().includes('reschedule')) {
+        replyText = 'Bilkul! Please provide your booking ID or registered phone number so I can pull up your existing calendar reservation.';
+      } else if (text.toLowerCase().includes('located') || text.toLowerCase().includes('location')) {
+        replyText = '📍 Luxe Clinic is located at Suite 402, Beverly Medical Towers. Complimentary valet parking is available for all confirmed appointments.';
       }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: 'bot',
-          text: botResponse,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]);
-      setIsTyping(false);
-    }, 850);
+      setMessages(prev => [...prev, { sender: 'bot', text: replyText, time: 'Just now' }]);
+    }, 900);
   };
 
-  const workflowSteps = [
-    { num: '01', title: 'Customer WhatsApp Message', desc: 'Customer reaches out via official WhatsApp Business account', icon: MessageSquare, grad: 'from-teal-300 to-cyan-400' },
-    { num: '02', title: 'Twilio Webhook -> Django', desc: 'Twilio forwards payload to Django server which boots LangGraph state', icon: Zap, grad: 'from-cyan-400 to-teal-300' },
-    { num: '03', title: 'Intent Classifier Node', desc: 'Routes conversation to Booking, Reschedule, FAQ, or Escalation sub-agent', icon: Brain, grad: 'from-teal-300 to-indigo-400' },
-    { num: '04', title: 'Tool Calling Reasoning Loop', desc: 'Agent chains calendar queries, checks conflict, and confirms without human delay', icon: CalendarCheck, grad: 'from-indigo-400 to-teal-300' },
-    { num: '05', title: 'HITL Escalation & Safe Fallback', desc: 'Instantly alerts staff on complex queries while keeping 24/7 SLA uptime', icon: ShieldCheck, grad: 'from-cyan-400 to-emerald-400' },
-  ];
-
   const subAgents = [
-    { name: 'Booking Sub-Agent', desc: 'Queries real-time calendar availability, locks slots, handles client intake details, and dispatches confirmation receipts.' },
-    { name: 'Reschedule Sub-Agent', desc: 'Searches existing client booking ID, identifies schedule conflicts, and negotiates alternative appointment windows.' },
+    { name: 'Intent Classifier Sub-Agent', desc: 'Identifies user goal in <200ms — Booking, Rescheduling, Cancellation, Pricing, or Medical Inquiry in Roman Urdu or English.' },
+    { name: 'Availability & Calendar Engine', desc: 'Syncs in real-time with Google Calendar / clinic DB to prevent double bookings and suggest adjacent alternative slots.' },
     { name: 'FAQ & Pricing Sub-Agent', desc: 'Instantly answers service details, pricing tiers, doctor credentials, and clinic policy in natural Roman Urdu & English.' },
     { name: 'Escalation Sub-Agent', desc: 'Detects ambiguous queries, grievances, or custom requests and immediately triggers real-time alerts to human front-desk staff.' }
   ];
@@ -97,6 +74,12 @@ export const FrontDeskAICaseStudyPage = ({ openConsultation }) => {
     { layer: 'Backend Architecture', tech: 'Django REST Webhooks & Business Logic' },
     { layer: 'Messaging Channel', tech: 'Twilio WhatsApp Business API' },
     { layer: 'Persistence Layer', tech: 'PostgreSQL DB & Redis Conversation Memory' }
+  ];
+
+  const relatedCaseStudies = [
+    { title: 'Noesis — AI Study Assistant', path: '/case-studies/noesis', tag: 'Agentic AI / LangGraph' },
+    { title: 'The Watcher — Child Safety AI', path: '/case-studies/the-watcher', tag: 'Mobile ML / Parental AI' },
+    { title: 'GetScry — Intent Intelligence', path: '/case-studies/getscry', tag: 'Predictive E-Commerce ML' }
   ];
 
   return (
@@ -146,114 +129,118 @@ export const FrontDeskAICaseStudyPage = ({ openConsultation }) => {
       </div>
 
       {/* Interactive WhatsApp Booking Simulator */}
-      <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-teal-500/30 shadow-2xl mb-16 relative overflow-hidden">
-        <div className="max-w-xl mx-auto rounded-3xl overflow-hidden border border-teal-500/40 shadow-2xl bg-[#031520] relative">
-          
-          {/* WhatsApp Header with Gradient */}
-          <div className="bg-gradient-to-r from-[#073634] to-[#042826] p-4 flex items-center justify-between border-b border-teal-500/30 text-white">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow">
-                  <Bot className="w-6 h-6 text-teal-100" />
-                </div>
-                <div className="w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#073634] absolute bottom-0 right-0 animate-pulse"></div>
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-white">FrontDesk AI Assistant</h4>
-                <p className="text-[11px] text-teal-200">Online · LangGraph Agent Active</p>
-              </div>
-            </div>
+      <div className="mb-16">
+        <h2 className="text-2xl font-bold text-white mb-6 text-center">Interactive WhatsApp Booking Simulator</h2>
+        
+        <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-teal-500/30 shadow-2xl relative overflow-hidden">
+          <div className="max-w-xl mx-auto rounded-3xl overflow-hidden border border-teal-500/40 shadow-2xl bg-[#031520] relative">
             
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => {
-                  setMessages([
-                    { sender: 'bot', text: 'Assalam-o-Alaikum! Welcome to Luxe Medical & Aesthetics 🌿 How can I assist you with your booking today?', time: '10:02 AM' },
-                  ]);
-                }}
-                className="p-2 rounded-lg bg-teal-950/60 hover:bg-teal-900/80 text-teal-300 transition-colors text-xs flex items-center gap-1 border border-teal-500/30"
-                title="Reset Chat"
+            {/* WhatsApp Header with Gradient */}
+            <div className="bg-gradient-to-r from-[#073634] to-[#042826] p-4 flex items-center justify-between border-b border-teal-500/30 text-white">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow">
+                    <Bot className="w-6 h-6 text-teal-100" />
+                  </div>
+                  <div className="w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#073634] absolute bottom-0 right-0 animate-pulse"></div>
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">FrontDesk AI Assistant</h3>
+                  <p className="text-[11px] text-teal-200">Online · LangGraph Agent Active</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => {
+                    setMessages([
+                      { sender: 'bot', text: 'Assalam-o-Alaikum! Welcome to Luxe Medical & Aesthetics 🌿 How can I assist you with your booking today?', time: '10:02 AM' },
+                    ]);
+                  }}
+                  className="p-2 rounded-lg bg-teal-950/60 hover:bg-teal-900/80 text-teal-300 transition-colors text-xs flex items-center gap-1 border border-teal-500/30 cursor-pointer"
+                  title="Reset Chat"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Reset</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Chat Messages Feed */}
+            <div className="p-4 sm:p-6 space-y-4 min-h-[340px] max-h-[420px] overflow-y-auto bg-[radial-gradient(#052528_1px,transparent_1px)] [background-size:12px_12px]">
+              {messages.map((msg, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+                >
+                  <div
+                    className={`max-w-[85%] p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-md ${
+                      msg.sender === 'user'
+                        ? 'bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-tr-none border border-teal-400/40'
+                        : 'bg-[#092b30] text-slate-100 rounded-tl-none border border-teal-500/30'
+                    }`}
+                  >
+                    <p className="whitespace-pre-line">{msg.text}</p>
+                    <span className={`text-[10px] block mt-1 text-right ${msg.sender === 'user' ? 'text-teal-200' : 'text-slate-400'}`}>
+                      {msg.time}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+
+              {isTyping && (
+                <div className="flex items-center gap-1.5 p-3 rounded-2xl bg-[#092b30] border border-teal-500/30 w-16 text-teal-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-bounce"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-bounce [animation-delay:0.2s]"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-bounce [animation-delay:0.4s]"></span>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Reply Suggestions */}
+            <div className="p-3 bg-[#02181d] border-t border-teal-500/20 flex flex-wrap gap-2">
+              <span className="text-[10px] font-mono text-teal-300 w-full mb-1">Quick Prompts (English / Roman Urdu):</span>
+              {quickReplies.map((reply, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleSendMessage(reply)}
+                  className="text-[11px] px-3 py-1.5 rounded-lg bg-teal-950/80 hover:bg-teal-900 border border-teal-500/30 text-teal-200 transition-colors text-left cursor-pointer"
+                >
+                  {reply}
+                </button>
+              ))}
+            </div>
+
+            {/* Message Input Box */}
+            <div className="p-3 bg-[#031b22] border-t border-teal-500/30 flex items-center gap-2">
+              <input
+                type="text"
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Type in English or Roman Urdu..."
+                className="flex-1 bg-[#05282d] border border-teal-500/40 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-teal-300 placeholder:text-slate-500"
+              />
+              <button
+                onClick={() => handleSendMessage()}
+                className="p-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-emerald-400 text-black font-bold hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,229,208,0.4)] cursor-pointer"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Reset</span>
+                <Send className="w-4 h-4" />
               </button>
             </div>
+
           </div>
-
-          {/* Chat Messages Feed */}
-          <div className="p-4 sm:p-6 space-y-4 min-h-[340px] max-h-[420px] overflow-y-auto bg-[radial-gradient(#052528_1px,transparent_1px)] [background-size:12px_12px]">
-            {messages.map((msg, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
-              >
-                <div
-                  className={`max-w-[85%] p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-md ${
-                    msg.sender === 'user'
-                      ? 'bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-tr-none border border-teal-400/40'
-                      : 'bg-[#092b30] text-slate-100 rounded-tl-none border border-teal-500/30'
-                  }`}
-                >
-                  <p>{msg.text}</p>
-                  <span className={`text-[10px] block mt-1 text-right ${msg.sender === 'user' ? 'text-teal-200' : 'text-slate-400'}`}>
-                    {msg.time}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-
-            {isTyping && (
-              <div className="flex items-center gap-1.5 p-3 rounded-2xl bg-[#092b30] border border-teal-500/30 w-16 text-teal-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-bounce"></span>
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-bounce [animation-delay:0.2s]"></span>
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-bounce [animation-delay:0.4s]"></span>
-              </div>
-            )}
-          </div>
-
-          {/* Quick Reply Suggestions */}
-          <div className="p-3 bg-[#02181d] border-t border-teal-500/20 flex flex-wrap gap-2">
-            <span className="text-[10px] font-mono text-teal-300 w-full mb-1">Quick Prompts (English / Roman Urdu):</span>
-            {quickReplies.map((reply, i) => (
-              <button
-                key={i}
-                onClick={() => handleSendMessage(reply)}
-                className="text-[11px] px-3 py-1.5 rounded-lg bg-teal-950/80 hover:bg-teal-900 border border-teal-500/30 text-teal-200 transition-colors text-left"
-              >
-                {reply}
-              </button>
-            ))}
-          </div>
-
-          {/* Message Input Box */}
-          <div className="p-3 bg-[#031b22] border-t border-teal-500/30 flex items-center gap-2">
-            <input
-              type="text"
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Type in English or Roman Urdu..."
-              className="flex-1 bg-[#05282d] border border-teal-500/40 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-teal-300 placeholder:text-slate-500"
-            />
-            <button
-              onClick={() => handleSendMessage()}
-              className="p-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-emerald-400 text-black font-bold hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,229,208,0.4)]"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </div>
-
         </div>
       </div>
 
       {/* 4 Specialized Sub-Agents */}
       <div className="mb-16">
         <div className="text-center mb-10">
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
             Specialized Multi-Agent Routing Engine
-          </h3>
+          </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
             Instead of a single brittle prompt, conversations route dynamically to domain-specific agent graphs
           </p>
@@ -266,7 +253,7 @@ export const FrontDeskAICaseStudyPage = ({ openConsultation }) => {
                 <div className="w-10 h-10 rounded-xl bg-teal-950 border border-teal-500/40 flex items-center justify-center text-teal-300 font-bold mb-4 font-mono text-sm">
                   0{i + 1}
                 </div>
-                <h4 className="text-base font-bold text-white mb-2">{agent.name}</h4>
+                <h3 className="text-base font-bold text-white mb-2">{agent.name}</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">{agent.desc}</p>
               </div>
               <div className="mt-4 pt-3 border-t border-teal-500/15 flex items-center justify-between text-[11px] font-mono text-teal-300">
@@ -279,44 +266,47 @@ export const FrontDeskAICaseStudyPage = ({ openConsultation }) => {
       </div>
 
       {/* Key Engineering Highlights Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-        <div className="gradient-card rounded-3xl p-6 border border-teal-500/25 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-teal-950 border border-teal-500/30 flex items-center justify-center text-teal-300">
-            <GitBranch className="w-5 h-5" />
+      <div className="mb-16">
+        <h2 className="text-2xl font-bold text-white mb-6">Key Engineering Highlights</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="gradient-card rounded-3xl p-6 border border-teal-500/25 space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-teal-950 border border-teal-500/30 flex items-center justify-center text-teal-300">
+              <GitBranch className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-white">Tool-Calling Reasoning Loop</h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Agents chain multiple actions autonomously in a single customer turn (e.g. check availability, discover conflict, suggest alternatives, confirm) without repeated prompting.
+            </p>
           </div>
-          <h4 className="text-base font-bold text-white">Tool-Calling Reasoning Loop</h4>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            Agents chain multiple actions autonomously in a single customer turn (e.g. check availability, discover conflict, suggest alternatives, confirm) without repeated prompting.
-          </p>
-        </div>
 
-        <div className="gradient-card rounded-3xl p-6 border border-teal-500/25 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-teal-950 border border-teal-500/30 flex items-center justify-center text-teal-300">
-            <ShieldCheck className="w-5 h-5" />
+          <div className="gradient-card rounded-3xl p-6 border border-teal-500/25 space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-teal-950 border border-teal-500/30 flex items-center justify-center text-teal-300">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-white">Graceful Degradation</h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              A global safety wrapper ensures that if any sub-node or network call fails, the customer still receives a polite coherent response and staff are alerted instantly.
+            </p>
           </div>
-          <h4 className="text-base font-bold text-white">Graceful Degradation</h4>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            A global safety wrapper ensures that if any sub-node or network call fails, the customer still receives a polite coherent response and staff are alerted instantly.
-          </p>
-        </div>
 
-        <div className="gradient-card rounded-3xl p-6 border border-teal-500/25 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-teal-950 border border-teal-500/30 flex items-center justify-center text-teal-300">
-            <Brain className="w-5 h-5" />
+          <div className="gradient-card rounded-3xl p-6 border border-teal-500/25 space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-teal-950 border border-teal-500/30 flex items-center justify-center text-teal-300">
+              <Brain className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-white">Human-in-the-Loop Escalation</h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              The agent recognizes the boundaries of its competence, escalating complex inquiries, grievances, and custom edge-cases to human staff with full conversation summaries.
+            </p>
           </div>
-          <h4 className="text-base font-bold text-white">Human-in-the-Loop Escalation</h4>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            The agent recognizes the boundaries of its competence, escalating complex inquiries, grievances, and custom edge-cases to human staff with full conversation summaries.
-          </p>
         </div>
       </div>
 
       {/* Tech Stack Layer Table */}
       <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-teal-500/30 mb-16 overflow-hidden">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
           <Zap className="w-5 h-5 text-teal-400" />
           Production Technology Stack
-        </h3>
+        </h2>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm text-slate-300">
@@ -338,13 +328,33 @@ export const FrontDeskAICaseStudyPage = ({ openConsultation }) => {
         </div>
       </div>
 
+      {/* Related Case Studies Internal Cross-Links */}
+      <div className="mb-16">
+        <h2 className="text-xl font-bold text-white mb-4">Explore Related AI Deployments</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {relatedCaseStudies.map((rc, idx) => (
+            <a
+              key={idx}
+              href={rc.path}
+              className="p-4 rounded-2xl gradient-card border border-teal-500/20 hover:border-teal-400/60 transition-all flex items-center justify-between group"
+            >
+              <div>
+                <div className="text-xs font-mono text-teal-400">{rc.tag}</div>
+                <div className="text-sm font-bold text-white group-hover:text-teal-300 transition-colors mt-0.5">{rc.title}</div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-teal-400 group-hover:translate-x-1 transition-all" />
+            </a>
+          ))}
+        </div>
+      </div>
+
       {/* CTA Footer */}
       <div className="gradient-card rounded-3xl p-8 sm:p-12 border border-teal-500/40 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-teal-500/10 via-cyan-500/10 to-emerald-500/10"></div>
         <div className="relative z-10 space-y-4 max-w-2xl mx-auto">
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
             Automate Your Inbound WhatsApp Bookings & Patient Flow
-          </h3>
+          </h2>
           <p className="text-slate-300 text-sm sm:text-base">
             Eliminate missed bookings, reduce front-desk overhead, and operate 24/7 with zero added headcount.
           </p>

@@ -144,10 +144,10 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
         {/* Showcase Header & Tab Switcher */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h3 className="text-2xl font-bold text-white flex items-center gap-2.5">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-2.5">
               <Eye className="w-5 h-5 text-cyan-400" />
               Live Streamlit Web Inspection UI & Defect Segmentation Showcase
-            </h3>
+            </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
               High-resolution captures from the working ThreadEye defect detection platform
             </p>
@@ -244,6 +244,8 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
                 <img 
                   src={projectImages.threadeyeInspection} 
                   alt="ThreadEye YOLOv8 Defect Detection & Segmentation Result" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-auto object-contain max-h-[560px] mx-auto transition-transform duration-700 group-hover:scale-[1.01]"
                 />
                 
@@ -332,6 +334,8 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
                 <img 
                   src={projectImages.threadeyeMainPreview} 
                   alt="ThreadEye Streamlit Initial State & Sensitivity Threshold Controls" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-auto object-contain max-h-[560px] mx-auto transition-transform duration-700 group-hover:scale-[1.01]"
                 />
                 
@@ -400,20 +404,20 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
       {/* THE CHALLENGE VS OUR ENGINEERING APPROACH */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
         <div className="gradient-card rounded-3xl p-8 border border-cyan-500/30">
-          <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2.5">
+          <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-400 shadow-[0_0_10px_#f87171]"></span>
             The Challenge: Manual Inspection Fatigue
-          </h3>
+          </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
             Textile mills, especially small and medium enterprises, rely on manual visual inspection for fabric quality control — a process where human inspectors suffer from visual fatigue within 20 minutes, leading to missed yarn breaks, inconsistent grading, expensive customer chargebacks, and discarded rolls.
           </p>
         </div>
 
         <div className="gradient-card rounded-3xl p-8 border border-teal-500/30">
-          <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2.5">
+          <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#00f0ff]"></span>
             Our Engineering Solution: YOLOv8 Segmentation
-          </h3>
+          </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
             We engineered an accessible, end-to-end computer vision pipeline combining custom tile preprocessing, a trained YOLOv8 instance segmentation network, sub-18ms GPU inference, and an intuitive Streamlit interface that delivers enterprise-grade defect isolation without proprietary vendor lock-in.
           </p>
@@ -469,10 +473,10 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
 
       {/* TECH STACK TABLE */}
       <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-cyan-500/30 mb-16 overflow-hidden">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
           <Cpu className="w-5 h-5 text-cyan-400" />
           Technical Implementation & Architecture Matrix
-        </h3>
+        </h2>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm text-slate-300">
@@ -494,13 +498,37 @@ export const ThreadEyeCaseStudyPage = ({ openConsultation }) => {
         </div>
       </div>
 
+      {/* Related Case Studies Internal Cross-Links */}
+      <div className="mb-16">
+        <h2 className="text-xl font-bold text-white mb-4">Explore Related AI Deployments</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            { title: 'Noesis — AI Study Assistant', path: '/case-studies/noesis', tag: 'Agentic AI / LangGraph' },
+            { title: 'The Watcher — Child Safety AI', path: '/case-studies/the-watcher', tag: 'Mobile ML / Parental AI' },
+            { title: 'GetScry — Intent Intelligence', path: '/case-studies/getscry', tag: 'Predictive E-Commerce ML' }
+          ].map((rc, idx) => (
+            <a
+              key={idx}
+              href={rc.path}
+              className="p-4 rounded-2xl gradient-card border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex items-center justify-between group"
+            >
+              <div>
+                <div className="text-xs font-mono text-cyan-400">{rc.tag}</div>
+                <div className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors mt-0.5">{rc.title}</div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
+            </a>
+          ))}
+        </div>
+      </div>
+
       {/* CTA FOOTER */}
       <div className="gradient-card rounded-3xl p-8 sm:p-12 border border-cyan-500/40 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-teal-500/10 to-indigo-500/10"></div>
         <div className="relative z-10 space-y-4 max-w-2xl mx-auto">
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
             Looking to Automate Quality Inspection in Your Facility?
-          </h3>
+          </h2>
           <p className="text-slate-300 text-sm sm:text-base">
             BrixelLabs designs custom computer vision models, edge inference engines, and automated industrial inspection platforms.
           </p>

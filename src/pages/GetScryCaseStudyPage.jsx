@@ -222,10 +222,10 @@ export const GetScryCaseStudyPage = ({ openConsultation }) => {
         {/* Showcase Header & Tab Switcher */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h3 className="text-2xl font-bold text-white flex items-center gap-2.5">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-2.5">
               <Layers className="w-5 h-5 text-cyan-400" />
               Live Platform Visual Architecture & Interface Showcase
-            </h3>
+            </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
               High-resolution captures from the active GetScry inference engine & Trailhead production demo
             </p>
@@ -565,9 +565,9 @@ export const GetScryCaseStudyPage = ({ openConsultation }) => {
       {/* INTERACTIVE INTENT SCORING SIMULATOR & PLAYGROUND */}
       <div className="mb-20">
         <div className="text-center mb-10 space-y-2">
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
             Interactive Intent Scoring <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-indigo-400">Playground</span>
-          </h3>
+          </h2>
           <p className="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto">
             Select a live visitor persona below to see how GetScry computes instant purchase probability, evaluates SHAP feature weights, and triggers precision interventions.
           </p>
@@ -774,10 +774,10 @@ export const GetScryCaseStudyPage = ({ openConsultation }) => {
 
       {/* TECH STACK MATRIX TABLE */}
       <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-cyan-500/30 mb-16 overflow-hidden">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
           <Cpu className="w-5 h-5 text-cyan-400" />
           Production System Architecture & Technology Stack
-        </h3>
+        </h2>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm text-slate-300">
@@ -799,13 +799,37 @@ export const GetScryCaseStudyPage = ({ openConsultation }) => {
         </div>
       </div>
 
+      {/* Related Case Studies Internal Cross-Links */}
+      <div className="mb-16">
+        <h2 className="text-xl font-bold text-white mb-4">Explore Related AI Deployments</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            { title: 'Noesis — AI Study Assistant', path: '/case-studies/noesis', tag: 'Agentic AI / LangGraph' },
+            { title: 'The Watcher — Child Safety AI', path: '/case-studies/the-watcher', tag: 'Mobile ML / Parental AI' },
+            { title: 'ThreadEye — Defect Detection', path: '/case-studies/threadeye', tag: 'Computer Vision <14ms' }
+          ].map((rc, idx) => (
+            <a
+              key={idx}
+              href={rc.path}
+              className="p-4 rounded-2xl gradient-card border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex items-center justify-between group"
+            >
+              <div>
+                <div className="text-xs font-mono text-cyan-400">{rc.tag}</div>
+                <div className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors mt-0.5">{rc.title}</div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
+            </a>
+          ))}
+        </div>
+      </div>
+
       {/* CTA FOOTER */}
       <div className="gradient-card rounded-3xl p-8 sm:p-12 border border-cyan-500/40 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-teal-500/10 to-indigo-500/10"></div>
         <div className="relative z-10 space-y-4 max-w-2xl mx-auto">
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
             Ready to Supercharge Your E-Commerce Conversion Rate?
-          </h3>
+          </h2>
           <p className="text-slate-300 text-sm sm:text-base">
             Pilot GetScry on your online store or integrate custom predictive machine learning into your checkout funnel.
           </p>

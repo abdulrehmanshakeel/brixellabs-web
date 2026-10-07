@@ -67,7 +67,7 @@ export const FabricDefectCaseStudyPage = ({ openConsultation }) => {
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
             <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
           </div>
-          <span className="font-mono text-slate-300 ml-2">brixellabs.com/case-study/fabric-defect-detection</span>
+          <span className="font-mono text-slate-300 ml-2">brixellabs.com/case-studies/threadeye</span>
         </div>
         <span className="text-cyan-400 font-semibold font-mono text-[11px]">PRODUCTION GRADE</span>
       </div>
@@ -383,9 +383,9 @@ export const FabricDefectCaseStudyPage = ({ openConsultation }) => {
         <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-cyan-500/15 via-teal-500/10 to-transparent blur-3xl pointer-events-none"></div>
 
         <div className="relative z-10 space-y-2">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">
             Have a similar quality control problem? Let's talk
-          </h3>
+          </h2>
           <p className="text-sm text-slate-300 max-w-md mx-auto">
             Schedule a technical call with our Computer Vision engineers to evaluate your factory production line.
           </p>

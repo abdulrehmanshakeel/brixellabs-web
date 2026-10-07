@@ -4,6 +4,7 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { ConsultationModal } from './components/common/ConsultationModal';
 import { CyberSpotlight } from './components/common/CyberSpotlight';
+import { SEOHead } from './components/common/SEOHead';
 
 // Lazy-loaded route components for instant initial page loading & minimal JS payload
 const HomePage = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
@@ -96,6 +97,9 @@ export function App() {
 
   return (
     <div className="relative min-h-screen bg-[#030c14] text-slate-100 flex flex-col justify-between selection:bg-cyan-400 selection:text-black">
+      {/* Dynamic SEO Meta & Canonical Manager */}
+      <SEOHead currentPath={currentPath} />
+
       {/* Background neon circuit & particle constellation */}
       <BackgroundEffects />
 

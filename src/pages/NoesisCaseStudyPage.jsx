@@ -142,10 +142,10 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
         {/* Showcase Header & Tab Switcher */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h3 className="text-2xl font-bold text-white flex items-center gap-2.5">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-2.5">
               <Layers className="w-5 h-5 text-cyan-400" />
               Production App Interface Showcase & Complete Study Cycle
-            </h3>
+            </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
               High-resolution captures from the working Noesis LangGraph stateful application
             </p>
@@ -597,20 +597,20 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
       {/* Problem vs Solution & Deep Architecture Details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
         <div className="gradient-card rounded-3xl p-8 border border-cyan-500/30">
-          <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2.5">
+          <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-400 shadow-[0_0_10px_#f87171]"></span>
             The Challenge: Static Online Learning Bottlenecks
-          </h3>
+          </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
             Traditional online learning tools either overwhelm beginners with dense technical jargon or bore advanced practitioners with oversimplified summaries. Existing platforms lack an adaptive on-demand system that autonomously assesses learner background, conducts precision research, synthesizes notes, and tests comprehension in real-time.
           </p>
         </div>
 
         <div className="gradient-card rounded-3xl p-8 border border-teal-500/30">
-          <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2.5">
+          <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#00f0ff]"></span>
             The Multi-Agent Solution: LangGraph StateGraphs
-          </h3>
+          </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
             Noesis solves this through LangGraph StateGraphs. By coordinating specialized nodes with strict Pydantic schemas, dynamic routing between Wikipedia and Tavily, and interrupt-driven Human-in-the-Loop checkpoints, Noesis crafts personalized learning cycles with zero human bottleneck.
           </p>
@@ -619,10 +619,10 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
 
       {/* Technical Feature Matrix Table */}
       <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-cyan-500/30 mb-16 overflow-hidden">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
           <Cpu className="w-5 h-5 text-cyan-400" />
           Technical Implementation Matrix
-        </h3>
+        </h2>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm text-slate-300">
@@ -664,13 +664,37 @@ export const NoesisCaseStudyPage = ({ openConsultation }) => {
         </div>
       </div>
 
+      {/* Related Case Studies Internal Cross-Links */}
+      <div className="mb-16">
+        <h2 className="text-xl font-bold text-white mb-4">Explore Related AI Deployments</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            { title: 'The Watcher — Child Safety AI', path: '/case-studies/the-watcher', tag: 'Mobile ML / Parental AI' },
+            { title: 'FrontDesk AI — WhatsApp Bot', path: '/case-studies/frontdesk-ai', tag: 'Conversational Automation' },
+            { title: 'GetScry — Intent Intelligence', path: '/case-studies/getscry', tag: 'Predictive E-Commerce ML' }
+          ].map((rc, idx) => (
+            <a
+              key={idx}
+              href={rc.path}
+              className="p-4 rounded-2xl gradient-card border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex items-center justify-between group"
+            >
+              <div>
+                <div className="text-xs font-mono text-cyan-400">{rc.tag}</div>
+                <div className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors mt-0.5">{rc.title}</div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
+            </a>
+          ))}
+        </div>
+      </div>
+
       {/* CTA Footer */}
       <div className="gradient-card rounded-3xl p-8 sm:p-12 border border-cyan-500/40 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-teal-500/10 to-indigo-500/10"></div>
         <div className="relative z-10 space-y-4 max-w-2xl mx-auto">
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
             Need an Autonomous Multi-Agent Solution for Your Business?
-          </h3>
+          </h2>
           <p className="text-slate-300 text-sm sm:text-base">
             From LangGraph orchestration to custom LLM tool-calling pipelines, BrixelLabs engineers production-grade AI systems tailored to your domain.
           </p>

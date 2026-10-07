@@ -119,6 +119,7 @@ export const ContactPage = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">Send Us a Project Message</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1.5">Name *</label>
@@ -201,9 +202,9 @@ export const ContactPage = () => {
         >
           {/* Direct Contact Info Card */}
           <div className="gradient-card rounded-3xl p-6 sm:p-7 border border-cyan-500/30 space-y-5">
-            <h3 className="text-lg font-bold text-white tracking-tight">
-              Direct Contact Info
-            </h3>
+            <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+              Direct Contact Information
+            </h2>
 
             <div className="space-y-4 text-sm">
               <a 

@@ -65,6 +65,12 @@ export const WatcherCaseStudyPage = ({ openConsultation }) => {
     }
   ];
 
+  const relatedCaseStudies = [
+    { title: 'Noesis — AI Study Assistant', path: '/case-studies/noesis', tag: 'Agentic AI / LangGraph' },
+    { title: 'FrontDesk AI — WhatsApp Bot', path: '/case-studies/frontdesk-ai', tag: 'Conversational Automation' },
+    { title: 'ThreadEye — Defect Detection', path: '/case-studies/threadeye', tag: 'Computer Vision <14ms' }
+  ];
+
   return (
     <div className="relative pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10">
       
@@ -124,10 +130,10 @@ export const WatcherCaseStudyPage = ({ openConsultation }) => {
       <div className="mb-16">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-2xl font-bold text-white flex items-center gap-2.5">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-2.5">
               <Play className="w-5 h-5 text-emerald-400" />
               Live Mobile Platform & ML Activity Video Demo
-            </h3>
+            </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
               Production screen capture of The Watcher Flutter client and LangGraph backend in action
             </p>
@@ -152,10 +158,10 @@ export const WatcherCaseStudyPage = ({ openConsultation }) => {
       <div className="mb-16">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
               <Smartphone className="w-5 h-5 text-emerald-400" />
               Live Mobile Application Capture
-            </h3>
+            </h2>
             <p className="text-xs text-slate-400">Cropped interface captures from parent companion app</p>
           </div>
           <span className="text-xs font-mono text-emerald-400 bg-emerald-950/70 px-3 py-1 rounded border border-emerald-500/30">
@@ -169,13 +175,15 @@ export const WatcherCaseStudyPage = ({ openConsultation }) => {
               <div className="rounded-2xl overflow-hidden border border-emerald-500/20 mb-4 bg-[#0a2024] flex items-center justify-center">
                 <img 
                   src={projectImages.watcherBrowsing} 
-                  alt="The Watcher Browsing Monitoring Screen" 
+                  alt="The Watcher Real-Time Browsing Monitoring Interface and Risk Assessment" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full max-h-96 object-contain hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-base font-bold text-emerald-300">Real-Time Browsing Monitoring</h4>
+                  <h3 className="text-base font-bold text-emerald-300">Real-Time Browsing Monitoring</h3>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/30">ML Labeled</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
@@ -190,13 +198,15 @@ export const WatcherCaseStudyPage = ({ openConsultation }) => {
               <div className="rounded-2xl overflow-hidden border border-cyan-500/20 mb-4 bg-[#0a1e28] flex items-center justify-center">
                 <img 
                   src={projectImages.watcherAlerts} 
-                  alt="The Watcher Alert Dashboard Screen" 
+                  alt="The Watcher Contextual Alerts and Risk Dashboard" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full max-h-96 object-contain hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-base font-bold text-cyan-300">Contextual Alert Dashboard</h4>
+                  <h3 className="text-base font-bold text-cyan-300">Contextual Alert Dashboard</h3>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30">LangGraph Agent</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
@@ -209,32 +219,35 @@ export const WatcherCaseStudyPage = ({ openConsultation }) => {
       </div>
 
       {/* Core Architectural Pillars */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-        {corePillars.map((pillar, i) => {
-          const Icon = pillar.icon;
-          return (
-            <div key={i} className="gradient-card rounded-3xl p-6 sm:p-8 border border-emerald-500/25 space-y-3 hover:border-emerald-400/50 transition-colors">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
-                <Icon className="w-6 h-6" />
+      <div className="mb-16">
+        <h2 className="text-2xl font-bold text-white mb-6">Core Architectural Pillars</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {corePillars.map((pillar, i) => {
+            const Icon = pillar.icon;
+            return (
+              <div key={i} className="gradient-card rounded-3xl p-6 sm:p-8 border border-emerald-500/25 space-y-3 hover:border-emerald-400/50 transition-colors">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
+                  <Icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-white">{pillar.title}</h3>
+                <p className="text-sm text-slate-300 leading-relaxed">{pillar.desc}</p>
               </div>
-              <h4 className="text-lg font-bold text-white">{pillar.title}</h4>
-              <p className="text-sm text-slate-300 leading-relaxed">{pillar.desc}</p>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Problem vs Solution */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
         <div className="gradient-card rounded-3xl p-8 border border-cyan-500/30">
-          <h3 className="text-2xl font-bold text-white mb-4">The Challenge</h3>
+          <h2 className="text-2xl font-bold text-white mb-4">The Challenge</h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
             In today's digital era, children are exposed to smartphones at ever-younger ages. Parents cannot manually scrutinize hours of daily screen time, and conventional parental control tools rely on blunt keyword blocklists that miss nuanced risks or frustrate kids with false flags.
           </p>
         </div>
 
         <div className="gradient-card rounded-3xl p-8 border border-emerald-500/30">
-          <h3 className="text-2xl font-bold text-white mb-4">Our Intelligent Solution</h3>
+          <h2 className="text-2xl font-bold text-white mb-4">Our Intelligent Solution</h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
             The Watcher pairs ML activity classification with LangGraph agentic reasoning. Instead of rigid rules, the AI understands contextual patterns (repeated exposure to mature themes, sudden late-night spikes), autonomously decides escalation thresholds, and compiles executive summaries for parents.
           </p>
@@ -243,28 +256,48 @@ export const WatcherCaseStudyPage = ({ openConsultation }) => {
 
       {/* Impact & Use Cases */}
       <div className="gradient-card rounded-3xl p-8 border border-teal-500/30 mb-16">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5 text-emerald-400" />
           Key Impact & Enterprise Use Cases
-        </h3>
+        </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs sm:text-sm">
           <div className="p-4 rounded-2xl bg-[#041a22] border border-emerald-500/20">
-            <h5 className="font-bold text-emerald-300 mb-1">Parental Peace of Mind</h5>
+            <h3 className="font-bold text-emerald-300 mb-1">Parental Peace of Mind</h3>
             <p className="text-slate-300">Continuous digital protection without the burden of constant manual screen checking.</p>
           </div>
           <div className="p-4 rounded-2xl bg-[#041a22] border border-emerald-500/20">
-            <h5 className="font-bold text-teal-300 mb-1">Early Pattern Detection</h5>
+            <h3 className="font-bold text-teal-300 mb-1">Early Pattern Detection</h3>
             <p className="text-slate-300">Identifies harmful or unusual browsing habits before they develop into serious risks.</p>
           </div>
           <div className="p-4 rounded-2xl bg-[#041a22] border border-emerald-500/20">
-            <h5 className="font-bold text-cyan-300 mb-1">AI-Generated Summaries</h5>
+            <h3 className="font-bold text-cyan-300 mb-1">AI-Generated Summaries</h3>
             <p className="text-slate-300">Delivers weekly digestible digests of child learning, hobbies, and safety flags.</p>
           </div>
           <div className="p-4 rounded-2xl bg-[#041a22] border border-emerald-500/20">
-            <h5 className="font-bold text-indigo-300 mb-1">Institutional Scale</h5>
+            <h3 className="font-bold text-indigo-300 mb-1">Institutional Scale</h3>
             <p className="text-slate-300">Architected for school tablet fleets, child advocacy networks, and family telecom packages.</p>
           </div>
+        </div>
+      </div>
+
+      {/* Related Case Studies Internal Cross-Links */}
+      <div className="mb-16">
+        <h2 className="text-xl font-bold text-white mb-4">Explore Related AI Deployments</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {relatedCaseStudies.map((rc, idx) => (
+            <a
+              key={idx}
+              href={rc.path}
+              className="p-4 rounded-2xl gradient-card border border-cyan-500/20 hover:border-cyan-400/60 transition-all flex items-center justify-between group"
+            >
+              <div>
+                <div className="text-xs font-mono text-cyan-400">{rc.tag}</div>
+                <div className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors mt-0.5">{rc.title}</div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
+            </a>
+          ))}
         </div>
       </div>
 
@@ -272,9 +305,9 @@ export const WatcherCaseStudyPage = ({ openConsultation }) => {
       <div className="gradient-card rounded-3xl p-8 sm:p-12 border border-emerald-500/40 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-cyan-500/10"></div>
         <div className="relative z-10 space-y-4 max-w-2xl mx-auto">
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
             Developing an Intelligent ML & Mobile Solution?
-          </h3>
+          </h2>
           <p className="text-slate-300 text-sm sm:text-base">
             BrixelLabs builds full-stack cross-platform apps with deep on-device and cloud machine learning pipelines.
           </p>

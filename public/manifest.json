@@ -1,0 +1,21 @@
+{
+  "name": "BrixelLabs — Tech & AI Solutions",
+  "short_name": "BrixelLabs",
+  "description": "Design · Build · Automate. Custom AI models, scalable web/mobile apps, and enterprise workflow automation.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030c14",
+  "theme_color": "#030c14",
+  "icons": [
+    {
+      "src": "/assets/logo/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/logo/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

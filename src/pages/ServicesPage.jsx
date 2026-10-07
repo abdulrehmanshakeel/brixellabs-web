@@ -285,9 +285,9 @@ export const ServicesPage = ({ openConsultation }) => {
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/15 via-teal-500/10 to-transparent blur-3xl pointer-events-none"></div>
 
         <div className="relative z-10">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">
             Not sure what technical architecture you need?
-          </h3>
+          </h2>
           <p className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-white text-lg font-medium mt-1">
             Book a free 30-minute discovery consultation with our engineers
           </p>

@@ -1,0 +1,73 @@
+# BrixelLabs Full Technical Context & System Documentation (llms-full.txt)
+
+## Company Overview
+- Entity Name: BrixelLabs
+- Slogan: Design · Build · Automate
+- Industry: Applied Artificial Intelligence, Full-Stack Software Engineering, Computer Vision, Edge Computing
+- Official Domain: https://brixellabs.com
+- Contact Email: brixellabs@gmail.com
+- Direct WhatsApp Hotline: +92 344 9254864
+- Geographical Reach: Global Remote Engineering Studio
+
+## Technical Architecture & Core Stacks
+
+### 1. Artificial Intelligence & Deep Learning
+- Frameworks: PyTorch, TensorFlow, TensorRT, ONNX Runtime, OpenCV
+- Computer Vision: YOLOv8, YOLOv9 instance segmentation & object classification
+- Latency Benchmark: <14ms edge inference speed on NVIDIA Jetson AGX / Orin platforms
+- Accuracy Metrics: 99.8% precision on industrial inspection datasets
+
+### 2. Large Language Models & Agentic AI
+- Agent Orchestration: LangGraph (StateGraph workflows), LangChain, LlamaIndex
+- Inference Providers: Groq (ultra-low latency LLaMA 3.3 70B & 8B), OpenAI GPT-4o, Anthropic Claude
+- Search & Retrieval: Dual-engine Tavily / DuckDuckGo web search routing, FAISS & Qdrant vector retrieval
+- Patterns: Human-in-the-loop (HITL) interrupt states, persistent thread checkpointers, self-healing reflection loops
+
+### 3. Full-Stack Web & Mobile Architecture
+- Frontend: React 18, Next.js, Tailwind CSS, Framer Motion, TypeScript
+- Mobile: Flutter (Dart), React Native, Kotlin Android Native daemons
+- Backend APIs: Django REST Framework, FastAPI (Python 3.11+), Node.js / Express
+- Databases: PostgreSQL, Redis (in-memory caching & session stores), MongoDB, SQLite
+- Cloud & CI/CD: Docker containers, Vercel, AWS ECS / Lambda, GitHub Actions, NGINX
+
+### 4. Data Analytics & Business Intelligence
+- Analysis Frameworks: Python (Pandas, NumPy, SciPy), Microsoft Excel (dynamic pivot tables & macros), SQL (PostgreSQL & MySQL aggregations)
+- Machine Learning Models: XGBoost, LightGBM, Random Forest, SHAP (SHapley Additive exPlanations) for explainability
+- Visualization: Chart.js, Recharts, Matplotlib, Seaborn
+
+## Deep Dive into Verified Deployments
+
+### A. Noesis — Autonomous AI Study Assistant
+- Link: https://brixellabs.com/case-studies/noesis
+- Core Problem: Students and researchers struggle with passive reading and non-interactive study material.
+- Architecture: LangGraph multi-agent DAG that analyzes topic difficulty, queries web search APIs, synthesizes organized Markdown notes, and constructs calibrated multi-choice quizzes.
+- Key Feature: Human-in-the-Loop calibration allowing users to approve/adjust search queries before notes generation.
+
+### B. The Watcher — AI Child Safety Platform
+- Link: https://brixellabs.com/case-studies/the-watcher
+- Core Problem: Traditional parental blockers are intrusive and easily bypassed.
+- Architecture: On-device Kotlin daemon + Flutter UI communicating with a Django REST & LangGraph backend. Real-time classification of browsing patterns without logging sensitive personal data.
+- Key Feature: AI-generated daily risk digest summarizing anomalies in plain English.
+
+### C. FrontDesk AI — Autonomous WhatsApp Booking Agent
+- Link: https://brixellabs.com/case-studies/frontdesk-ai
+- Core Problem: Medical clinics and service businesses lose customers due to delayed front-desk messaging response times.
+- Architecture: Webhook integration via Twilio WhatsApp Business API -> Django async processor -> Groq-accelerated LangGraph scheduling agent -> Google Calendar / internal DB sync.
+- Key Feature: Natural bilingual fluency across conversational Roman Urdu and English.
+
+### D. ThreadEye — Industrial Fabric Defect Detection
+- Link: https://brixellabs.com/case-studies/threadeye
+- Core Problem: Manual textile inspection misses 15-20% of warp/weft defects at high loom speeds.
+- Architecture: 4K industrial line-scan cameras streaming 60 FPS video over GigE to NVIDIA Jetson hardware running YOLOv8n-seg TensorRT engine. Flaws trigger instant PLC relays.
+- Key Feature: Sub-14ms detection latency with 99.8% classification accuracy.
+
+### E. GetScry — Real-Time Visitor Intent Intelligence
+- Link: https://brixellabs.com/case-studies/getscry
+- Core Problem: High bounce rates and wasted marketing discounts given to low-intent shoppers.
+- Architecture: High-throughput event ingestion -> XGBoost classifier predicting purchase intent (0-100%) -> SHAP explainability engine generating human-readable conversion reasons in <35ms.
+
+## Consultation & Project Onboarding
+
+Clients can schedule a direct technical discovery call via:
+- Booking Page: https://brixellabs.com/contact
+- Direct Inquiry: brixellabs@gmail.com

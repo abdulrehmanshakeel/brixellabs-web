@@ -18,7 +18,9 @@ export const featuredProjects = [
         <div className="relative h-32 rounded-xl bg-[#092740] border border-cyan-500/30 overflow-hidden flex items-center justify-center">
           <img 
             src={projectImages.noesisQuiz} 
-            alt="Noesis AI Study Assistant" 
+            alt="Noesis — AI Study Assistant LangGraph Adaptive Quiz Interface" 
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[9px] font-mono text-cyan-300 border border-cyan-500/40">
@@ -51,7 +53,9 @@ export const featuredProjects = [
         <div className="relative h-32 rounded-xl bg-[#082b2e] border border-emerald-500/30 overflow-hidden flex items-center justify-center">
           <img 
             src={projectImages.watcherBrowsing} 
-            alt="The Watcher Monitoring" 
+            alt="The Watcher — AI Child Safety Platform Real-Time Browsing Classifier" 
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[9px] font-mono text-emerald-300 border border-emerald-500/40">
@@ -119,7 +123,9 @@ export const featuredProjects = [
         <div className="relative h-32 rounded-xl bg-[#082238] border border-cyan-500/30 overflow-hidden flex items-center justify-center">
           <img 
             src={projectImages.threadeyeInspection} 
-            alt="ThreadEye Defect Detection" 
+            alt="ThreadEye — Industrial Computer Vision Fabric Defect Detection Inspection" 
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[9px] font-mono text-cyan-300 border border-cyan-500/40">
@@ -153,7 +159,9 @@ export const featuredProjects = [
         <div className="relative h-32 rounded-xl bg-[#240e1b] border border-rose-500/30 overflow-hidden flex items-center justify-center">
           <img 
             src={projectImages.getscryDashboard} 
-            alt="GetScry Intent Dashboard" 
+            alt="GetScry — Predictive Visitor Intent Intelligence Analytics Dashboard" 
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[9px] font-mono text-rose-300 border border-rose-500/40">

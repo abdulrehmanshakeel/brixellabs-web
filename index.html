@@ -2,15 +2,136 @@
 <html lang="en" class="scroll-smooth dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/assets/logo/logo.png" />
-    <link rel="apple-touch-icon" href="/assets/logo/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BrixelLabs — Design · Build · Automate | Tech & AI Solutions</title>
-    <meta name="description" content="Design · Build · Automate. Custom AI models, scalable web/mobile apps, and enterprise workflow automation." />
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    
+    <!-- Primary Page Title & Meta Description -->
+    <title>BrixelLabs — Design · Build · Automate | Tech &amp; AI Solutions</title>
+    <meta name="description" content="Design · Build · Automate. Custom AI models, scalable web/mobile apps, computer vision systems under 14ms latency, and enterprise workflow automation." />
+    <meta name="keywords" content="AI engineering, machine learning, computer vision, YOLOv8, LangGraph, agentic AI, React, Next.js, Flutter, Django, data analytics, BrixelLabs" />
+    <meta name="author" content="BrixelLabs" />
+    <meta name="publisher" content="BrixelLabs" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://brixellabs.com/" />
+
+    <!-- Search Engine Indexing & Robots Directives -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+    <!-- Search Engine Webmaster Verification -->
+    <meta name="google-site-verification" content="google-site-verification-token-brixellabs" />
+    <meta name="msvalidate.01" content="bing-site-verification-token-brixellabs" />
+
+    <!-- Browser UI & Theme Color -->
+    <meta name="theme-color" content="#030c14" />
+    <meta name="msapplication-TileColor" content="#030c14" />
+
+    <!-- Favicons & App Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo/logo.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logo/logo.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/logo/logo.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Open Graph (Facebook, LinkedIn, Discord, Slack, WhatsApp) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="BrixelLabs" />
+    <meta property="og:url" content="https://brixellabs.com/" />
+    <meta property="og:title" content="BrixelLabs — Design · Build · Automate | Tech &amp; AI Solutions" />
+    <meta property="og:description" content="Design · Build · Automate. Custom AI models, scalable web/mobile apps, computer vision, and enterprise workflow automation." />
+    <meta property="og:image" content="https://brixellabs.com/og-image.jpg" />
+    <meta property="og:image:secure_url" content="https://brixellabs.com/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="BrixelLabs — Full-Stack Tech &amp; AI Solutions" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@brixellabs" />
+    <meta name="twitter:creator" content="@brixellabs" />
+    <meta name="twitter:title" content="BrixelLabs — Design · Build · Automate | Tech &amp; AI Solutions" />
+    <meta name="twitter:description" content="Design · Build · Automate. Custom AI models, scalable web/mobile apps, computer vision, and enterprise workflow automation." />
+    <meta name="twitter:image" content="https://brixellabs.com/og-image.jpg" />
+    <meta name="twitter:image:alt" content="BrixelLabs — Full-Stack Tech &amp; AI Solutions" />
+
+    <!-- Google Fonts Preconnect & Swap for Core Web Vitals (Zero Layout Shift) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data: JSON-LD Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://brixellabs.com/#organization",
+          "name": "BrixelLabs",
+          "alternateName": ["Brixel Labs", "BrixelLabs Tech & AI Solutions"],
+          "url": "https://brixellabs.com",
+          "logo": {
+            "@type": "ImageObject",
+            "@id": "https://brixellabs.com/#logo",
+            "url": "https://brixellabs.com/assets/logo/logo.png",
+            "caption": "BrixelLabs Logo"
+          },
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://brixellabs.com/og-image.jpg"
+          },
+          "description": "BrixelLabs designs intuitive digital experiences, builds scalable full-stack web and mobile systems with custom AI models, and automates business workflows.",
+          "slogan": "Design · Build · Automate",
+          "email": "brixellabs@gmail.com",
+          "telephone": "+923449254864",
+          "sameAs": [
+            "https://www.linkedin.com/company/brixellabs/home/?viewAsMember=true",
+            "https://www.instagram.com/brixellabs?igsi=cmM0OXliYjJxaWpt"
+          ],
+          "knowsAbout": [
+            "Agentic AI",
+            "LangGraph Multi-Agent Workflows",
+            "Computer Vision & Edge AI",
+            "YOLOv8 and YOLOv9 Instance Segmentation",
+            "Predictive Machine Learning",
+            "Full-Stack Web Development",
+            "Cross-Platform Mobile Apps",
+            "NLP Chatbots & RAG Systems",
+            "Data Analytics & SQL Dashboards"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://brixellabs.com/#website",
+          "url": "https://brixellabs.com",
+          "name": "BrixelLabs",
+          "publisher": {
+            "@id": "https://brixellabs.com/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://brixellabs.com/case-studies?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://brixellabs.com/#service",
+          "name": "BrixelLabs AI & Software Engineering",
+          "url": "https://brixellabs.com",
+          "priceRange": "$$$$",
+          "image": "https://brixellabs.com/og-image.jpg",
+          "telephone": "+923449254864",
+          "email": "brixellabs@gmail.com",
+          "provider": {
+            "@id": "https://brixellabs.com/#organization"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body class="bg-[#030c14] text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-black overflow-x-hidden min-h-screen">
     <div id="root"></div>
