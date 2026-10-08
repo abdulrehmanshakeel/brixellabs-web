@@ -3,6 +3,8 @@ import { HeroSection } from '../components/home/HeroSection';
 import { ServicesGrid } from '../components/home/ServicesGrid';
 import { FeaturedCaseStudies } from '../components/home/FeaturedCaseStudies';
 import { ProcessSummary } from '../components/home/ProcessSummary';
+import { VerifiedTestimonials } from '../components/common/VerifiedTestimonials';
+import { FAQSection } from '../components/common/FAQSection';
 import { ScheduleConsultationSection } from '../components/common/ScheduleConsultationSection';
 import { VideoShowreelModal } from '../components/common/VideoShowreelModal';
 
@@ -33,7 +35,13 @@ export const HomePage = ({ navigate, openConsultation }) => {
       {/* 4. Process (1. Design, 2. Build, 3. Automate) */}
       <ProcessSummary navigate={navigate} />
 
-      {/* 5. Schedule Free Consultation */}
+      {/* 5. Real Verified Case Study Testimonials */}
+      <VerifiedTestimonials navigate={navigate} />
+
+      {/* 6. Interactive FAQ Accordion */}
+      <FAQSection openConsultation={openConsultation} />
+
+      {/* 7. Schedule Free Consultation */}
       <ScheduleConsultationSection />
 
       {/* Video Showreel Live Modal */}

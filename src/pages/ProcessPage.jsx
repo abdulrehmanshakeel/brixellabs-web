@@ -1,3 +1,4 @@
+import React from 'react';
 import { 
   PhoneCall, 
   Monitor, 
@@ -6,12 +7,15 @@ import {
   Clock, 
   Workflow, 
   CheckCircle2, 
-  ArrowRight 
+  ArrowRight,
+  ShieldCheck,
+  Cpu
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { TiltCard } from '../components/common/TiltCard';
+import { FAQSection } from '../components/common/FAQSection';
 
-export const ProcessPage = ({ openConsultation }) => {
+export const ProcessPage = ({ navigate, openConsultation }) => {
   const steps = [
     {
       id: 'step-01',
@@ -101,12 +105,12 @@ export const ProcessPage = ({ openConsultation }) => {
           transition={{ delay: 0.2 }}
           className="text-base sm:text-lg text-slate-300 max-w-xl mx-auto font-normal leading-relaxed"
         >
-          A transparent, iterative engineering process from whiteboard architecture to production deployment. All 4 roadmap stages stay active and visible together on screen.
+          A transparent, iterative engineering process from whiteboard architecture to production deployment.
         </motion.p>
       </div>
 
-      {/* 4 Process Cards Stack: All Cards Slide In and Stay Visible Together on Screen */}
-      <div className="relative space-y-8">
+      {/* 4 Process Cards Stack */}
+      <div className="relative space-y-8 mb-20">
         <h2 className="sr-only">4-Stage Iterative Delivery Methodology</h2>
         
         {/* Vertical glowing connector line */}
@@ -129,7 +133,7 @@ export const ProcessPage = ({ openConsultation }) => {
               className="relative z-10"
             >
               <TiltCard className="h-full">
-                <div className="gradient-card rounded-3xl p-6 sm:p-8 lg:p-10 border border-cyan-500/30 group hover:border-cyan-400/80 transition-all duration-400 relative overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
+                <div className="gradient-card rounded-3xl p-6 sm:p-8 lg:p-10 border border-cyan-500/30 group hover:border-cyan-400/80 transition-all duration-400 relative overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.5)] bg-[#031525]/90">
                   <div className={`absolute -top-16 -right-16 w-36 h-36 rounded-full blur-3xl opacity-35 bg-gradient-to-br ${step.bgGrad} pointer-events-none group-hover:opacity-75 transition-opacity`}></div>
 
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10 mb-4">
@@ -182,6 +186,9 @@ export const ProcessPage = ({ openConsultation }) => {
         })}
 
       </div>
+
+      {/* FAQ Section */}
+      <FAQSection openConsultation={openConsultation} />
 
       {/* Bottom CTA */}
       <div className="mt-16 text-center">

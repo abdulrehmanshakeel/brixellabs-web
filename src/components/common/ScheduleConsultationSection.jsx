@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import { Send, Upload, CheckCircle2, Globe, FileText, ArrowRight, Clock, ShieldCheck, Wifi } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { adminStorage } from '../../utils/adminStorage';
+import { apiClient } from '../../api/client';
+import { TurnstileWidget } from './TurnstileWidget';
+import { trackFormSubmission } from '../../utils/analytics';
 
-export const ScheduleConsultationSection = ({ title = "Schedule Free Consultation", subtitle = "Contact consultation form and accelerate growth." }) => {
+export const ScheduleConsultationSection = ({ 
+  title = "Schedule Free Consultation", 
+  subtitle = "Contact our senior engineers to evaluate technical feasibility, AI models, and delivery roadmaps." 
+}) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     company: '',
     projectBrief: '',
     fileName: '',
+    honeypot: ''
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -21,32 +28,57 @@ export const ScheduleConsultationSection = ({ title = "Schedule Free Consultatio
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Honeypot check
+    if (formData.honeypot) {
+      console.warn('Bot spam caught by honeypot.');
+      return;
+    }
+
     if (!formData.name || !formData.email) return;
 
-    // Save inquiry to Admin CRM
-    adminStorage.addInquiry({
-      name: formData.name,
-      email: formData.email,
-      company: formData.company,
-      service: 'Consultation & Architecture',
-      budget: '$15,000 - $35,000',
-      timeline: '2-3 Weeks',
-      message: `${formData.projectBrief || ''} ${formData.fileName ? `[Attached file: ${formData.fileName}]` : ''}`.trim(),
-      source: 'Schedule Consultation Section'
-    });
+    setIsSubmitting(true);
 
-    setSubmitted(true);
-    confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#00f0ff', '#00e5d0', '#38bdf8', '#ffffff']
-    });
+    try {
+      // 1. Save inquiry to Admin CRM
+      adminStorage.addInquiry({
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        service: 'Consultation & Architecture',
+        budget: '$15,000 - $35,000',
+        timeline: '2-3 Weeks',
+        message: `${formData.projectBrief || ''} ${formData.fileName ? `[Attached file: ${formData.fileName}]` : ''}`.trim(),
+        source: 'Schedule Consultation Section'
+      });
+
+      // 2. Sync with backend API
+      apiClient.createInquiry({
+        name: formData.name,
+        email: formData.email,
+        company: formData.company || '',
+        service: 'Consultation & Architecture',
+        message: `${formData.projectBrief || ''} ${formData.fileName ? `[Attached file: ${formData.fileName}]` : ''}`.trim(),
+        source: 'Schedule Consultation Section'
+      }).catch(err => console.warn('API inquiry sync:', err));
+
+      // 3. Track GA conversion
+      trackFormSubmission('Schedule Consultation Section', 'Consultation & Architecture');
+
+      // 4. Redirect to thank-you page
+      window.history.pushState({}, '', '/thank-you');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error('Error submitting consultation:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10" id="consultation">
-      <div className="gradient-card rounded-3xl p-6 sm:p-10 lg:p-12 border border-cyan-500/35 shadow-2xl relative overflow-hidden">
+      <div className="gradient-card rounded-3xl p-6 sm:p-10 lg:p-12 border border-cyan-500/35 shadow-2xl relative overflow-hidden bg-[#031525]/95">
         
         {/* Subtle glowing corner accents */}
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-gradient-to-br from-cyan-400/20 to-teal-400/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -66,108 +98,111 @@ export const ScheduleConsultationSection = ({ title = "Schedule Free Consultatio
               </p>
             </div>
 
-            {submitted ? (
-              <div className="p-8 rounded-2xl bg-cyan-950/40 border border-cyan-400/40 text-center space-y-4 animate-fadeIn">
-                <div className="w-16 h-16 mx-auto rounded-full bg-cyan-400/20 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(0,240,255,0.4)]">
-                  <CheckCircle2 className="w-9 h-9" />
-                </div>
-                <h3 className="text-2xl font-bold text-white">Consultation Request Received!</h3>
-                <p className="text-slate-300 text-sm max-w-md mx-auto">
-                  Thank you, <span className="text-cyan-400 font-semibold">{formData.name}</span>. Our engineering team will review your brief and get back to you within 24 hours.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSubmitted(false);
-                    setFormData({ name: '', email: '', company: '', projectBrief: '', fileName: '' });
-                  }}
-                  className="mt-4 px-6 py-2 rounded-lg border border-cyan-400/40 text-cyan-300 text-sm font-medium hover:bg-cyan-500/10 transition-colors"
-                >
-                  Send Another Request
-                </button>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Hidden honeypot */}
+              <div className="hidden" aria-hidden="true">
+                <input
+                  type="text"
+                  tabIndex="-1"
+                  autoComplete="off"
+                  value={formData.honeypot}
+                  onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                />
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="email"
-                      required
-                      placeholder="Email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
-                    />
-                  </div>
-                </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <input
                     type="text"
-                    placeholder="Company"
-                    value={formData.company}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    required
+                    placeholder="Your Name *"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
                   />
                 </div>
-
                 <div>
-                  <textarea
-                    rows={4}
-                    placeholder="Project Brief"
-                    value={formData.projectBrief}
-                    onChange={(e) => setFormData({ ...formData, projectBrief: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner resize-none"
-                  ></textarea>
+                  <input
+                    type="email"
+                    required
+                    placeholder="Work Email *"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
+                  />
                 </div>
+              </div>
 
-                {/* File Upload Row */}
-                <div className="flex items-center gap-3">
-                  <label className="flex-1 flex items-center justify-between px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-sm text-slate-300 cursor-pointer hover:border-cyan-400/60 transition-colors group">
-                    <div className="flex items-center gap-2.5 truncate">
-                      <FileText className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                      <span className="truncate text-slate-400 group-hover:text-slate-300">
-                        {formData.fileName || "Attached file"}
-                      </span>
-                    </div>
-                    <span className="text-xs px-2.5 py-0.5 rounded bg-cyan-900/50 text-cyan-300 border border-cyan-500/30">
-                      20MB
+              <div>
+                <input
+                  type="text"
+                  placeholder="Company / Organization"
+                  value={formData.company}
+                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
+                />
+              </div>
+
+              <div>
+                <textarea
+                  rows={3}
+                  required
+                  placeholder="Project Brief & Requirements *"
+                  value={formData.projectBrief}
+                  onChange={(e) => setFormData({ ...formData, projectBrief: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner resize-none"
+                ></textarea>
+              </div>
+
+              {/* File Upload Row */}
+              <div className="flex items-center gap-3">
+                <label className="flex-1 flex items-center justify-between px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-sm text-slate-300 cursor-pointer hover:border-cyan-400/60 transition-colors group">
+                  <div className="flex items-center gap-2.5 truncate">
+                    <FileText className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                    <span className="truncate text-slate-400 group-hover:text-slate-300">
+                      {formData.fileName || "Attach Architecture / PRD File (Optional)"}
                     </span>
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={handleFileChange}
-                    />
-                  </label>
-                </div>
+                  </div>
+                  <span className="text-xs px-2.5 py-0.5 rounded bg-cyan-900/50 text-cyan-300 border border-cyan-500/30">
+                    20MB
+                  </span>
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </div>
 
-                {/* Submit button with Gradient */}
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031422] font-extrabold text-sm transition-all duration-300 shadow-[0_0_25px_rgba(0,240,255,0.6)] hover:shadow-[0_0_40px_rgba(0,240,255,0.9)] hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <span>Send Message</span>
-                    <Send className="w-4 h-4" />
-                  </button>
-                </div>
-              </form>
-            )}
+              {/* Turnstile Spam Protection */}
+              <TurnstileWidget 
+                onVerify={(token) => setTurnstileToken(token)}
+                onExpire={() => setTurnstileToken(null)}
+              />
+
+              {/* Submit button with Gradient */}
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031422] font-extrabold text-sm transition-all duration-300 shadow-[0_0_25px_rgba(0,240,255,0.6)] hover:shadow-[0_0_40px_rgba(0,240,255,0.9)] hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                >
+                  {isSubmitting ? (
+                    <span>Transmitting...</span>
+                  ) : (
+                    <>
+                      <span>Book Free Discovery Session</span>
+                      <Send className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
 
           {/* Right: Remote-First Global Team Info Card */}
           <div className="lg:col-span-4">
-            <div className="gradient-card rounded-2xl p-6 border border-cyan-500/25 space-y-5">
+            <div className="gradient-card rounded-2xl p-6 border border-cyan-500/25 space-y-5 bg-[#020e18]/80">
               <div>
                 <div className="text-xs uppercase tracking-wider font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-300">
                   FREE DISCOVERY SESSION

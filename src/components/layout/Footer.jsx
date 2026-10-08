@@ -89,7 +89,7 @@ export const Footer = ({ navigate }) => {
                   <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-md"></div>
                   <img 
                     src={logoImg} 
-                    alt="BrixelLabs" 
+                    alt="BrixelLabs — Tech & AI Solutions Logo" 
                     className="w-9 h-9 object-contain relative z-10 drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]"
                   />
                 </div>
@@ -320,13 +320,13 @@ export const Footer = ({ navigate }) => {
 
           <div className="flex items-center gap-4">
             <button 
-              onClick={() => handleNav('/contact')}
+              onClick={() => handleNav('/privacy-policy')}
               className="hover:text-cyan-400 transition-colors cursor-pointer"
             >
               Privacy Policy
             </button>
             <button 
-              onClick={() => handleNav('/contact')}
+              onClick={() => handleNav('/privacy-policy')}
               className="hover:text-cyan-400 transition-colors cursor-pointer"
             >
               Terms of Service

@@ -9,17 +9,20 @@ import {
   AgenticAIIcon, 
   DataAnalyticsIcon 
 } from '../assets/icons';
-import { Check, Layers, ArrowRight, Cpu, Database } from 'lucide-react';
+import { Check, Layers, ArrowRight, Cpu, Database, Sparkles, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { TiltCard } from '../components/common/TiltCard';
+import { FAQSection } from '../components/common/FAQSection';
 
-export const ServicesPage = ({ openConsultation }) => {
+export const ServicesPage = ({ navigate, openConsultation }) => {
   const cat1 = [
     {
       id: 'srv-uiux',
       title: 'UI/UX Design',
       desc: 'Human-centered user experience design, interactive wireframing, high-fidelity prototypes, and scalable design tokens.',
       icon: UIUXIcon,
+      caseStudyLink: '/case-studies/noesis',
+      caseStudyTitle: 'See Noesis UI/UX Case Study',
       bullets: ['User Research & Journeys', 'Wireframing & Interactive Prototypes', 'Design System Token Architecture'],
       gradient: 'from-cyan-500/20 via-blue-500/10 to-transparent'
     },
@@ -28,6 +31,8 @@ export const ServicesPage = ({ openConsultation }) => {
       title: 'Web Development',
       desc: 'Scalable frontend and backend architectures with modern React, Next.js, Django, Node microservices, and distributed DBs.',
       icon: WebDevIcon,
+      caseStudyLink: '/case-studies/getscry',
+      caseStudyTitle: 'See GetScry Web Platform',
       bullets: ['High-Performance React/Next.js', 'Django & Node Cloud APIs', 'Distributed DB & Redis Caching'],
       gradient: 'from-teal-500/20 via-cyan-500/10 to-transparent'
     },
@@ -36,6 +41,8 @@ export const ServicesPage = ({ openConsultation }) => {
       title: 'Mobile Development',
       desc: 'Native and cross-platform mobile apps for iOS and Android built for high reliability, offline sync, and smooth animations.',
       icon: MobileDevIcon,
+      caseStudyLink: '/case-studies/the-watcher',
+      caseStudyTitle: 'See The Watcher Mobile App',
       bullets: ['React Native & Flutter', 'Native Device Features & Sensors', 'Offline-First Cloud Sync'],
       gradient: 'from-blue-500/20 via-indigo-500/10 to-transparent'
     }
@@ -47,6 +54,8 @@ export const ServicesPage = ({ openConsultation }) => {
       title: 'AI & Machine Learning',
       desc: 'Custom deep neural networks, predictive models, regression pipelines, and continuous automated model retraining.',
       icon: AIMLIcon,
+      caseStudyLink: '/case-studies/getscry',
+      caseStudyTitle: 'See GetScry ML Case Study',
       bullets: ['Custom Neural Architectures', 'Supervised & Unsupervised ML', 'Model Evaluation & Benchmarking'],
       gradient: 'from-fuchsia-500/20 via-cyan-500/10 to-transparent'
     },
@@ -55,6 +64,8 @@ export const ServicesPage = ({ openConsultation }) => {
       title: 'NLP, Chatbots & RAG Services',
       desc: 'Enterprise Natural Language Processing (NLP), semantic search, sentiment classification, multi-channel AI chatbots (WhatsApp, Web, Telegram), and contextual RAG pipelines.',
       icon: NLPIcon,
+      caseStudyLink: '/case-studies/frontdesk-ai',
+      caseStudyTitle: 'See FrontDesk AI WhatsApp Bot',
       bullets: ['Natural Language Processing (NLP) & Semantic Search', 'WhatsApp, Web & Telegram Chatbot Integration', 'Contextual RAG Retrieval & Custom LLM Fine-Tuning'],
       gradient: 'from-indigo-500/20 via-teal-500/10 to-transparent'
     },
@@ -63,6 +74,8 @@ export const ServicesPage = ({ openConsultation }) => {
       title: 'Computer Vision',
       desc: 'Real-time object detection, automated visual inspection, industrial defect classification under 14ms, and video telemetry.',
       icon: ComputerVisionIcon,
+      caseStudyLink: '/case-studies/threadeye',
+      caseStudyTitle: 'See ThreadEye <14ms Vision Study',
       bullets: ['YOLOv9 Real-Time Detection', 'TensorRT Edge Inference <14ms', 'Camera Stream Processing'],
       gradient: 'from-cyan-500/25 via-teal-500/15 to-transparent'
     },
@@ -71,6 +84,8 @@ export const ServicesPage = ({ openConsultation }) => {
       title: 'Agentic AI & Automation',
       desc: 'Autonomous multi-agent workflows, self-healing task queues, robotic process automation, and zero-downtime API connectors.',
       icon: AgenticAIIcon,
+      caseStudyLink: '/case-studies/noesis',
+      caseStudyTitle: 'See Noesis LangGraph Agent',
       bullets: ['Multi-Agent Task Orchestration', 'Self-Healing Workflows', 'Zero-Downtime Pipeline Sync'],
       gradient: 'from-teal-500/25 via-indigo-500/15 to-transparent'
     }
@@ -105,15 +120,15 @@ export const ServicesPage = ({ openConsultation }) => {
           transition={{ delay: 0.2 }}
           className="text-base sm:text-lg text-slate-300 max-w-2xl font-normal leading-relaxed"
         >
-          End-to-end technology solutions from initial concept and UI/UX design to custom AI model training and production deployment. All capabilities stay active and visible together on screen.
+          End-to-end technology solutions from initial concept and UI/UX design to custom AI model training and production deployment.
         </motion.p>
       </div>
 
-      {/* Category 1: Design & Development (Cards slide in and all stay on screen) */}
+      {/* Category 1: Design & Development */}
       <div className="mb-24">
         <div className="flex items-center justify-between mb-8 pb-3 border-b border-cyan-500/20">
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-3">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300 font-mono font-black">01.</span> Design & Full-Stack Development
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300 font-mono font-black">01.</span> Design &amp; Full-Stack Development
           </h2>
           <span className="text-xs font-mono text-cyan-400 bg-cyan-950/80 px-2.5 py-1 rounded-lg border border-cyan-500/30">3 Active Capabilities</span>
         </div>
@@ -160,6 +175,19 @@ export const ServicesPage = ({ openConsultation }) => {
                           <span>{bullet}</span>
                         </div>
                       ))}
+
+                      {navigate && service.caseStudyLink && (
+                        <button
+                          onClick={() => {
+                            navigate(service.caseStudyLink);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="pt-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link"
+                        >
+                          <span>{service.caseStudyTitle}</span>
+                          <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </TiltCard>
@@ -169,11 +197,11 @@ export const ServicesPage = ({ openConsultation }) => {
         </div>
       </div>
 
-      {/* Category 2: AI & Intelligence (Cards slide in and all stay on screen) */}
+      {/* Category 2: AI & Intelligence */}
       <div className="mb-24">
         <div className="flex items-center justify-between mb-8 pb-3 border-b border-cyan-500/20">
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-3">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-indigo-400 font-mono font-black">02.</span> AI & Intelligent Automation
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-indigo-400 font-mono font-black">02.</span> AI &amp; Intelligent Automation
           </h2>
           <span className="text-xs font-mono text-teal-300 bg-teal-950/80 px-2.5 py-1 rounded-lg border border-teal-500/30">4 Active Capabilities</span>
         </div>
@@ -220,6 +248,19 @@ export const ServicesPage = ({ openConsultation }) => {
                           <span>{bullet}</span>
                         </div>
                       ))}
+
+                      {navigate && service.caseStudyLink && (
+                        <button
+                          onClick={() => {
+                            navigate(service.caseStudyLink);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="pt-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link"
+                        >
+                          <span>{service.caseStudyTitle}</span>
+                          <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </TiltCard>
@@ -229,11 +270,11 @@ export const ServicesPage = ({ openConsultation }) => {
         </div>
       </div>
 
-      {/* Category 3: Data Analytics & Dashboard Creation (Python, Excel, SQL) */}
+      {/* Category 3: Data Analytics */}
       <div className="mb-24">
         <div className="flex items-center justify-between mb-8 pb-3 border-b border-cyan-500/20">
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-3">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-300 font-mono font-black">03.</span> Data Analytics & Dashboard Creation
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-300 font-mono font-black">03.</span> Data Analytics &amp; Dashboard Creation
           </h2>
           <span className="text-xs font-mono text-cyan-400 bg-cyan-950/80 px-2.5 py-1 rounded-lg border border-cyan-500/30">Python • Excel • SQL Analytics</span>
         </div>
@@ -255,7 +296,7 @@ export const ServicesPage = ({ openConsultation }) => {
             {/* Right Content */}
             <div className="lg:col-span-8 space-y-4">
               <h3 className="text-2xl sm:text-3xl font-bold text-white">
-                Data Analytics & Custom Dashboard Creation
+                Data Analytics &amp; Custom Dashboard Creation
               </h3>
               <p className="text-sm text-slate-300 leading-relaxed">
                 Transform raw business numbers and database records into clear executive foresight. We analyze your data exclusively through <strong>Python</strong>, <strong>Microsoft Excel</strong>, and <strong>SQL</strong> to build clean statistical models, automated KPI dashboards, and high-clarity reporting decks.
@@ -264,7 +305,7 @@ export const ServicesPage = ({ openConsultation }) => {
               <div className="space-y-3 pt-2">
                 <div className="flex items-start gap-3 text-sm text-slate-200">
                   <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
-                  <span><strong>Python Data Analysis:</strong> Data wrangling, exploratory data analysis, statistical computation, and visualization with Pandas, NumPy, Matplotlib & Seaborn.</span>
+                  <span><strong>Python Data Analysis:</strong> Data wrangling, exploratory data analysis, statistical computation, and visualization with Pandas, NumPy, Matplotlib &amp; Seaborn.</span>
                 </div>
                 <div className="flex items-start gap-3 text-sm text-slate-200">
                   <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
@@ -272,7 +313,7 @@ export const ServicesPage = ({ openConsultation }) => {
                 </div>
                 <div className="flex items-start gap-3 text-sm text-slate-200">
                   <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
-                  <span><strong>SQL Database Analytics:</strong> Complex aggregation queries, window functions, relational joins, and database reporting across PostgreSQL & MySQL.</span>
+                  <span><strong>SQL Database Analytics:</strong> Complex aggregation queries, window functions, relational joins, and database reporting across PostgreSQL &amp; MySQL.</span>
                 </div>
               </div>
             </div>
@@ -280,8 +321,11 @@ export const ServicesPage = ({ openConsultation }) => {
         </motion.div>
       </div>
 
-      {/* Bottom CTA Banner with Gradient */}
-      <div className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
+      {/* Services FAQ Section */}
+      <FAQSection openConsultation={openConsultation} />
+
+      {/* Bottom CTA Banner */}
+      <div className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden mt-12">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/15 via-teal-500/10 to-transparent blur-3xl pointer-events-none"></div>
 
         <div className="relative z-10">
@@ -289,7 +333,7 @@ export const ServicesPage = ({ openConsultation }) => {
             Not sure what technical architecture you need?
           </h2>
           <p className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-white text-lg font-medium mt-1">
-            Book a free 30-minute discovery consultation with our engineers
+            Book a free 30-minute discovery consultation with our senior engineers
           </p>
         </div>
 

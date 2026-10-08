@@ -17,6 +17,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { ScheduleConsultationSection } from '../components/common/ScheduleConsultationSection';
+import { VerifiedTestimonials } from '../components/common/VerifiedTestimonials';
 import { motion } from 'framer-motion';
 import { TiltCard } from '../components/common/TiltCard';
 import { AnimatedCounter } from '../components/common/AnimatedCounter';
@@ -345,6 +346,9 @@ export const AboutPage = ({ navigate, openConsultation }) => {
           })}
         </div>
       </div>
+
+      {/* Real Verified Client Testimonials */}
+      <VerifiedTestimonials navigate={navigate} />
 
       {/* Schedule Free Consultation */}
       <ScheduleConsultationSection />

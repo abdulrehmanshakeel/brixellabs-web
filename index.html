@@ -33,6 +33,12 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/logo/logo.png" />
     <link rel="manifest" href="/manifest.json" />
 
+    <!-- Preconnect to CDNs & Third-Party APIs for Core Web Vitals Optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://challenges.cloudflare.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+
     <!-- Open Graph (Facebook, LinkedIn, Discord, Slack, WhatsApp) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="BrixelLabs" />
@@ -57,9 +63,20 @@
     <meta name="twitter:image:alt" content="BrixelLabs — Full-Stack Tech &amp; AI Solutions" />
 
     <!-- Google Fonts Preconnect & Swap for Core Web Vitals (Zero Layout Shift) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Google Analytics (GA4) Integration -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BRIXELLABS01"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-BRIXELLABS01', {
+        send_page_view: false,
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=None;Secure'
+      });
+    </script>
 
     <!-- Structured Data: JSON-LD Schema Markup -->
     <script type="application/ld+json">

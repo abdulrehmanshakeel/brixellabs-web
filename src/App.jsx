@@ -18,6 +18,9 @@ const ThreadEyeCaseStudyPage = lazy(() => import('./pages/ThreadEyeCaseStudyPage
 const GetScryCaseStudyPage = lazy(() => import('./pages/GetScryCaseStudyPage').then(m => ({ default: m.GetScryCaseStudyPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const ThankYouPage = lazy(() => import('./pages/ThankYouPage').then(m => ({ default: m.ThankYouPage })));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 // Futuristic Lightweight Loading Fallback
@@ -51,8 +54,13 @@ export function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Normalize path (remove trailing slash except root)
+  const normalizedPath = currentPath.length > 1 && currentPath.endsWith('/') 
+    ? currentPath.slice(0, -1) 
+    : currentPath;
+
   // If on Admin Portal route, render standalone Admin Command Center
-  if (currentPath === '/admin') {
+  if (normalizedPath === '/admin') {
     return (
       <Suspense fallback={<PageLoader />}>
         <AdminPage />
@@ -61,44 +69,51 @@ export function App() {
   }
 
   const renderPage = () => {
-    switch (currentPath) {
-      case '/services':
-        return <ServicesPage openConsultation={() => setIsConsultationOpen(true)} />;
-      case '/process':
-        return <ProcessPage openConsultation={() => setIsConsultationOpen(true)} />;
-      case '/case-studies':
-        return <OurWorkPage navigate={navigate} />;
-      case '/case-studies/noesis':
-      case '/case-studies/neosis':
-        return <NoesisCaseStudyPage openConsultation={() => setIsConsultationOpen(true)} />;
-      case '/case-studies/the-watcher':
-        return <WatcherCaseStudyPage openConsultation={() => setIsConsultationOpen(true)} />;
-      case '/case-studies/frontdesk-ai':
-        return <FrontDeskAICaseStudyPage openConsultation={() => setIsConsultationOpen(true)} />;
-      case '/case-studies/threadeye':
-      case '/case-studies/fabric-defect-detection':
-        return <ThreadEyeCaseStudyPage openConsultation={() => setIsConsultationOpen(true)} />;
-      case '/case-studies/getscry':
-        return <GetScryCaseStudyPage openConsultation={() => setIsConsultationOpen(true)} />;
-      case '/about':
-        return <AboutPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
-      case '/contact':
-        return <ContactPage />;
+    switch (normalizedPath) {
       case '/':
-      default:
         return (
           <HomePage 
             navigate={navigate} 
             openConsultation={() => setIsConsultationOpen(true)} 
           />
         );
+      case '/services':
+        return <ServicesPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
+      case '/process':
+        return <ProcessPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
+      case '/case-studies':
+        return <OurWorkPage navigate={navigate} />;
+      case '/case-studies/noesis':
+      case '/case-studies/neosis':
+        return <NoesisCaseStudyPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
+      case '/case-studies/the-watcher':
+        return <WatcherCaseStudyPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
+      case '/case-studies/frontdesk-ai':
+        return <FrontDeskAICaseStudyPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
+      case '/case-studies/threadeye':
+      case '/case-studies/fabric-defect-detection':
+        return <ThreadEyeCaseStudyPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
+      case '/case-studies/getscry':
+        return <GetScryCaseStudyPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
+      case '/about':
+        return <AboutPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
+      case '/contact':
+        return <ContactPage navigate={navigate} />;
+      case '/thank-you':
+        return <ThankYouPage navigate={navigate} />;
+      case '/privacy-policy':
+      case '/privacy':
+        return <PrivacyPolicyPage navigate={navigate} />;
+      default:
+        // Custom 404 Page
+        return <NotFoundPage navigate={navigate} />;
     }
   };
 
   return (
     <div className="relative min-h-screen bg-[#030c14] text-slate-100 flex flex-col justify-between selection:bg-cyan-400 selection:text-black">
       {/* Dynamic SEO Meta & Canonical Manager */}
-      <SEOHead currentPath={currentPath} />
+      <SEOHead currentPath={normalizedPath} />
 
       {/* Background neon circuit & particle constellation */}
       <BackgroundEffects />
@@ -108,7 +123,7 @@ export function App() {
 
       {/* Global Navbar */}
       <Navbar 
-        currentPath={currentPath} 
+        currentPath={normalizedPath} 
         navigate={navigate} 
         openConsultation={() => setIsConsultationOpen(true)} 
       />
@@ -127,6 +142,7 @@ export function App() {
       <ConsultationModal 
         isOpen={isConsultationOpen} 
         onClose={() => setIsConsultationOpen(false)} 
+        navigate={navigate}
       />
     </div>
   );
