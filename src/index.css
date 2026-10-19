@@ -362,22 +362,22 @@
   box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 240, 255, 0.15);
 }
 
-/* Infinite Marquee Animations for Tech Stack */
+/* Infinite Marquee Animations for Tech Stack (GPU Hardware-Accelerated) */
 @keyframes marqueeLeft {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
   100% {
-    transform: translateX(-33.333333%);
+    transform: translate3d(-33.333333%, 0, 0);
   }
 }
 
 @keyframes marqueeRight {
   0% {
-    transform: translateX(-33.333333%);
+    transform: translate3d(-33.333333%, 0, 0);
   }
   100% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
 }
 

@@ -39,14 +39,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Preconnect to CDNs & Third-Party APIs for Core Web Vitals Optimization -->
+    <!-- Preconnect to CDNs for Core Web Vitals Optimization -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://challenges.cloudflare.com" />
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-
-    <!-- Cloudflare Turnstile: Modern Spam & Bot Protection API -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
     <!-- Open Graph (Facebook, LinkedIn, Discord, Slack, WhatsApp) -->
     <meta property="og:type" content="website" />
@@ -80,8 +76,7 @@
       <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     </noscript>
 
-    <!-- Google Analytics (GA4) Integration -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BRIXELLABS01"></script>
+    <!-- Google Analytics (GA4) - Deferred after page load to prioritize maximum initial paint speed -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -90,6 +85,12 @@
         send_page_view: false,
         anonymize_ip: true,
         cookie_flags: 'SameSite=None;Secure'
+      });
+      window.addEventListener('load', function() {
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-BRIXELLABS01';
+        s.async = true;
+        document.head.appendChild(s);
       });
     </script>
 

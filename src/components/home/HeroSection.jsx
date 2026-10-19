@@ -99,11 +99,11 @@ export const HeroSection = ({ navigate, openConsultation }) => {
           {/* Left Column: Headlines & Unified CTA with Refined Spacing */}
           <div className="lg:col-span-8 space-y-6 sm:space-y-8 text-left py-6 sm:py-10">
             
-            {/* Big Headline in Pure Crisp White */}
+            {/* Big Headline in Pure Crisp White - Instant First Paint (LCP Optimization) */}
             <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0.9, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              transition={{ duration: 0.25 }}
               className="font-heading text-5xl sm:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.04]"
             >
               Full-Stack Tech <br />
@@ -112,9 +112,9 @@ export const HeroSection = ({ navigate, openConsultation }) => {
 
             {/* Punchy Subtitle with Enhanced Readability */}
             <motion.p 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0.9, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.25 }}
               className="text-base sm:text-lg lg:text-xl text-slate-300 max-w-2xl font-normal leading-relaxed"
             >
               We engineer high-performance web applications, custom Shopify stores, and autonomous AI systems built for measurable ROI.
@@ -122,9 +122,9 @@ export const HeroSection = ({ navigate, openConsultation }) => {
 
             {/* One Button Per Section: Unified Master Button Style */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0.9, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              transition={{ duration: 0.25 }}
               className="pt-2 sm:pt-4"
             >
               <button

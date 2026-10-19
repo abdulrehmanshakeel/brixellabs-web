@@ -23,6 +23,16 @@ export const TurnstileWidget = ({
     let isMounted = true;
     let pollInterval = null;
 
+    // Dynamically inject Cloudflare Turnstile script on-demand only when widget is actually displayed
+    if (typeof window !== 'undefined' && !window.turnstile && !document.getElementById('cf-turnstile-script')) {
+      const script = document.createElement('script');
+      script.id = 'cf-turnstile-script';
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+
     const renderWidget = () => {
       if (!window.turnstile || !containerRef.current || widgetIdRef.current !== null) {
         return;

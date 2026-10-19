@@ -23,9 +23,15 @@ export const BackgroundEffects = () => {
 
     window.addEventListener('resize', handleResize, { passive: true });
 
-    // Optimize particle count for high frame rate (max 32 particles)
+    // Skip particle canvas loop entirely on mobile devices to preserve 100% CPU/GPU and maximize load speed
     const isMobile = width < 768;
-    const particleCount = isMobile ? 16 : Math.min(Math.floor((width * height) / 45000), 32);
+    if (isMobile) {
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+
+    const particleCount = Math.min(Math.floor((width * height) / 45000), 28);
     
     const particles = Array.from({ length: particleCount }, () => ({
       x: Math.random() * width,
