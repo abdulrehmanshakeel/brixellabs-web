@@ -4,6 +4,11 @@ export const CyberSpotlight = () => {
   const spotlightRef = useRef(null);
 
   useEffect(() => {
+    // Skip completely on mobile touch devices to eliminate CPU / GPU overhead
+    if (typeof window === 'undefined' || window.innerWidth < 768 || window.matchMedia('(hover: none)').matches) {
+      return;
+    }
+
     const el = spotlightRef.current;
     if (!el) return;
 
@@ -53,7 +58,7 @@ export const CyberSpotlight = () => {
   return (
     <div 
       ref={spotlightRef}
-      className="fixed inset-0 pointer-events-none z-30 opacity-0 transition-opacity duration-300 will-change-[background,opacity]"
+      className="hidden md:block fixed inset-0 pointer-events-none z-30 opacity-0 transition-opacity duration-300 will-change-[background,opacity]"
     />
   );
 };

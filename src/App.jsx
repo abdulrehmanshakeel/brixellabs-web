@@ -2,17 +2,19 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BackgroundEffects } from './components/layout/BackgroundEffects';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
-import { ConsultationModal } from './components/common/ConsultationModal';
 import { CyberSpotlight } from './components/common/CyberSpotlight';
 import { SEOHead } from './components/common/SEOHead';
 import { StickySocialBar } from './components/common/StickySocialBar';
 import { ScrollProgressBar } from './components/common/ScrollProgressBar';
 import { BackToTop } from './components/common/BackToTop';
 import { CookieBanner } from './components/common/CookieBanner';
-import { SiteSearchModal } from './components/common/SiteSearchModal';
 import { ForceUpdateScreen } from './components/common/ForceUpdateScreen';
 import { ToastContainer } from './components/common/Toast';
 import { captureUTMParams } from './utils/utm';
+
+// Lazy-loaded interactive modals (loaded on-demand to optimize initial mobile page load <3s)
+const ConsultationModal = lazy(() => import('./components/common/ConsultationModal').then(m => ({ default: m.ConsultationModal })));
+const SiteSearchModal = lazy(() => import('./components/common/SiteSearchModal').then(m => ({ default: m.SiteSearchModal })));
 
 // Lazy-loaded route components for instant initial page loading & minimal JS payload
 const HomePage = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
@@ -248,12 +250,16 @@ export function App() {
       {/* GDPR / CCPA Compliant Glassmorphic Cookie Consent Banner */}
       <CookieBanner navigate={navigate} />
 
-      {/* Global Quick Search Modal (Cmd+K / Ctrl+K) */}
-      <SiteSearchModal 
-        isOpen={isSearchOpen} 
-        onClose={() => setIsSearchOpen(false)} 
-        navigate={navigate} 
-      />
+      {/* Global Quick Search Modal (Cmd+K / Ctrl+K) - Lazy Loaded on Demand */}
+      {isSearchOpen && (
+        <Suspense fallback={null}>
+          <SiteSearchModal 
+            isOpen={isSearchOpen} 
+            onClose={() => setIsSearchOpen(false)} 
+            navigate={navigate} 
+          />
+        </Suspense>
+      )}
 
       {/* Remote Force-Update Screen & Version Manager */}
       <ForceUpdateScreen />
@@ -261,12 +267,16 @@ export function App() {
       {/* Global Toast Notification System */}
       <ToastContainer />
 
-      {/* Reusable Consultation Discovery Modal */}
-      <ConsultationModal 
-        isOpen={isConsultationOpen} 
-        onClose={() => setIsConsultationOpen(false)} 
-        navigate={navigate}
-      />
+      {/* Reusable Consultation Discovery Modal - Lazy Loaded on Demand */}
+      {isConsultationOpen && (
+        <Suspense fallback={null}>
+          <ConsultationModal 
+            isOpen={isConsultationOpen} 
+            onClose={() => setIsConsultationOpen(false)} 
+            navigate={navigate}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }
