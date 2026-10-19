@@ -13,6 +13,32 @@
 backend/.env
 backend/.env.*
 
+# --- App Signing Keys, Keystores & Private Certificates (NEVER COMMIT) ---
+*.jks
+*.keystore
+*.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.crt
+*.der
+*.mobileprovision
+*.signingkey
+app_signing_key*
+*signing_key*
+secrets/
+secret/
+backups/
+backup/
+credentials*.json
+service-account*.json
+google-services.json
+GoogleService-Info.plist
+*.id_rsa
+*.id_ecdsa
+*.id_ed25519
+
 # Allow .env.example templates
 !.env.example
 !backend/.env.example

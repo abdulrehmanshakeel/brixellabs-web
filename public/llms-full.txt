@@ -37,31 +37,31 @@
 
 ## Deep Dive into Verified Deployments
 
-### A. Noesis — Autonomous AI Study Assistant
+### A. Noesis: Autonomous AI Study Assistant
 - Link: https://brixellabs.com/case-studies/noesis
 - Core Problem: Students and researchers struggle with passive reading and non-interactive study material.
 - Architecture: LangGraph multi-agent DAG that analyzes topic difficulty, queries web search APIs, synthesizes organized Markdown notes, and constructs calibrated multi-choice quizzes.
 - Key Feature: Human-in-the-Loop calibration allowing users to approve/adjust search queries before notes generation.
 
-### B. The Watcher — AI Child Safety Platform
+### B. The Watcher: AI Child Safety Platform
 - Link: https://brixellabs.com/case-studies/the-watcher
 - Core Problem: Traditional parental blockers are intrusive and easily bypassed.
 - Architecture: On-device Kotlin daemon + Flutter UI communicating with a Django REST & LangGraph backend. Real-time classification of browsing patterns without logging sensitive personal data.
 - Key Feature: AI-generated daily risk digest summarizing anomalies in plain English.
 
-### C. FrontDesk AI — Autonomous WhatsApp Booking Agent
+### C. FrontDesk AI: Autonomous WhatsApp Booking Agent
 - Link: https://brixellabs.com/case-studies/frontdesk-ai
 - Core Problem: Medical clinics and service businesses lose customers due to delayed front-desk messaging response times.
 - Architecture: Webhook integration via Twilio WhatsApp Business API -> Django async processor -> Groq-accelerated LangGraph scheduling agent -> Google Calendar / internal DB sync.
 - Key Feature: Natural bilingual fluency across conversational Roman Urdu and English.
 
-### D. ThreadEye — Industrial Fabric Defect Detection
+### D. ThreadEye: Industrial Fabric Defect Detection
 - Link: https://brixellabs.com/case-studies/threadeye
 - Core Problem: Manual textile inspection misses 15-20% of warp/weft defects at high loom speeds.
 - Architecture: 4K industrial line-scan cameras streaming 60 FPS video over GigE to NVIDIA Jetson hardware running YOLOv8n-seg TensorRT engine. Flaws trigger instant PLC relays.
 - Key Feature: Sub-14ms detection latency with 99.8% classification accuracy.
 
-### E. GetScry — Real-Time Visitor Intent Intelligence
+### E. GetScry: Real-Time Visitor Intent Intelligence
 - Link: https://brixellabs.com/case-studies/getscry
 - Core Problem: High bounce rates and wasted marketing discounts given to low-intent shoppers.
 - Architecture: High-throughput event ingestion -> XGBoost classifier predicting purchase intent (0-100%) -> SHAP explainability engine generating human-readable conversion reasons in <35ms.
@@ -70,4 +70,5 @@
 
 Clients can schedule a direct technical discovery call via:
 - Booking Page: https://brixellabs.com/contact
-- Direct Inquiry: brixellabs@gmail.com
+- Official Contact Email: brixellabs@gmail.com
+- WhatsApp Hotline: +92 344 9254864

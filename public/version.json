@@ -1,0 +1,15 @@
+{
+  "version": "2.4.0",
+  "minSupportedVersion": "2.0.0",
+  "forceUpdate": false,
+  "updateTitle": "Mandatory Platform Update",
+  "updateMessage": "A critical security, database integrity, and architecture update is required to continue accessing BrixelLabs.",
+  "releaseNotes": [
+    "Enterprise backend security & host header filtering",
+    "Database check constraints and row-level security policies",
+    "Day-one crash reporting and incident telemetry",
+    "App signing key disaster recovery vault"
+  ],
+  "downloadUrl": "/",
+  "publishedAt": "2026-10-18T16:00:00Z"
+}

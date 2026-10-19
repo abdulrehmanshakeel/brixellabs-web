@@ -1,279 +1,242 @@
 import React from 'react';
 import { 
   Users, 
-  DollarSign, 
+  MessageSquare, 
   Layers, 
-  Activity, 
-  TrendingUp, 
-  Clock, 
-  CheckCircle2, 
+  Briefcase, 
   ArrowUpRight, 
-  Cpu, 
-  Server, 
-  Zap, 
-  ShieldCheck,
-  Eye,
-  Mail
+  Mail, 
+  Phone, 
+  Globe,
+  Settings,
+  ArrowRight
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 export const AdminOverview = ({ 
   inquiries = [], 
   services = [], 
   portfolio = [], 
-  onSelectLead,
-  onNavigateTab 
+  team = [], 
+  auditLogs = [],
+  setActiveTab,
+  onNavigateTab,
+  onSelectLead 
 }) => {
-  // Compute analytics
+  const navigateTo = onNavigateTab || setActiveTab || (() => {});
+
   const totalLeads = inquiries.length;
-  const newLeads = inquiries.filter(i => i.status === 'New').length;
-  const closedLeads = inquiries.filter(i => i.status === 'Closed / Won').length;
+  const newLeads = inquiries.filter(i => (i.status || '').toLowerCase() === 'new').length;
+  const activeServicesCount = services.filter(s => s.active !== false).length;
+  const totalProjectsCount = portfolio.length;
 
-  // Pipeline estimation based on budget strings
-  const estimatePipeline = () => {
-    let total = 0;
-    inquiries.forEach(i => {
-      if (i.budget === '$50k+') total += 65000;
-      else if (i.budget === '$25k - $50k') total += 37500;
-      else if (i.budget === '$10k - $25k') total += 17500;
-      else total += 8000;
-    });
-    return total;
-  };
-
-  const pipelineValue = estimatePipeline();
-
-  const metrics = [
+  const stats = [
     {
-      title: 'Total Active Inquiries',
+      title: 'New Messages',
+      value: newLeads,
+      label: newLeads === 1 ? '1 unread' : `${newLeads} unread`,
+      icon: MessageSquare,
+      onClick: () => navigateTo('inquiries')
+    },
+    {
+      title: 'Total Inquiries',
       value: totalLeads,
-      change: `+${newLeads} new today`,
+      label: 'All time inquiries',
       icon: Users,
-      gradient: 'from-cyan-400 to-teal-300',
-      bgGrad: 'from-cyan-500/20 to-blue-600/10'
+      onClick: () => navigateTo('inquiries')
     },
     {
-      title: 'Projected Deal Pipeline',
-      value: `$${(pipelineValue / 1000).toFixed(1)}k`,
-      change: `${closedLeads} contracts closed`,
-      icon: DollarSign,
-      gradient: 'from-emerald-300 to-teal-400',
-      bgGrad: 'from-emerald-500/20 to-cyan-600/10'
-    },
-    {
-      title: 'Active Tech Services',
-      value: services.filter(s => s.active !== false).length,
-      change: '8 core capabilities',
+      title: 'Active Services',
+      value: activeServicesCount,
+      label: 'Live on website',
       icon: Layers,
-      gradient: 'from-cyan-300 to-indigo-400',
-      bgGrad: 'from-blue-500/20 to-indigo-600/10'
+      onClick: () => navigateTo('services')
     },
     {
-      title: 'Avg Inference Latency',
-      value: '13.4ms',
-      change: '99.99% Edge SLA',
-      icon: Activity,
-      gradient: 'from-indigo-300 to-cyan-300',
-      bgGrad: 'from-indigo-500/20 to-teal-600/10'
+      title: 'Projects',
+      value: totalProjectsCount,
+      label: 'Case studies',
+      icon: Briefcase,
+      onClick: () => navigateTo('portfolio')
     }
   ];
 
-  return (
-    <div className="space-y-6">
-      
-      {/* 4 Top KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {metrics.map((item, idx) => {
-          const IconComp = item.icon;
-          return (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.08 }}
-              className="gradient-card rounded-2xl p-5 border border-cyan-500/30 relative overflow-hidden shadow-lg"
-            >
-              <div className={`absolute -top-12 -right-12 w-28 h-28 rounded-full blur-2xl opacity-30 bg-gradient-to-br ${item.bgGrad} pointer-events-none`}></div>
-              
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-mono text-slate-400 font-semibold">{item.title}</span>
-                <div className="w-8 h-8 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
-                  <IconComp className="w-4 h-4" />
-                </div>
-              </div>
+  const getWhatsAppLink = (phone, name) => {
+    if (!phone) return null;
+    const cleanNumber = phone.replace(/[^0-9]/g, '');
+    const message = encodeURIComponent(`Hi ${name || 'there'}, thanks for contacting BrixelLabs! How can we help you?`);
+    return `https://wa.me/${cleanNumber}?text=${message}`;
+  };
 
-              <div className={`text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${item.gradient} font-mono`}>
+  return (
+    <div className="space-y-4 max-w-6xl mx-auto">
+      {/* 4 Minimal Metric Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {stats.map((item, idx) => {
+          const Icon = item.icon;
+          return (
+            <div
+              key={idx}
+              onClick={item.onClick}
+              className="p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] hover:border-white/10 transition-colors cursor-pointer group"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-slate-400 font-medium">{item.title}</span>
+                <Icon className="w-3.5 h-3.5 text-white" />
+              </div>
+              <div className="text-2xl font-bold text-white tracking-tight">
                 {item.value}
               </div>
-
-              <div className="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                <span>{item.change}</span>
+              <div className="mt-1 text-[11px] text-slate-500 font-medium">
+                {item.label}
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>
 
-      {/* Main Grid: Recent Inquiries + Live Telemetry */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* Left Col (8 cols): Recent Inbound Leads */}
-        <div className="lg:col-span-8 gradient-card rounded-3xl p-6 border border-cyan-500/30 shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20">
-            <div>
-              <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                <Users className="w-5 h-5 text-cyan-400" />
-                <span>Recent Inbound Client Inquiries</span>
-              </h2>
-              <p className="text-xs text-slate-400">Live submissions captured across website forms</p>
-            </div>
-
-            <button
-              onClick={() => onNavigateTab('inquiries')}
-              className="text-xs font-mono text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 transition-colors cursor-pointer"
-            >
-              <span>View All CRM ({totalLeads})</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
+      {/* Recent Messages Section */}
+      <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] overflow-hidden">
+        <div className="p-4 border-b border-white/[0.06] flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-semibold text-white">
+              Recent Messages
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Latest inquiries from website visitors
+            </p>
           </div>
 
-          {/* Table / List */}
-          <div className="space-y-2.5">
-            {inquiries.slice(0, 5).map((inq) => (
-              <div
-                key={inq.id}
-                onClick={() => onSelectLead(inq)}
-                className="p-3.5 rounded-2xl bg-[#041525]/90 hover:bg-[#07243c] border border-cyan-500/25 hover:border-cyan-400/60 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 cursor-pointer group shadow-sm"
-              >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
-                      {inq.name}
-                    </span>
-                    <span className="text-xs text-slate-400 font-mono">
-                      · {inq.company || 'Enterprise'}
-                    </span>
-                    {inq.status === 'New' && (
-                      <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-400 text-[10px] font-mono font-bold animate-pulse">
-                        NEW
+          <button
+            onClick={() => navigateTo('inquiries')}
+            className="text-xs text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1 transition-colors cursor-pointer"
+          >
+            <span>View all ({totalLeads})</span>
+            <ArrowRight className="w-3.5 h-3.5 text-white" />
+          </button>
+        </div>
+
+        {inquiries.length === 0 ? (
+          <div className="p-10 text-center text-slate-500 text-xs">
+            No messages received yet.
+          </div>
+        ) : (
+          <div className="divide-y divide-white/[0.04]">
+            {inquiries.slice(0, 5).map((inq) => {
+              const waLink = getWhatsAppLink(inq.phone, inq.name);
+              const isNew = (inq.status || 'new').toLowerCase() === 'new';
+
+              return (
+                <div
+                  key={inq.id}
+                  className="p-4 hover:bg-white/[0.02] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                >
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-white">
+                        {inq.name}
                       </span>
+                      {inq.company && (
+                        <span className="text-[11px] text-slate-400 bg-white/[0.04] px-1.5 py-0.5 rounded">
+                          {inq.company}
+                        </span>
+                      )}
+                      {isNew && (
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-cyan-400/10 text-cyan-300 border border-cyan-400/20">
+                          New
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="text-xs text-slate-400 flex flex-wrap items-center gap-x-2">
+                      <span className="text-slate-300">{inq.service || 'Inquiry'}</span>
+                      {inq.budget && <span>• {inq.budget}</span>}
+                      {inq.phone && <span className="font-mono text-slate-500">• {inq.phone}</span>}
+                    </div>
+
+                    {inq.projectBrief && (
+                      <p className="text-xs text-slate-400 line-clamp-1">
+                        {inq.projectBrief}
+                      </p>
                     )}
                   </div>
-                  <div className="text-xs text-slate-400 flex items-center gap-3">
-                    <span>{inq.service}</span>
-                    <span className="text-cyan-400 font-mono font-semibold">{inq.budget}</span>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-1.5 shrink-0 self-start sm:self-center">
+                    {waLink && (
+                      <a
+                        href={waLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-medium flex items-center gap-1 transition-colors"
+                        title="Open WhatsApp chat"
+                      >
+                        <Phone className="w-3 h-3 text-white" />
+                        <span>WhatsApp</span>
+                      </a>
+                    )}
+
+                    {inq.email && (
+                      <a
+                        href={`mailto:${inq.email}`}
+                        className="px-2.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs font-medium flex items-center gap-1 transition-colors"
+                        title="Send email"
+                      >
+                        <Mail className="w-3 h-3 text-white" />
+                        <span>Email</span>
+                      </a>
+                    )}
+
+                    <button
+                      onClick={() => {
+                        if (onSelectLead) onSelectLead(inq);
+                        navigateTo('inquiries');
+                      }}
+                      className="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.04] text-xs font-medium transition-colors cursor-pointer"
+                    >
+                      View
+                    </button>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-3 self-end sm:self-center">
-                  <span className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold border ${
-                    inq.status === 'Closed / Won'
-                      ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40'
-                      : inq.status === 'In Review'
-                      ? 'bg-amber-950/80 text-amber-300 border-amber-500/40'
-                      : inq.status === 'Contacted'
-                      ? 'bg-indigo-950/80 text-indigo-300 border-indigo-500/40'
-                      : 'bg-cyan-950/80 text-cyan-300 border-cyan-500/40'
-                  }`}>
-                    {inq.status}
-                  </span>
-                  <span className="text-[11px] font-mono text-slate-500">
-                    {new Date(inq.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        </div>
-
-        {/* Right Col (4 cols): Server & Cluster Telemetry */}
-        <div className="lg:col-span-4 space-y-6">
-          
-          {/* Cluster Telemetry Widget */}
-          <div className="gradient-card rounded-3xl p-6 border border-cyan-500/30 shadow-xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20">
-              <h3 className="text-sm font-bold text-white font-mono uppercase flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-cyan-400" />
-                <span>Node Cluster Telemetry</span>
-              </h3>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/40">ONLINE</span>
-            </div>
-
-            <div className="space-y-3 text-xs">
-              <div>
-                <div className="flex items-center justify-between text-slate-300 mb-1">
-                  <span>Edge AI GPU Load (NVIDIA Jetson)</span>
-                  <span className="font-mono text-cyan-300 font-bold">24.2%</span>
-                </div>
-                <div className="h-1.5 w-full bg-[#051829] rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-cyan-400 to-teal-300 w-[24.2%]"></div>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-slate-300 mb-1">
-                  <span>Inference Engine Memory (TensorRT)</span>
-                  <span className="font-mono text-teal-300 font-bold">4.8 GB / 32 GB</span>
-                </div>
-                <div className="h-1.5 w-full bg-[#051829] rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-teal-300 to-cyan-400 w-[15%]"></div>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-slate-300 mb-1">
-                  <span>FastAPI Microservices Throughput</span>
-                  <span className="font-mono text-indigo-300 font-bold">1,840 req/min</span>
-                </div>
-                <div className="h-1.5 w-full bg-[#051829] rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-indigo-400 to-cyan-400 w-[38%]"></div>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-slate-300 mb-1">
-                  <span>PostgreSQL Pool Utilization</span>
-                  <span className="font-mono text-cyan-300 font-bold">12 / 100 Connections</span>
-                </div>
-                <div className="h-1.5 w-full bg-[#051829] rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-cyan-400 to-blue-400 w-[12%]"></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2 border-t border-cyan-500/15 flex items-center justify-between text-[11px] font-mono text-slate-400">
-              <span>Cloud Region: global-us-east-1</span>
-              <span className="text-emerald-400 font-bold">SLA: 99.99%</span>
-            </div>
-          </div>
-
-          {/* Quick Action Card */}
-          <div className="gradient-card rounded-3xl p-5 border border-cyan-500/30 shadow-xl text-center space-y-3">
-            <h4 className="text-sm font-bold text-white">Need to update capabilities or tagline?</h4>
-            <p className="text-xs text-slate-400">
-              Manage the 8 live services or modify global branding parameters in real-time.
-            </p>
-            <div className="flex items-center justify-center gap-2 pt-1">
-              <button
-                onClick={() => onNavigateTab('services')}
-                className="px-3 py-1.5 rounded-xl bg-[#082844] hover:bg-cyan-950 text-cyan-300 border border-cyan-500/40 text-xs font-semibold transition-all cursor-pointer"
-              >
-                Services
-              </button>
-              <button
-                onClick={() => onNavigateTab('settings')}
-                className="px-3 py-1.5 rounded-xl bg-[#082844] hover:bg-cyan-950 text-cyan-300 border border-cyan-500/40 text-xs font-semibold transition-all cursor-pointer"
-              >
-                Settings
-              </button>
-            </div>
-          </div>
-
-        </div>
-
+        )}
       </div>
 
+      {/* Quick Navigation Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <button
+          onClick={() => navigateTo('inquiries')}
+          className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] text-left transition-colors cursor-pointer"
+        >
+          <div className="text-xs font-semibold text-white">Messages</div>
+          <div className="text-[11px] text-slate-500 mt-0.5">{totalLeads} total leads</div>
+        </button>
+
+        <button
+          onClick={() => navigateTo('services')}
+          className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] text-left transition-colors cursor-pointer"
+        >
+          <div className="text-xs font-semibold text-white">Services</div>
+          <div className="text-[11px] text-slate-500 mt-0.5">{activeServicesCount} live on site</div>
+        </button>
+
+        <button
+          onClick={() => navigateTo('portfolio')}
+          className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] text-left transition-colors cursor-pointer"
+        >
+          <div className="text-xs font-semibold text-white">Projects</div>
+          <div className="text-[11px] text-slate-500 mt-0.5">{totalProjectsCount} case studies</div>
+        </button>
+
+        <button
+          onClick={() => navigateTo('settings')}
+          className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] text-left transition-colors cursor-pointer"
+        >
+          <div className="text-xs font-semibold text-white">Settings</div>
+          <div className="text-[11px] text-slate-500 mt-0.5">Phone, email & notice</div>
+        </button>
+      </div>
     </div>
   );
 };

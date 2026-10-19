@@ -50,13 +50,13 @@ export default function AdminPage() {
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
     refreshData();
-    showToast('Welcome to Brixel Labs Command Center', 'success');
+    showToast('Welcome back to BrixelLabs Admin', 'success');
   };
 
   const handleLogout = () => {
     adminStorage.logout();
     setIsAuthenticated(false);
-    showToast('Logged out of Admin Portal', 'info');
+    showToast('Logged out successfully', 'info');
   };
 
   if (!isAuthenticated) {
@@ -64,16 +64,20 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#02090f] text-slate-100 flex relative selection:bg-cyan-500 selection:text-black font-sans">
+    <div className="min-h-screen bg-[#030c14] text-slate-100 flex relative selection:bg-cyan-400 selection:text-black font-sans">
+      {/* Background ambient light effects matching website */}
+      <div className="fixed top-0 right-1/4 w-[600px] h-[400px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="fixed bottom-0 left-1/3 w-[500px] h-[300px] bg-teal-500/5 rounded-full blur-[120px] pointer-events-none" />
+
       {/* Toast Notification Container */}
       {toast && (
-        <div className="fixed top-6 right-6 z-50 animate-bounce-short flex items-center gap-3 px-4 py-3 rounded-xl bg-[#030d17] border border-cyan-500/50 shadow-2xl shadow-cyan-950/80 text-sm text-cyan-200">
-          {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
-          {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-400" />}
-          {toast.type === 'info' && <Info className="w-5 h-5 text-cyan-400" />}
+        <div className="fixed top-6 right-6 z-50 animate-bounce-short flex items-center gap-3 px-4 py-3 rounded-2xl bg-[#061523]/95 backdrop-blur-2xl border border-white/10 shadow-[0_12px_40px_0_rgba(0,0,0,0.7)] text-sm">
+          {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-white" />}
+          {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-white" />}
+          {toast.type === 'info' && <Info className="w-5 h-5 text-white" />}
           <span className="font-medium text-white">{toast.message}</span>
-          <button onClick={() => setToast(null)} className="text-cyan-500 hover:text-cyan-300 ml-2">
-            <X className="w-4 h-4" />
+          <button onClick={() => setToast(null)} className="text-white hover:opacity-80 ml-2 cursor-pointer">
+            <X className="w-4 h-4 text-white" />
           </button>
         </div>
       )}
@@ -83,7 +87,7 @@ export default function AdminPage() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onLogout={handleLogout}
-        inquiriesCount={inquiries.filter(i => i.status === 'new').length}
+        inquiriesCount={inquiries.filter(i => (i.status || '').toLowerCase() === 'new').length}
         servicesCount={services.length}
         portfolioCount={portfolio.length}
         teamCount={team.length}
@@ -101,7 +105,7 @@ export default function AdminPage() {
           onAddLead={() => setActiveTab('inquiries')}
           onExportCSV={() => {
             adminStorage.exportInquiriesCSV();
-            showToast('Inquiries CSV exported', 'success');
+            showToast('Customer inquiries exported to Excel', 'success');
           }}
         />
 

@@ -4,6 +4,25 @@
 *.env
 !.env.example
 
+# App Signing Keys, Keystores & Private Certificates
+*.jks
+*.keystore
+*.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.crt
+*.signingkey
+app_signing_key*
+*signing_key*
+secrets/
+secret/
+backups/
+backup/
+credentials*.json
+service-account*.json
+
 # Local SQLite Database
 *.sqlite3
 *.sqlite3-journal

@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  Camera, 
-  Cpu, 
-  MessageSquare, 
-  Activity, 
-  Play, 
-  Pause, 
-  Maximize2, 
-  Bot, 
-  ShieldCheck, 
-  CheckCircle2,
-  Volume2
-} from 'lucide-react';
+  faCamera, 
+  faMicrochip, 
+  faComments, 
+  faChartLine, 
+  faPlay, 
+  faPause, 
+  faRobot, 
+  faShieldHalved 
+} from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HeroVideoShowcase = ({ onOpenShowreel }) => {
@@ -29,19 +27,19 @@ export const HeroVideoShowcase = ({ onOpenShowreel }) => {
   }, [isPlaying]);
 
   const tabs = [
-    { id: 'vision', label: 'Vision AI', icon: Camera, badge: '4K · 14ms' },
-    { id: 'agents', label: 'Agentic Workflows', icon: Cpu, badge: 'Multi-Agent' },
-    { id: 'chat', label: 'Conversational Bot', icon: MessageSquare, badge: 'WhatsApp Sync' },
-    { id: 'cloud', label: 'Cloud Stream', icon: Activity, badge: 'Real-time' },
+    { id: 'vision', label: 'Vision AI', icon: faCamera, badge: '4K · 14ms' },
+    { id: 'agents', label: 'Agentic Workflows', icon: faMicrochip, badge: 'Multi-Agent' },
+    { id: 'chat', label: 'Conversational Bot', icon: faComments, badge: 'WhatsApp Sync' },
+    { id: 'cloud', label: 'Cloud Stream', icon: faChartLine, badge: 'Real-time' },
   ];
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      {/* Outer Glow Container */}
-      <div className="relative gradient-card rounded-3xl overflow-hidden border border-cyan-500/35 shadow-[0_0_50px_rgba(0,240,255,0.25)]">
+      {/* Terminal Console Container */}
+      <div className="relative rounded-2xl overflow-hidden bg-slate-950/90 border border-slate-800 shadow-2xl">
         
         {/* Top Window Chrome */}
-        <div className="px-4 py-2.5 bg-[#051829] border-b border-cyan-500/25 flex items-center justify-between">
+        <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
@@ -52,14 +50,14 @@ export const HeroVideoShowcase = ({ onOpenShowreel }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-md border border-cyan-500/30">
-              LIVE TELEMETRY
+            <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-md border border-cyan-800/50">
+              LIVE PREVIEW
             </span>
           </div>
         </div>
 
         {/* Tab Switcher Pills */}
-        <div className="grid grid-cols-4 p-1.5 bg-[#041423] border-b border-cyan-500/20 gap-1">
+        <div className="grid grid-cols-4 p-1.5 bg-slate-950/90 border-b border-slate-800 gap-1">
           {tabs.map((tab, idx) => {
             const IconComp = tab.icon;
             const isActive = activeTab === idx;
@@ -81,7 +79,7 @@ export const HeroVideoShowcase = ({ onOpenShowreel }) => {
                   />
                 )}
                 <span className="relative z-10 flex items-center gap-1 font-semibold text-[11px] truncate">
-                  <IconComp className={`w-3.5 h-3.5 ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
+                  <FontAwesomeIcon icon={tab.icon} className="w-3.5 h-3.5 text-white" />
                   <span className="hidden sm:inline">{tab.label}</span>
                 </span>
                 <span className="relative z-10 text-[9px] font-mono text-cyan-400/80">
@@ -142,7 +140,7 @@ export const HeroVideoShowcase = ({ onOpenShowreel }) => {
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
                   4K CAM-01 · 60 FPS
                 </span>
-                <span className="text-teal-300">Inference: 13.8ms</span>
+                <span className="text-teal-300">Speed: Instant (&lt;0.1s)</span>
               </div>
             </div>
           )}
@@ -155,24 +153,24 @@ export const HeroVideoShowcase = ({ onOpenShowreel }) => {
                 <div className="absolute top-1/2 left-6 right-6 h-[2px] bg-gradient-to-r from-cyan-400 to-teal-300 -translate-y-1/2 opacity-70 z-0"></div>
 
                 <div className="relative z-10 glass-panel rounded-xl p-2.5 border border-cyan-500/40 text-center bg-[#072036]/90 space-y-1">
-                  <div className="w-8 h-8 mx-auto rounded-lg bg-cyan-950 border border-cyan-400 flex items-center justify-center text-cyan-300">
-                    <Cpu className="w-4 h-4" />
+                  <div className="w-8 h-8 mx-auto rounded-lg bg-cyan-950 border border-cyan-400 flex items-center justify-center text-white">
+                    <FontAwesomeIcon icon={faMicrochip} className="w-4 h-4 text-white" />
                   </div>
                   <div className="text-[10px] font-bold text-white">Ingestion</div>
                   <div className="text-[9px] text-cyan-300 font-mono">1.2k doc/s</div>
                 </div>
 
                 <div className="relative z-10 glass-panel rounded-xl p-2.5 border border-teal-500/40 text-center bg-[#072a3e]/90 space-y-1 shadow-[0_0_15px_rgba(0,229,208,0.3)]">
-                  <div className="w-8 h-8 mx-auto rounded-lg bg-teal-950 border border-teal-400 flex items-center justify-center text-teal-300">
-                    <Bot className="w-4 h-4" />
+                  <div className="w-8 h-8 mx-auto rounded-lg bg-teal-950 border border-teal-400 flex items-center justify-center text-white">
+                    <FontAwesomeIcon icon={faRobot} className="w-4 h-4 text-white" />
                   </div>
                   <div className="text-[10px] font-bold text-white">LLM Agent</div>
                   <div className="text-[9px] text-teal-300 font-mono">Reasoning</div>
                 </div>
 
                 <div className="relative z-10 glass-panel rounded-xl p-2.5 border border-cyan-500/40 text-center bg-[#072036]/90 space-y-1">
-                  <div className="w-8 h-8 mx-auto rounded-lg bg-cyan-950 border border-cyan-400 flex items-center justify-center text-cyan-300">
-                    <ShieldCheck className="w-4 h-4" />
+                  <div className="w-8 h-8 mx-auto rounded-lg bg-cyan-950 border border-cyan-400 flex items-center justify-center text-white">
+                    <FontAwesomeIcon icon={faShieldHalved} className="w-4 h-4 text-white" />
                   </div>
                   <div className="text-[10px] font-bold text-white">Action API</div>
                   <div className="text-[9px] text-emerald-400 font-mono">Executed</div>
@@ -213,10 +211,10 @@ export const HeroVideoShowcase = ({ onOpenShowreel }) => {
             <div className="absolute inset-0 p-4 flex flex-col justify-between">
               <div className="grid grid-cols-3 gap-2">
                 <div className="glass-panel p-2 rounded-lg text-center font-mono text-[10px] text-cyan-300">
-                  Reqs: 840k/m
+                  Visits: 840k/m
                 </div>
                 <div className="glass-panel p-2 rounded-lg text-center font-mono text-[10px] text-teal-300">
-                  Latency: 11ms
+                  Speed: Instant
                 </div>
                 <div className="glass-panel p-2 rounded-lg text-center font-mono text-[10px] text-emerald-300">
                   Uptime: 99.99%
@@ -248,18 +246,18 @@ export const HeroVideoShowcase = ({ onOpenShowreel }) => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="p-1.5 rounded-lg bg-[#082238] text-cyan-300 hover:text-white border border-cyan-500/30 transition-colors"
+              className="p-1.5 rounded-lg bg-[#082238] text-white hover:text-white border border-cyan-500/30 transition-colors"
             >
-              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              {isPlaying ? <FontAwesomeIcon icon={faPause} className="w-3.5 h-3.5 text-white" /> : <FontAwesomeIcon icon={faPlay} className="w-3.5 h-3.5 text-white" />}
             </button>
-            <span className="text-[11px] text-slate-400 font-mono">
-              Live Interactive AI Telemetry
+            <span className="text-[11px] text-slate-400 font-medium">
+              Live Interactive Demonstration
             </span>
           </div>
 
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-950/70 border border-cyan-500/30">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-            <span className="text-[10px] font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-300 uppercase tracking-wider">
+            <span className="text-[10px] font-mono font-bold text-white uppercase tracking-wider">
               Design · Build · Automate
             </span>
           </div>

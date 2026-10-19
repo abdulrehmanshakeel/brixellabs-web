@@ -1,28 +1,41 @@
 # BrixelLabs Robots.txt
-# Website: https://brixellabs.com
+# Official Website: https://brixellabs.com
 # Sitemap: https://brixellabs.com/sitemap.xml
 
+# Default Crawler Directives
 User-agent: *
 Allow: /
+Allow: /*.js$
+Allow: /*.css$
+Allow: /assets/
 Disallow: /admin
 Disallow: /admin/
+Disallow: /django-admin/
 Disallow: /api/
+Disallow: /backups/
 
-# Search Engine Crawlers
+# Major Search Engine Web Crawlers
 User-agent: Googlebot
 Allow: /
+Allow: /*.js$
+Allow: /*.css$
 
 User-agent: Googlebot-Image
-Allow: /assets/
 Allow: /
+Allow: /assets/
 
 User-agent: Bingbot
 Allow: /
+Allow: /*.js$
+Allow: /*.css$
 
-User-agent: Slurp
+User-agent: Applebot
 Allow: /
 
 User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Slurp
 Allow: /
 
 User-agent: Baiduspider
@@ -31,9 +44,7 @@ Allow: /
 User-agent: YandexBot
 Allow: /
 
-User-agent: Applebot
-Allow: /
-
+# Social Media Link Preview Bots
 User-agent: Twitterbot
 Allow: /
 
@@ -43,11 +54,32 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-# AI Crawlers & LLMs
+User-agent: Slackbot
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# AI Crawlers, Search Agents & LLM Indexing Bots (Explicitly Allowed)
 User-agent: GPTBot
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-searchBot
 Allow: /
 
 User-agent: Claude-Web
@@ -59,11 +91,30 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: CCBot
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExrernalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: Applebot-Extended
 Allow: /
 
 User-agent: Google-Extended
 Allow: /
 
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Host and Sitemap Directives
 Host: https://brixellabs.com
 Sitemap: https://brixellabs.com/sitemap.xml

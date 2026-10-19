@@ -48,7 +48,7 @@ class Command(BaseCommand):
             },
             {
                 'id': 'srv-agentic',
-                'title': 'Agentic AI & Automation',
+                'title': 'AI Agents & AI Automations',
                 'category': 'AI & ML',
                 'description': 'Custom multi-agent workflows, LangGraph graphs, autonomous tool-calling loops, and intelligent workflow automations.',
                 'bullets': ['LangGraph Multi-Agent Workflows', 'Autonomous Tool Calling & HITL', 'Groq & OpenAI Low-Latency Pipelines'],
@@ -81,6 +81,24 @@ class Command(BaseCommand):
                 'bullets': ['Automated Python ETL Pipelines', 'Advanced SQL Warehousing & Views', 'Executive Excel / Tableau KPI Dashboards'],
                 'active': True,
                 'order': 6
+            },
+            {
+                'id': 'srv-saas',
+                'title': 'Custom Software & SaaS Development',
+                'category': 'Engineering',
+                'description': 'End-to-end bespoke software engineering and cloud-native multi-tenant SaaS platforms built for scale and security.',
+                'bullets': ['Multi-Tenant SaaS Architecture', 'Custom Business & Enterprise Software', 'Scalable Cloud Microservices'],
+                'active': True,
+                'order': 7
+            },
+            {
+                'id': 'srv-apidev',
+                'title': 'API Development & Integration',
+                'category': 'Engineering',
+                'description': 'Custom REST & GraphQL APIs engineered for high speed, secure database communication, and seamless integration into existing legacy or modern systems.',
+                'bullets': ['Custom REST & GraphQL APIs', 'Existing System & Legacy Integration', 'High-Throughput & Secure Endpoints'],
+                'active': True,
+                'order': 8
             }
         ]
 
@@ -92,7 +110,7 @@ class Command(BaseCommand):
         portfolio_data = [
             {
                 'id': 'noesis',
-                'title': 'Noesis — AI Study Assistant',
+                'title': 'Noesis: AI Study Assistant',
                 'client': 'EdTech Research',
                 'category': 'Agentic AI / LLM',
                 'metric': 'HITL Interrupt + MemorySaver',
@@ -105,7 +123,7 @@ class Command(BaseCommand):
             },
             {
                 'id': 'the-watcher',
-                'title': 'The Watcher — AI Child Monitoring',
+                'title': 'The Watcher: AI Child Monitoring',
                 'client': 'Family & Child Safety',
                 'category': 'AI Child Safety & Mobile',
                 'metric': 'Real-Time Telemetry Inference',
@@ -118,7 +136,7 @@ class Command(BaseCommand):
             },
             {
                 'id': 'threadeye',
-                'title': 'ThreadEye — Defect Inspection',
+                'title': 'ThreadEye: Defect Inspection',
                 'client': 'Industrial Manufacturing',
                 'category': 'Computer Vision / Edge ML',
                 'metric': '<18ms Inference Latency',
@@ -131,7 +149,7 @@ class Command(BaseCommand):
             },
             {
                 'id': 'getscry',
-                'title': 'GetScry — Predictive Retention Engine',
+                'title': 'GetScry: Predictive Retention Engine',
                 'client': 'E-Commerce Enterprise',
                 'category': 'Machine Learning / Analytics',
                 'metric': '+34% Conversion Lift',
@@ -144,7 +162,7 @@ class Command(BaseCommand):
             },
             {
                 'id': 'frontdesk-ai',
-                'title': 'FrontDesk AI — Autonomous Receptionist',
+                'title': 'FrontDesk AI: Autonomous Receptionist',
                 'client': 'Hospitality & Healthcare',
                 'category': 'Conversational AI / RAG',
                 'metric': 'Zero Queue Wait Time',
@@ -170,8 +188,8 @@ class Command(BaseCommand):
                 'value': {
                     'agencyName': 'BrixelLabs AI Systems',
                     'tagline': 'Engineering Autonomous AI Agents & Production Computer Vision',
-                    'contactEmail': 'contact@brixellabs.com',
-                    'contactPhone': '+1 (555) 019-2834',
+                    'contactEmail': 'brixellabs@gmail.com',
+                    'contactPhone': '+92 344 9254864',
                     'officeLocation': 'Global Distributed AI Studio',
                     'consultationCalendarUrl': 'https://cal.com/brixellabs',
                     'maintenanceMode': False

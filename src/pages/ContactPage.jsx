@@ -1,26 +1,33 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  Mail, 
-  Phone, 
-  Linkedin, 
-  Twitter, 
-  Instagram, 
-  Facebook,
-  Send, 
-  Radio, 
-  Clock, 
-  Shield,
-  MessageSquare,
-  ShieldCheck,
-  CheckCircle2,
-  Sparkles
-} from 'lucide-react';
+  faEnvelope, 
+  faPhone, 
+  faPaperPlane, 
+  faTowerBroadcast, 
+  faClock, 
+  faShieldHalved,
+  faTriangleExclamation,
+  faLocationDot,
+  faArrowUpRightFromSquare
+} from '@fortawesome/free-solid-svg-icons';
+import { 
+  faLinkedinIn, 
+  faInstagram, 
+  faFacebookF, 
+  faXTwitter, 
+  faWhatsapp 
+} from '@fortawesome/free-brands-svg-icons';
 import { motion } from 'framer-motion';
 import { adminStorage } from '../utils/adminStorage';
 import { apiClient } from '../api/client';
-import { TurnstileWidget } from '../components/common/TurnstileWidget';
 import { trackFormSubmission } from '../utils/analytics';
+import { getStoredUTMParams } from '../utils/utm';
 import { FAQSection } from '../components/common/FAQSection';
+import { SocialMediaConnectSection } from '../components/common/SocialMediaConnectSection';
+import { TurnstileWidget } from '../components/common/TurnstileWidget';
+import { sanitizeInput, sanitizeEmail, sanitizePhone, isValidEmail } from '../utils/sanitize';
+import { CopyButton } from '../components/common/CopyButton';
 
 export const ContactPage = ({ navigate }) => {
   const [formData, setFormData] = useState({
@@ -32,7 +39,8 @@ export const ContactPage = ({ navigate }) => {
     projectBrief: '',
     honeypot: '' // Spam trap for automated scrapers
   });
-  const [turnstileToken, setTurnstileToken] = useState(null);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const [hasAgreed, setHasAgreed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
@@ -46,36 +54,57 @@ export const ContactPage = ({ navigate }) => {
       return;
     }
 
-    if (!formData.name || !formData.email || !formData.projectBrief) {
+    const cleanName = sanitizeInput(formData.name);
+    const cleanEmail = sanitizeEmail(formData.email);
+    const cleanPhone = sanitizePhone(formData.phone || '');
+    const cleanCompany = sanitizeInput(formData.company || '');
+    const cleanBrief = sanitizeInput(formData.projectBrief);
+
+    if (!cleanName || !cleanEmail || !cleanBrief) {
       setSubmitError('Please fill in all required fields.');
+      return;
+    }
+
+    if (!isValidEmail(cleanEmail)) {
+      setSubmitError('Please enter a valid email address.');
+      return;
+    }
+
+    if (!hasAgreed) {
+      setSubmitError('Please confirm the terms, privacy policy, and age verification checkbox.');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // 1. Save inquiry to Admin Local CRM
+      const utm = getStoredUTMParams();
+
+      // 1. Save inquiry to Admin Local CRM with UTM tracking
       adminStorage.addInquiry({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        company: formData.company,
+        name: cleanName,
+        email: cleanEmail,
+        phone: cleanPhone,
+        company: cleanCompany,
         service: formData.service || 'General Engineering Inquiry',
         budget: 'Custom Scope',
         timeline: '2-4 Weeks',
-        message: formData.projectBrief,
-        source: 'Contact Page Form'
+        message: cleanBrief,
+        source: 'Contact Page Form',
+        ...utm
       });
 
       // 2. Sync with backend API
       apiClient.createInquiry({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone || '',
-        company: formData.company || '',
+        name: cleanName,
+        email: cleanEmail,
+        phone: cleanPhone,
+        company: cleanCompany,
         service: formData.service || 'General AI & Engineering',
-        message: formData.projectBrief,
-        source: 'Contact Page Form'
+        message: cleanBrief,
+        source: 'Contact Page Form',
+        turnstile_token: turnstileToken,
+        ...utm
       }).catch(err => console.warn('Backend API inquiry sync:', err));
 
       // 3. Track conversion in Google Analytics
@@ -102,22 +131,13 @@ export const ContactPage = ({ navigate }) => {
       
       {/* Header */}
       <div className="text-center mb-16 space-y-3">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-950/80 via-[#07243c]/80 to-teal-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.2)]"
-        >
-          <Radio className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Get In Touch</span>
-        </motion.div>
-
         <motion.h1 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight"
         >
-          Let's <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(0,240,255,0.45)]">Talk</span>
+          Let's Talk
         </motion.h1>
 
         <motion.p 
@@ -130,25 +150,26 @@ export const ContactPage = ({ navigate }) => {
         </motion.p>
       </div>
 
-      {/* Main Form & Info Grid with Gradient Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-20">
+      {/* Main Form & Info Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-24">
         
-        {/* Left: Contact Form Card */}
+        {/* Left: Contact Form (Directly integrated, NOT a card) */}
         <motion.div 
-          initial={{ opacity: 0, x: -25 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="lg:col-span-8 gradient-card rounded-3xl p-6 sm:p-10 border border-cyan-500/35 shadow-2xl relative overflow-hidden bg-[#031525]/95"
+          className="lg:col-span-7"
         >
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-white">Send Us a Project Message</h2>
-              <span className="text-[11px] font-mono text-cyan-400 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" />
-                <span>&lt;24h Response</span>
-              </span>
-            </div>
+          <div className="mb-6">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Tell Us About Your Project
+            </h2>
+            <p className="text-sm text-slate-300 mt-1">
+              Have an idea, project, or question? Send us a message and we'll get back to you with clear answers within 24 hours.
+            </p>
+          </div>
 
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Hidden Honeypot Input for Bot Trapping */}
             <div className="hidden" aria-hidden="true">
               <label htmlFor="website-hp">Leave this blank</label>
@@ -164,237 +185,312 @@ export const ContactPage = ({ navigate }) => {
             </div>
 
             {submitError && (
-              <div className="p-3 rounded-xl bg-red-950/80 border border-red-500/40 text-red-200 text-xs font-mono">
-                {submitError}
+              <div className="p-3.5 rounded-xl bg-red-950/80 border border-red-500/40 text-red-200 text-xs flex items-center gap-2.5">
+                <FontAwesomeIcon icon={faTriangleExclamation} className="text-red-400 flex-shrink-0" />
+                <span>{submitError}</span>
               </div>
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">Name *</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Your Name <span className="text-cyan-400">*</span>
+                </label>
                 <input
                   type="text"
                   required
-                  placeholder="Your Name"
+                  placeholder="Full Name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">Work Email *</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Email Address <span className="text-cyan-400">*</span>
+                </label>
                 <input
                   type="email"
                   required
-                  placeholder="your@email.com"
+                  placeholder="name@company.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">Phone / WhatsApp</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Phone / WhatsApp <span className="text-slate-500 font-normal">(Optional)</span>
+                </label>
                 <input
                   type="text"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="Phone Number (Optional)"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">Company / Organization</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Company / Organization <span className="text-slate-500 font-normal">(Optional)</span>
+                </label>
                 <input
                   type="text"
-                  placeholder="Your Company"
+                  placeholder="Company Name (Optional)"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Primary Area of Interest</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                What are you looking to build?
+              </label>
               <select
                 value={formData.service}
                 onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white text-sm focus:outline-none focus:border-cyan-400"
+                className="w-full px-4 py-3 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
               >
-                <option value="Computer Vision & Edge AI">Computer Vision &amp; Edge AI (TensorRT, YOLOv8/v9)</option>
-                <option value="Agentic AI & LangGraph">Agentic AI &amp; LangGraph Multi-Agent Workflows</option>
-                <option value="Custom AI/ML Models">Custom Deep Learning &amp; Predictive ML</option>
-                <option value="NLP & WhatsApp Chatbots">NLP, WhatsApp &amp; RAG Conversational Systems</option>
-                <option value="Full-Stack Web & Mobile">Full-Stack Web &amp; Mobile Engineering</option>
-                <option value="Data Analytics (Python/SQL/Excel)">Data Analytics &amp; Telemetry Dashboards</option>
-                <option value="General Engineering Inquiry">General Technical Consultation</option>
+                <option value="Computer Vision & Camera AI">Computer Vision &amp; Camera Quality AI</option>
+                <option value="AI Agents & AI Automations">AI Agents &amp; AI Automations</option>
+                <option value="Custom AI/ML Models">Custom AI &amp; Machine Learning Solutions</option>
+                <option value="Smart Chatbots (WhatsApp / Web)">Smart Chatbots &amp; WhatsApp Assistants</option>
+                <option value="Web & Mobile Development">Web &amp; Mobile App Development</option>
+                <option value="Custom Software & SaaS Development">Custom Software &amp; SaaS Development</option>
+                <option value="Shopify Store Development">Shopify Store Development &amp; Custom Themes</option>
+                <option value="API Development & Integration">API Development &amp; System Integration</option>
+                <option value="Web Scraping & Data Extraction">Web Scraping &amp; Data Extraction</option>
+                <option value="Data Analytics (Python/SQL/Excel)">Data Analytics &amp; Excel Dashboards</option>
+                <option value="General Consultation">General Project Consultation</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Project Brief &amp; Deliverables *</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                Project Details <span className="text-cyan-400">*</span>
+              </label>
               <textarea
                 rows={4}
                 required
-                placeholder="Describe your project vision, target timeline, technical requirements, or current bottlenecks..."
+                placeholder="Describe your project, timeline, and goals..."
                 value={formData.projectBrief}
                 onChange={(e) => setFormData({ ...formData, projectBrief: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner resize-none"
+                className="w-full px-4 py-3 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all resize-none"
               ></textarea>
             </div>
 
-            {/* Cloudflare Turnstile Spam Protection */}
+            {/* Cloudflare Turnstile Spam & Bot Protection */}
             <TurnstileWidget 
               onVerify={(token) => setTurnstileToken(token)}
-              onExpire={() => setTurnstileToken(null)}
+              onError={() => setTurnstileToken('dev-fallback-token')}
+              size="normal"
             />
 
-            <div className="pt-2">
+            {/* Explicit Form Consent, Age Verification & Data Minimization Notice */}
+            <div className="pt-1 pb-1">
+              <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  required
+                  checked={hasAgreed}
+                  onChange={(e) => setHasAgreed(e.target.checked)}
+                  className="mt-0.5 accent-cyan-400 w-4 h-4 cursor-pointer rounded flex-shrink-0"
+                />
+                <span className="text-xs text-slate-300 leading-relaxed">
+                  I confirm I am 18 years of age or older, and agree to the{' '}
+                  <a 
+                    href="/terms-of-service" 
+                    onClick={(e) => { e.preventDefault(); navigate('/terms-of-service'); }} 
+                    className="text-cyan-400 underline hover:text-cyan-300 font-medium"
+                  >
+                    Terms of Service
+                  </a>
+                  {' '}and{' '}
+                  <a 
+                    href="/privacy-policy" 
+                    onClick={(e) => { e.preventDefault(); navigate('/privacy-policy'); }} 
+                    className="text-cyan-400 underline hover:text-cyan-300 font-medium"
+                  >
+                    Privacy Policy
+                  </a>.
+                </span>
+              </label>
+              <p className="text-[11px] text-slate-400 mt-1 pl-6 leading-relaxed">
+                Data Minimization: We collect only the contact information required to evaluate your inquiry. We never share or sell personal data.
+              </p>
+            </div>
+
+            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031422] font-extrabold text-sm transition-all duration-300 shadow-[0_0_25px_rgba(0,240,255,0.6)] hover:shadow-[0_0_40px_rgba(0,240,255,0.9)] hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                className="btn-primary w-full sm:w-auto disabled:opacity-60 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>
                     <span className="w-4 h-4 rounded-full border-2 border-[#031422] border-t-transparent animate-spin" />
-                    <span>Transmitting Brief...</span>
+                    <span>Sending message...</span>
                   </>
                 ) : (
                   <>
-                    <span>Send Message &amp; Schedule Review</span>
-                    <Send className="w-4 h-4" />
+                    <span>Send Message</span>
+                    <FontAwesomeIcon icon={faPaperPlane} className="w-3.5 h-3.5" />
                   </>
                 )}
               </button>
+
+              <div className="flex items-center gap-2 text-xs text-slate-400">
+                <FontAwesomeIcon icon={faShieldHalved} className="text-white" />
+                <span>100% confidential. No spam, ever.</span>
+              </div>
             </div>
           </form>
         </motion.div>
 
-        {/* Right: Direct Info Cards with Gradients */}
+        {/* Right: Direct Channels & Guarantees Sidebar */}
         <motion.div 
-          initial={{ opacity: 0, x: 25 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="lg:col-span-4 space-y-6"
+          className="lg:col-span-5 space-y-8 lg:pl-6 lg:border-l lg:border-slate-800/80"
         >
-          {/* Direct Contact Info Card */}
-          <div className="gradient-card rounded-3xl p-6 sm:p-7 border border-cyan-500/30 space-y-5 bg-[#031422]/90">
-            <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
-              Direct Engineering Contact
-            </h2>
+          {/* Direct Contact Info */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold text-white tracking-tight">
+              Direct Contact
+            </h3>
+            <p className="text-xs text-slate-400">
+              Prefer direct outreach? Reach our engineering team directly via verified channels:
+            </p>
 
-            <div className="space-y-4 text-sm">
-              <a 
-                href="https://mail.google.com/mail/?view=cm&fs=1&to=brixellabs@gmail.com" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="flex items-center gap-3 text-slate-300 hover:text-cyan-300 transition-colors group"
-                title="Send Email via Gmail"
-              >
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#092b45] to-[#041525] border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400 transition-colors flex-shrink-0">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[11px] text-slate-400">Email us directly</div>
-                  <div className="font-semibold text-white">brixellabs@gmail.com</div>
-                </div>
-              </a>
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center gap-2">
+                <a 
+                  href="mailto:brixellabs@gmail.com" 
+                  className="flex-1 flex items-center gap-3 p-3 rounded-xl bg-[#ea4335]/10 border border-[#ea4335]/35 hover:border-[#ea4335] hover:bg-[#ea4335]/20 shadow-sm hover:shadow-[0_0_16px_rgba(234,67,53,0.35)] transition-all group no-underline"
+                  title="Send Email to brixellabs@gmail.com"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-[#ea4335] text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-red-950/40 group-hover:scale-105 transition-transform">
+                    <FontAwesomeIcon icon={faEnvelope} className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[11px] text-red-300/90 font-mono">Official Email</div>
+                    <div className="font-bold text-white text-sm truncate">brixellabs@gmail.com</div>
+                  </div>
+                </a>
+                <CopyButton text="brixellabs@gmail.com" label="Copy" className="flex-shrink-0" />
+              </div>
 
-              <a 
-                href="https://wa.me/923449254864" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-slate-300 hover:text-cyan-300 transition-colors group"
-              >
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#092b45] to-[#041525] border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400 transition-colors flex-shrink-0">
-                  <Phone className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[11px] text-slate-400">WhatsApp hotline</div>
-                  <div className="font-semibold text-white">+92 344 9254864</div>
-                </div>
-              </a>
+              <div className="flex items-center gap-2">
+                <a 
+                  href="tel:+923449254864" 
+                  className="flex-1 flex items-center gap-3 p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/35 hover:border-cyan-400 hover:bg-cyan-500/20 shadow-sm hover:shadow-[0_0_16px_rgba(0,240,255,0.35)] transition-all group no-underline"
+                  title="Call BrixelLabs"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-cyan-500 text-slate-950 flex items-center justify-center flex-shrink-0 shadow-md shadow-cyan-950/40 group-hover:scale-105 transition-transform">
+                    <FontAwesomeIcon icon={faPhone} className="w-4 h-4 text-[#031422]" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[11px] text-cyan-300 font-mono">Direct Phone Call</div>
+                    <div className="font-bold text-white text-sm truncate">+92 344 9254864</div>
+                  </div>
+                </a>
+                <CopyButton text="+923449254864" label="Copy" className="flex-shrink-0" />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <a 
+                  href="https://wa.me/923449254864?text=Hi%20BrixelLabs%2C%20I%20would%20like%20to%20discuss%20a%20project." 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex-1 flex items-center gap-3 p-3 rounded-xl bg-[#25d366]/10 border border-[#25d366]/35 hover:border-[#25d366] hover:bg-[#25d366]/20 shadow-sm hover:shadow-[0_0_16px_rgba(37,211,102,0.35)] transition-all group no-underline"
+                  title="Chat on WhatsApp"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-[#25d366] text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-emerald-950/40 group-hover:scale-105 transition-transform">
+                    <FontAwesomeIcon icon={faWhatsapp} className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[11px] text-emerald-300/90 font-mono">WhatsApp Hotline</div>
+                    <div className="font-bold text-white text-sm truncate">+92 344 9254864</div>
+                  </div>
+                </a>
+                <CopyButton text="+923449254864" label="Copy" className="flex-shrink-0" />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <a 
+                  href="https://www.google.com/maps/search/?api=1&query=Jinnah+Colony%2C+Faisalabad%2C+38000%2C+Pakistan"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center gap-3 p-3 rounded-xl bg-purple-500/10 border border-purple-500/30 hover:border-purple-400 hover:bg-purple-500/20 text-white transition-all group no-underline"
+                  title="Open Jinnah Colony, Faisalabad in Google Maps"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-purple-500/20 border border-purple-500/40 text-purple-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                    <FontAwesomeIcon icon={faLocationDot} className="w-4 h-4 text-purple-300" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[11px] text-purple-300/90 font-mono flex items-center gap-1.5">
+                      <span>Operations &amp; Studio</span>
+                      <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[9px] text-purple-400 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                    <div className="font-semibold text-white text-xs sm:text-sm leading-snug">
+                      Jinnah Colony, Faisalabad, 38000, Pakistan
+                    </div>
+                  </div>
+                </a>
+                <CopyButton text="Jinnah Colony, Faisalabad, 38000, Pakistan" label="Copy" className="flex-shrink-0" />
+              </div>
             </div>
 
             {/* Social Media links */}
-            <div className="pt-4 border-t border-cyan-500/20">
-              <div className="text-xs font-semibold text-slate-400 mb-3">
+            <div className="pt-4 border-t border-slate-800/60">
+              <div className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2.5">
                 Official Channels
               </div>
-              <div className="grid grid-cols-2 gap-2 text-slate-300">
+              <div className="grid grid-cols-2 gap-2 text-white">
                 <a 
                   href="https://www.linkedin.com/company/brixellabs/home/?viewAsMember=true" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="flex items-center gap-2 text-xs p-2 rounded-xl bg-[#07243b]/60 border border-cyan-500/20 hover:border-cyan-400 hover:text-cyan-300 transition-all"
+                  className="flex items-center gap-2 text-xs font-semibold p-2.5 rounded-lg bg-[#0077b5] hover:bg-[#005f93] text-white border border-[#0077b5] shadow-sm hover:shadow-[0_0_14px_rgba(0,119,181,0.5)] transition-all hover:scale-[1.02]"
                 >
-                  <Linkedin className="w-3.5 h-3.5 text-cyan-400" />
+                  <FontAwesomeIcon icon={faLinkedinIn} className="w-3.5 h-3.5 text-white" />
                   <span>LinkedIn</span>
                 </a>
                 <a 
                   href="https://www.instagram.com/brixellabs?igsi=cmM0OXliYjJxaWpt" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="flex items-center gap-2 text-xs p-2 rounded-xl bg-[#07243b]/60 border border-cyan-500/20 hover:border-cyan-400 hover:text-cyan-300 transition-all"
+                  className="flex items-center gap-2 text-xs font-semibold p-2.5 rounded-lg bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-95 text-white border border-pink-500/50 shadow-sm hover:shadow-[0_0_14px_rgba(220,39,67,0.5)] transition-all hover:scale-[1.02]"
                 >
-                  <Instagram className="w-3.5 h-3.5 text-cyan-400" />
+                  <FontAwesomeIcon icon={faInstagram} className="w-3.5 h-3.5 text-white" />
                   <span>Instagram</span>
                 </a>
                 <a 
                   href="https://www.facebook.com/share/1HiGirYC4f/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="flex items-center gap-2 text-xs p-2 rounded-xl bg-[#07243b]/60 border border-cyan-500/20 hover:border-cyan-400 hover:text-cyan-300 transition-all"
+                  className="flex items-center gap-2 text-xs font-semibold p-2.5 rounded-lg bg-[#1877f2] hover:bg-[#125ec2] text-white border border-[#1877f2] shadow-sm hover:shadow-[0_0_14px_rgba(24,119,242,0.5)] transition-all hover:scale-[1.02]"
                 >
-                  <Facebook className="w-3.5 h-3.5 text-cyan-400" />
+                  <FontAwesomeIcon icon={faFacebookF} className="w-3.5 h-3.5 text-white" />
                   <span>Facebook</span>
                 </a>
                 <a 
                   href="https://x.com/Brixellabs" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="flex items-center gap-2 text-xs p-2 rounded-xl bg-[#07243b]/60 border border-cyan-500/20 hover:border-cyan-400 hover:text-cyan-300 transition-all"
+                  className="flex items-center gap-2 text-xs font-semibold p-2.5 rounded-lg bg-black hover:bg-neutral-900 text-white border border-slate-700 hover:border-slate-500 shadow-sm hover:shadow-[0_0_14px_rgba(255,255,255,0.2)] transition-all hover:scale-[1.02]"
                 >
-                  <Twitter className="w-3.5 h-3.5 text-cyan-400" />
+                  <FontAwesomeIcon icon={faXTwitter} className="w-3.5 h-3.5 text-white" />
                   <span>X (Twitter)</span>
                 </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Guarantees Card */}
-          <div className="gradient-card rounded-3xl p-6 sm:p-7 border border-cyan-500/30 space-y-4 bg-[#031422]/90">
-            <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-cyan-400" />
-              <span>Engineering Guarantees</span>
-            </h3>
-
-            <div className="space-y-3">
-              <div className="flex items-start gap-3 text-xs text-slate-200">
-                <div className="w-4 h-4 rounded-full bg-cyan-400/20 border border-cyan-400 flex items-center justify-center text-cyan-300 flex-shrink-0 mt-0.5">
-                  ✓
-                </div>
-                <span>Free 30-minute technical architecture discovery</span>
-              </div>
-
-              <div className="flex items-start gap-3 text-xs text-slate-200">
-                <div className="w-4 h-4 rounded-full bg-cyan-400/20 border border-cyan-400 flex items-center justify-center text-cyan-300 flex-shrink-0 mt-0.5">
-                  ✓
-                </div>
-                <span>Bilateral NDA signed prior to code/data exchange</span>
-              </div>
-
-              <div className="flex items-start gap-3 text-xs text-slate-200">
-                <div className="w-4 h-4 rounded-full bg-cyan-400/20 border border-cyan-400 flex items-center justify-center text-cyan-300 flex-shrink-0 mt-0.5">
-                  ✓
-                </div>
-                <span>100% full IP ownership & zero vendor lock-in</span>
               </div>
             </div>
           </div>
@@ -403,8 +499,11 @@ export const ContactPage = ({ navigate }) => {
 
       </div>
 
+      {/* Social Media Connect Channels Section */}
+      <SocialMediaConnectSection />
+
       {/* FAQ Section on Contact Page */}
-      <FAQSection />
+      <FAQSection showCta={false} />
 
     </div>
   );

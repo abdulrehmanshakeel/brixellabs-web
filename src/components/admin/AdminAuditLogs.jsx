@@ -1,26 +1,43 @@
 import React, { useState } from 'react';
 import { 
-  ShieldCheck, Search, Filter, Trash2, Key, 
-  FileEdit, PlusCircle, Trash, Settings, Download, AlertTriangle, Clock
+  Search, Trash2, Key, FileEdit, PlusCircle, Trash, Settings, Download, AlertTriangle, Clock, Activity
 } from 'lucide-react';
 import { adminStorage } from '../../utils/adminStorage';
 
 const ACTION_ICONS = {
-  AUTH_LOGIN: { icon: Key, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-  AUTH_LOGOUT: { icon: Key, color: 'text-slate-400', bg: 'bg-slate-500/10' },
-  PASSWORD_CHANGED: { icon: Key, color: 'text-amber-400', bg: 'bg-amber-500/10' },
-  CREATE_INQUIRY: { icon: PlusCircle, color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
-  UPDATE_INQUIRY: { icon: FileEdit, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-  DELETE_INQUIRY: { icon: Trash, color: 'text-red-400', bg: 'bg-red-500/10' },
-  CREATE_SERVICE: { icon: PlusCircle, color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
-  UPDATE_SERVICE: { icon: FileEdit, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-  DELETE_SERVICE: { icon: Trash, color: 'text-red-400', bg: 'bg-red-500/10' },
-  CREATE_PORTFOLIO: { icon: PlusCircle, color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
-  UPDATE_PORTFOLIO: { icon: FileEdit, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-  DELETE_PORTFOLIO: { icon: Trash, color: 'text-red-400', bg: 'bg-red-500/10' },
-  SETTINGS_UPDATED: { icon: Settings, color: 'text-purple-400', bg: 'bg-purple-500/10' },
-  EXPORT_CSV: { icon: Download, color: 'text-teal-400', bg: 'bg-teal-500/10' },
-  RESET_DEFAULTS: { icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-500/10' },
+  AUTH_LOGIN: { icon: Key, color: 'text-white' },
+  AUTH_LOGOUT: { icon: Key, color: 'text-white' },
+  PASSWORD_CHANGED: { icon: Key, color: 'text-white' },
+  CREATE_INQUIRY: { icon: PlusCircle, color: 'text-white' },
+  UPDATE_INQUIRY: { icon: FileEdit, color: 'text-white' },
+  DELETE_INQUIRY: { icon: Trash, color: 'text-white' },
+  CREATE_SERVICE: { icon: PlusCircle, color: 'text-white' },
+  UPDATE_SERVICE: { icon: FileEdit, color: 'text-white' },
+  DELETE_SERVICE: { icon: Trash, color: 'text-white' },
+  CREATE_PORTFOLIO: { icon: PlusCircle, color: 'text-white' },
+  UPDATE_PORTFOLIO: { icon: FileEdit, color: 'text-white' },
+  DELETE_PORTFOLIO: { icon: Trash, color: 'text-white' },
+  SETTINGS_UPDATED: { icon: Settings, color: 'text-white' },
+  EXPORT_CSV: { icon: Download, color: 'text-white' },
+  RESET_DEFAULTS: { icon: AlertTriangle, color: 'text-white' },
+};
+
+const ACTION_LABELS = {
+  AUTH_LOGIN: 'Admin Signed In',
+  AUTH_LOGOUT: 'Admin Logged Out',
+  PASSWORD_CHANGED: 'Password Changed',
+  CREATE_INQUIRY: 'New Message Received',
+  UPDATE_INQUIRY: 'Message Status Updated',
+  DELETE_INQUIRY: 'Message Deleted',
+  CREATE_SERVICE: 'Service Added',
+  UPDATE_SERVICE: 'Service Updated',
+  DELETE_SERVICE: 'Service Deleted',
+  CREATE_PORTFOLIO: 'Project Added',
+  UPDATE_PORTFOLIO: 'Project Updated',
+  DELETE_PORTFOLIO: 'Project Deleted',
+  SETTINGS_UPDATED: 'Settings Saved',
+  EXPORT_CSV: 'Data Exported to CSV',
+  RESET_DEFAULTS: 'Data Reset to Defaults',
 };
 
 export default function AdminAuditLogs({ auditLogs = [], onRefresh, showToast }) {
@@ -28,113 +45,137 @@ export default function AdminAuditLogs({ auditLogs = [], onRefresh, showToast })
   const [filterType, setFilterType] = useState('all');
 
   const filteredLogs = auditLogs.filter(log => {
+    const actionLabel = ACTION_LABELS[log.action] || log.action || '';
     const matchesSearch = 
+      actionLabel.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (log.action || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (log.details || '').toLowerCase().includes(searchTerm.toLowerCase());
     
-    if (filterType === 'all') return matchesSearch;
-    if (filterType === 'auth') return matchesSearch && log.action.startsWith('AUTH');
-    if (filterType === 'crud') return matchesSearch && (log.action.includes('CREATE') || log.action.includes('UPDATE') || log.action.includes('DELETE'));
-    if (filterType === 'settings') return matchesSearch && log.action.includes('SETTINGS');
-    return matchesSearch;
+    if (!matchesSearch) return false;
+    if (filterType === 'all') return true;
+    if (filterType === 'auth') return log.action.startsWith('AUTH');
+    if (filterType === 'content') return log.action.includes('SERVICE') || log.action.includes('PORTFOLIO') || log.action.includes('INQUIRY');
+    if (filterType === 'settings') return log.action.includes('SETTINGS') || log.action.includes('PASSWORD') || log.action.includes('RESET');
+    return true;
   });
 
   const handleClearLogs = () => {
-    if (window.confirm('Are you sure you want to clear all security audit logs?')) {
+    if (window.confirm('Clear all activity logs?')) {
       adminStorage.clearAuditLogs();
-      showToast?.('Audit log history cleared', 'info');
+      showToast?.('Activity logs cleared', 'info');
       onRefresh?.();
     }
   };
 
+  const formatDate = (isoString) => {
+    if (!isoString) return '';
+    try {
+      const d = new Date(isoString);
+      return d.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return isoString;
+    }
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Top Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-[#030d17]/80 border border-cyan-900/30 backdrop-blur-md">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="relative min-w-[260px] flex-1 sm:flex-initial">
-            <Search className="w-4 h-4 text-cyan-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+    <div className="space-y-4 max-w-4xl mx-auto">
+      {/* Controls Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative min-w-[200px]">
+            <Search className="w-3.5 h-3.5 text-white absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search audit trail..."
+              placeholder="Search activity..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#02070e] border border-cyan-900/40 rounded-lg pl-10 pr-4 py-2 text-sm text-cyan-100 placeholder-cyan-700/60 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-white/[0.03] border border-white/[0.08] rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400/50"
             />
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 bg-[#02070e] rounded-lg border border-cyan-900/40">
-            {['all', 'auth', 'crud', 'settings'].map((f) => (
+          <div className="flex items-center gap-1">
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'auth', label: 'Logins' },
+              { id: 'content', label: 'Content' },
+              { id: 'settings', label: 'Settings' }
+            ].map((f) => (
               <button
-                key={f}
-                onClick={() => setFilterType(f)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${
-                  filterType === f
-                    ? 'bg-cyan-500 text-black font-semibold'
-                    : 'text-cyan-300/70 hover:text-cyan-100'
+                key={f.id}
+                onClick={() => setFilterType(f.id)}
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                  filterType === f.id
+                    ? 'bg-white/[0.08] text-white font-semibold'
+                    : 'text-slate-400 hover:text-white'
                 }`}
               >
-                {f}
+                {f.label}
               </button>
             ))}
           </div>
         </div>
 
-        <button
-          onClick={handleClearLogs}
-          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-red-950/30 border border-red-900/40 text-red-400 text-xs font-medium hover:bg-red-900/50 hover:text-white transition-all"
-        >
-          <Trash2 className="w-3.5 h-3.5" />
-          <span>Clear Logs</span>
-        </button>
+        {auditLogs.length > 0 && (
+          <button
+            onClick={handleClearLogs}
+            className="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-rose-400 hover:bg-rose-500/10 text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-center"
+            title="Clear all logs"
+          >
+            <Trash2 className="w-3.5 h-3.5 text-white hover:text-rose-400" />
+            <span>Clear History</span>
+          </button>
+        )}
       </div>
 
-      {/* Log list */}
-      <div className="rounded-xl bg-[#030d17]/80 border border-cyan-900/30 backdrop-blur-md overflow-hidden shadow-xl">
-        <div className="p-4 border-b border-cyan-900/40 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-cyan-400" />
-            <h3 className="text-sm font-bold text-white">Immutable Event Journal</h3>
-          </div>
-          <span className="text-xs text-cyan-500/70 font-mono">
-            {filteredLogs.length} logged actions recorded
-          </span>
+      {/* Logs List */}
+      {filteredLogs.length === 0 ? (
+        <div className="p-10 text-center rounded-xl bg-white/[0.02] border border-white/[0.06] text-slate-400">
+          <Activity className="w-8 h-8 mx-auto text-white mb-2" />
+          <p className="text-sm font-semibold text-white">No activity found</p>
+          <p className="text-xs text-slate-400 mt-1">Actions you perform in the admin panel will appear here.</p>
         </div>
+      ) : (
+        <div className="space-y-1.5">
+          {filteredLogs.map((log) => {
+            const itemConfig = ACTION_ICONS[log.action] || { icon: Activity, color: 'text-white' };
+            const Icon = itemConfig.icon;
+            const title = ACTION_LABELS[log.action] || log.action || 'Activity Event';
 
-        <div className="divide-y divide-cyan-900/20 max-h-[650px] overflow-y-auto">
-          {filteredLogs.length === 0 ? (
-            <div className="p-12 text-center text-cyan-500/60 text-sm">
-              <Clock className="w-8 h-8 mx-auto mb-2 text-cyan-600/40" />
-              No audit logs matching this search filter.
-            </div>
-          ) : (
-            filteredLogs.map((log) => {
-              const meta = ACTION_ICONS[log.action] || { icon: ShieldCheck, color: 'text-cyan-400', bg: 'bg-cyan-500/10' };
-              const Icon = meta.icon;
-              return (
-                <div key={log.id} className="p-4 hover:bg-cyan-950/20 transition-colors flex items-start gap-4">
-                  <div className={`w-8 h-8 rounded-lg ${meta.bg} flex items-center justify-center shrink-0 border border-cyan-800/30 ${meta.color}`}>
-                    <Icon className="w-4 h-4" />
+            return (
+              <div
+                key={log.id}
+                className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.08] transition-colors flex items-center justify-between gap-3 text-xs"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-7 h-7 rounded-md bg-white/[0.06] flex items-center justify-center shrink-0 text-white">
+                    <Icon className="w-3.5 h-3.5 text-white" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-mono font-bold text-white tracking-wide">
-                        {log.action}
-                      </span>
-                      <span className="text-[11px] text-cyan-500/70 font-mono shrink-0">
-                        {log.timestamp ? new Date(log.timestamp).toLocaleString() : 'Just now'}
-                      </span>
-                    </div>
-                    <p className="text-xs text-cyan-300/80 mt-1 font-mono break-all">
-                      {log.details}
+                  <div className="min-w-0">
+                    <p className="font-medium text-white truncate">
+                      {title}
                     </p>
+                    {log.details && (
+                      <p className="text-[11px] text-slate-400 truncate">
+                        {log.details}
+                      </p>
+                    )}
                   </div>
                 </div>
-              );
-            })
-          )}
+
+                <div className="flex items-center gap-1.5 text-[11px] text-slate-400 shrink-0 font-mono">
+                  <Clock className="w-3 h-3 text-white" />
+                  <span>{formatDate(log.timestamp)}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </div>
+      )}
     </div>
   );
 }

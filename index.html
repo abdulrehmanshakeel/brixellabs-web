@@ -4,17 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     
+    <!-- Enforce HTTPS: Automatically upgrade all insecure HTTP requests -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+
     <!-- Primary Page Title & Meta Description -->
-    <title>BrixelLabs — Design · Build · Automate | Tech &amp; AI Solutions</title>
-    <meta name="description" content="Design · Build · Automate. Custom AI models, scalable web/mobile apps, computer vision systems under 14ms latency, and enterprise workflow automation." />
-    <meta name="keywords" content="AI engineering, machine learning, computer vision, YOLOv8, LangGraph, agentic AI, React, Next.js, Flutter, Django, data analytics, BrixelLabs" />
+    <title>BrixelLabs: Design · Build · Automate | Tech &amp; AI Solutions</title>
+    <meta name="description" content="Design · Build · Automate. Custom AI models, scalable web &amp; mobile apps, Shopify store development, web scraping, high-throughput APIs, and workflow automation." />
+    <meta name="keywords" content="Shopify store development, web scraping, Playwright, Scrapy, API development, RESTful APIs, GraphQL, AI engineering, machine learning, computer vision, YOLOv8, LangGraph, agentic AI, React, Next.js, Flutter, Django, data analytics, BrixelLabs" />
     <meta name="author" content="BrixelLabs" />
     <meta name="publisher" content="BrixelLabs" />
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://brixellabs.com/" />
 
-    <!-- Search Engine Indexing & Robots Directives -->
+    <!-- Search Engine Indexing & Robots Directives (All Public Content Fully Indexable) -->
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -28,9 +31,12 @@
     <meta name="msapplication-TileColor" content="#030c14" />
 
     <!-- Favicons & App Icons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo/logo.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logo/logo.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/logo/logo.png" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
+    <link rel="icon" type="image/webp" href="/favicon.webp" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
     <link rel="manifest" href="/manifest.json" />
 
     <!-- Preconnect to CDNs & Third-Party APIs for Core Web Vitals Optimization -->
@@ -39,31 +45,40 @@
     <link rel="preconnect" href="https://challenges.cloudflare.com" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
 
+    <!-- Cloudflare Turnstile: Modern Spam & Bot Protection API -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+
     <!-- Open Graph (Facebook, LinkedIn, Discord, Slack, WhatsApp) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="BrixelLabs" />
     <meta property="og:url" content="https://brixellabs.com/" />
-    <meta property="og:title" content="BrixelLabs — Design · Build · Automate | Tech &amp; AI Solutions" />
-    <meta property="og:description" content="Design · Build · Automate. Custom AI models, scalable web/mobile apps, computer vision, and enterprise workflow automation." />
+    <meta property="og:title" content="BrixelLabs: Design · Build · Automate | Tech &amp; AI Solutions" />
+    <meta property="og:description" content="Design · Build · Automate. Custom AI models, scalable web/mobile apps, computer vision systems under 14ms latency, and enterprise workflow automation." />
     <meta property="og:image" content="https://brixellabs.com/og-image.jpg" />
     <meta property="og:image:secure_url" content="https://brixellabs.com/og-image.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="BrixelLabs — Full-Stack Tech &amp; AI Solutions" />
+    <meta property="og:image:alt" content="BrixelLabs: Next-Generation Tech &amp; AI Engineering" />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@brixellabs" />
     <meta name="twitter:creator" content="@brixellabs" />
-    <meta name="twitter:title" content="BrixelLabs — Design · Build · Automate | Tech &amp; AI Solutions" />
-    <meta name="twitter:description" content="Design · Build · Automate. Custom AI models, scalable web/mobile apps, computer vision, and enterprise workflow automation." />
+    <meta name="twitter:title" content="BrixelLabs: Design · Build · Automate | Tech &amp; AI Solutions" />
+    <meta name="twitter:description" content="Design · Build · Automate. Custom AI models, scalable web/mobile apps, computer vision systems under 14ms latency, and enterprise workflow automation." />
     <meta name="twitter:image" content="https://brixellabs.com/og-image.jpg" />
-    <meta name="twitter:image:alt" content="BrixelLabs — Full-Stack Tech &amp; AI Solutions" />
+    <meta name="twitter:image:alt" content="BrixelLabs: Next-Generation Tech &amp; AI Engineering" />
 
-    <!-- Google Fonts Preconnect & Swap for Core Web Vitals (Zero Layout Shift) -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <!-- Single Font Pair: Plus Jakarta Sans (Headings) + Inter (Body/UI) with font-display:swap -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome 6 Icons with Non-Render-Blocking Loading for Core Web Vitals -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    </noscript>
 
     <!-- Google Analytics (GA4) Integration -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BRIXELLABS01"></script>
@@ -93,19 +108,39 @@
             "@type": "ImageObject",
             "@id": "https://brixellabs.com/#logo",
             "url": "https://brixellabs.com/assets/logo/logo.png",
-            "caption": "BrixelLabs Logo"
+            "caption": "BrixelLabs Logo",
+            "width": "370",
+            "height": "282"
           },
           "image": {
             "@type": "ImageObject",
-            "url": "https://brixellabs.com/og-image.jpg"
+            "url": "https://brixellabs.com/og-image.jpg",
+            "width": "1200",
+            "height": "630"
           },
           "description": "BrixelLabs designs intuitive digital experiences, builds scalable full-stack web and mobile systems with custom AI models, and automates business workflows.",
           "slogan": "Design · Build · Automate",
           "email": "brixellabs@gmail.com",
           "telephone": "+923449254864",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Jinnah Colony",
+            "addressLocality": "Faisalabad",
+            "postalCode": "38000",
+            "addressCountry": "PK"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+923449254864",
+            "contactType": "customer service",
+            "email": "brixellabs@gmail.com",
+            "availableLanguage": ["English", "Urdu"]
+          },
           "sameAs": [
             "https://www.linkedin.com/company/brixellabs/home/?viewAsMember=true",
-            "https://www.instagram.com/brixellabs?igsi=cmM0OXliYjJxaWpt"
+            "https://www.instagram.com/brixellabs?igsi=cmM0OXliYjJxaWpt",
+            "https://www.facebook.com/share/1HiGirYC4f/",
+            "https://x.com/Brixellabs"
           ],
           "knowsAbout": [
             "Agentic AI",
@@ -116,7 +151,9 @@
             "Full-Stack Web Development",
             "Cross-Platform Mobile Apps",
             "NLP Chatbots & RAG Systems",
-            "Data Analytics & SQL Dashboards"
+            "Shopify Store Development",
+            "Web Scraping & Data Pipelines",
+            "API Development & Integration"
           ]
         },
         {
@@ -136,14 +173,56 @@
         {
           "@type": "ProfessionalService",
           "@id": "https://brixellabs.com/#service",
-          "name": "BrixelLabs AI & Software Engineering",
+          "name": "BrixelLabs AI & Software Engineering Studio",
           "url": "https://brixellabs.com",
           "priceRange": "$$$$",
           "image": "https://brixellabs.com/og-image.jpg",
           "telephone": "+923449254864",
           "email": "brixellabs@gmail.com",
+          "areaServed": {
+            "@type": "GeoShape",
+            "name": "Worldwide"
+          },
           "provider": {
             "@id": "https://brixellabs.com/#organization"
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Engineering Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Custom AI & Machine Learning Solutions",
+                  "description": "Custom predictive models, neural classification, and automated retraining pipelines."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Full-Stack Web & Mobile App Development",
+                  "description": "Production-grade React, Next.js, Flutter, and Django microservices."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Edge Computer Vision & Real-Time Inspection",
+                  "description": "Sub-14ms YOLOv8/TensorRT camera defect detection on NVIDIA Jetson."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Agentic AI & Business Workflow Automation",
+                  "description": "Autonomous multi-agent swarms using LangGraph and Groq LPUs."
+                }
+              }
+            ]
           }
         }
       ]

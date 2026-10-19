@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Search, Plus, Edit2, Trash2, ExternalLink, Briefcase, 
-  TrendingUp, Tag, X, Save, Eye, Star
+  Search, Plus, Edit2, Trash2, Star, X
 } from 'lucide-react';
 import { adminStorage } from '../../utils/adminStorage';
 
@@ -15,12 +14,12 @@ export default function AdminPortfolio({ portfolio = [], onRefresh, showToast })
     id: '',
     title: '',
     client: '',
-    category: 'AI Agents',
+    category: 'AI Assistant',
     description: '',
-    metric: '99.9% Automation',
+    metric: '',
     link: '#',
     featured: true,
-    tagsInput: 'Python, FastAPI, RAG'
+    tagsInput: ''
   });
 
   const categories = ['all', ...Array.from(new Set(portfolio.map(p => p.category).filter(Boolean)))];
@@ -34,29 +33,29 @@ export default function AdminPortfolio({ portfolio = [], onRefresh, showToast })
     return matchesSearch && matchesCategory;
   });
 
-  const handleOpenAddModal = () => {
+  const handleOpenAdd = () => {
     setEditingItem(null);
     setFormData({
       id: '',
       title: '',
       client: '',
-      category: 'AI Agents',
+      category: 'AI Assistant',
       description: '',
-      metric: '4x Performance Boost',
+      metric: 'Fast Results',
       link: '#',
       featured: true,
-      tagsInput: 'Python, LLM, Cloud'
+      tagsInput: 'Python, AI'
     });
     setIsModalOpen(true);
   };
 
-  const handleOpenEditModal = (item) => {
+  const handleOpenEdit = (item) => {
     setEditingItem(item);
     setFormData({
       id: item.id,
       title: item.title || '',
       client: item.client || '',
-      category: item.category || 'AI Agents',
+      category: item.category || 'AI Assistant',
       description: item.description || '',
       metric: item.metric || '',
       link: item.link || '#',
@@ -69,14 +68,11 @@ export default function AdminPortfolio({ portfolio = [], onRefresh, showToast })
   const handleSave = (e) => {
     e.preventDefault();
     if (!formData.title || !formData.description) {
-      showToast?.('Please provide title and description', 'error');
+      showToast?.('Title and description are required', 'error');
       return;
     }
 
-    const tagsArray = formData.tagsInput
-      .split(',')
-      .map(t => t.trim())
-      .filter(Boolean);
+    const tagsArray = formData.tagsInput.split(',').map(t => t.trim()).filter(Boolean);
 
     const payload = {
       title: formData.title,
@@ -91,10 +87,10 @@ export default function AdminPortfolio({ portfolio = [], onRefresh, showToast })
 
     if (editingItem) {
       adminStorage.updatePortfolio(editingItem.id, payload);
-      showToast?.('Case study updated successfully', 'success');
+      showToast?.('Project updated', 'success');
     } else {
       adminStorage.addPortfolio(payload);
-      showToast?.('New project added to portfolio', 'success');
+      showToast?.('Project added', 'success');
     }
 
     setIsModalOpen(false);
@@ -102,9 +98,9 @@ export default function AdminPortfolio({ portfolio = [], onRefresh, showToast })
   };
 
   const handleDelete = (id, title) => {
-    if (window.confirm(`Delete case study "${title}"?`)) {
+    if (window.confirm(`Delete "${title}"?`)) {
       adminStorage.deletePortfolio(id);
-      showToast?.(`Case study "${title}" deleted`, 'info');
+      showToast?.(`"${title}" deleted`, 'info');
       onRefresh?.();
     }
   };
@@ -112,107 +108,101 @@ export default function AdminPortfolio({ portfolio = [], onRefresh, showToast })
   const handleToggleFeatured = (item) => {
     const nextState = !item.featured;
     adminStorage.updatePortfolio(item.id, { featured: nextState });
-    showToast?.(`Project ${nextState ? 'featured on homepage' : 'unfeatured'}`, 'info');
+    showToast?.(`Project ${nextState ? 'featured' : 'unfeatured'}`, 'info');
     onRefresh?.();
   };
 
   return (
-    <div className="space-y-6">
-      {/* Controls Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-xl bg-[#030d17]/80 border border-cyan-900/30 backdrop-blur-md">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="relative min-w-[260px] flex-1 sm:flex-initial">
-            <Search className="w-4 h-4 text-cyan-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+    <div className="space-y-4 max-w-6xl mx-auto">
+      {/* Top Filter & Search */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative min-w-[200px]">
+            <Search className="w-3.5 h-3.5 text-white absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search projects, clients, tech..."
+              placeholder="Search projects..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#02070e] border border-cyan-900/40 rounded-lg pl-10 pr-4 py-2 text-sm text-cyan-100 placeholder-cyan-700/60 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-white/[0.03] border border-white/[0.08] rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400/50"
             />
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 bg-[#02070e] rounded-lg border border-cyan-900/40">
+          <div className="flex items-center gap-1 overflow-x-auto">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setCategoryFilter(cat)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${
+                className={`px-2.5 py-1 rounded-md text-xs font-medium capitalize transition-colors cursor-pointer whitespace-nowrap ${
                   categoryFilter === cat
-                    ? 'bg-cyan-500 text-black font-semibold'
-                    : 'text-cyan-300/70 hover:text-cyan-100'
+                    ? 'bg-white/[0.08] text-white font-semibold'
+                    : 'text-slate-400 hover:text-white'
                 }`}
               >
-                {cat}
+                {cat === 'all' ? 'All' : cat}
               </button>
             ))}
           </div>
         </div>
 
         <button
-          onClick={handleOpenAddModal}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold text-xs hover:from-cyan-400 hover:to-blue-500 transition-all shadow-md shadow-cyan-500/20"
+          onClick={handleOpenAdd}
+          className="btn-primary !px-3 !py-1.5 !text-xs !rounded-lg flex items-center gap-1 font-semibold"
         >
-          <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>Add Case Study</span>
+          <Plus className="w-3.5 h-3.5 stroke-[2.5] text-white" />
+          <span>New Project</span>
         </button>
       </div>
 
-      {/* Portfolio Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Grid Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {filteredPortfolio.map((item) => (
           <div
             key={item.id}
-            className="p-5 rounded-xl bg-[#030d17]/80 border border-cyan-900/40 hover:border-cyan-500/60 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-cyan-950/40"
+            className="p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.06] hover:border-white/10 transition-colors flex flex-col justify-between"
           >
             <div>
-              {/* Top metadata */}
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-cyan-300 font-medium">
-                  {item.category || 'Engineering'}
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <span className="text-[11px] text-slate-400 font-mono">
+                  {item.category || 'Case Study'}
                 </span>
                 <button
                   onClick={() => handleToggleFeatured(item)}
-                  className={`flex items-center gap-1 text-[11px] px-2 py-0.5 rounded transition-colors ${
+                  className={`flex items-center gap-1 text-[11px] px-2 py-0.5 rounded cursor-pointer transition-colors ${
                     item.featured !== false
-                      ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
-                      : 'bg-slate-800/40 border border-slate-700/40 text-slate-400'
+                      ? 'text-white bg-white/[0.1]'
+                      : 'text-slate-400 hover:text-white'
                   }`}
-                  title="Toggle featured state"
+                  title="Toggle featured status"
                 >
-                  <Star className={`w-3 h-3 ${item.featured !== false ? 'fill-amber-400' : ''}`} />
-                  {item.featured !== false ? 'Featured' : 'Standard'}
+                  <Star className={`w-3 h-3 text-white ${item.featured !== false ? 'fill-white' : ''}`} />
+                  <span>{item.featured !== false ? 'Featured' : 'Normal'}</span>
                 </button>
               </div>
 
-              {/* Title & Client */}
-              <h4 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
+              <h4 className="text-sm font-semibold text-white">
                 {item.title}
               </h4>
-              <div className="text-xs text-cyan-400/80 font-mono mb-2">
-                Client: {item.client || 'Enterprise Partner'}
+              <div className="text-[11px] text-slate-500 mb-2">
+                {item.client || 'Client project'}
               </div>
 
-              {/* Highlight Metric */}
               {item.metric && (
-                <div className="flex items-center gap-1.5 p-2 rounded-lg bg-cyan-950/40 border border-cyan-800/30 text-cyan-300 text-xs font-semibold mb-3">
-                  <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>{item.metric}</span>
+                <div className="text-xs text-cyan-300 font-medium mb-2">
+                  • {item.metric}
                 </div>
               )}
 
-              {/* Description */}
-              <p className="text-xs text-cyan-200/80 line-clamp-3 leading-relaxed mb-4">
+              <p className="text-xs text-slate-400 line-clamp-3 leading-relaxed mb-3">
                 {item.description}
               </p>
 
-              {/* Tags */}
               {Array.isArray(item.tags) && item.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-4">
+                <div className="flex flex-wrap gap-1 mb-3">
                   {item.tags.map((tag, i) => (
                     <span
                       key={i}
-                      className="text-[11px] px-2 py-0.5 rounded bg-[#02070e] border border-cyan-900/60 text-cyan-300 font-mono"
+                      className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.03] text-slate-400 font-mono"
                     >
                       {tag}
                     </span>
@@ -221,155 +211,137 @@ export default function AdminPortfolio({ portfolio = [], onRefresh, showToast })
               )}
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center justify-between pt-3 border-t border-cyan-900/30">
-              <span className="text-[11px] text-cyan-500/60 font-mono">ID: {item.id}</span>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => handleOpenEditModal(item)}
-                  className="p-1.5 rounded-lg bg-cyan-950/50 border border-cyan-800/40 text-cyan-300 hover:text-white hover:bg-cyan-900/60 transition-colors"
-                  title="Edit Case Study"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => handleDelete(item.id, item.title)}
-                  className="p-1.5 rounded-lg bg-red-950/30 border border-red-900/40 text-red-400 hover:text-red-200 hover:bg-red-900/50 transition-colors"
-                  title="Delete Case Study"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
+            <div className="flex items-center justify-end gap-1 pt-2 border-t border-white/[0.04]">
+              <button
+                onClick={() => handleOpenEdit(item)}
+                className="p-1.5 rounded text-white hover:bg-white/[0.08] transition-colors"
+                title="Edit"
+              >
+                <Edit2 className="w-3.5 h-3.5 text-white" />
+              </button>
+              <button
+                onClick={() => handleDelete(item.id, item.title)}
+                className="p-1.5 rounded text-white hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                title="Delete"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-white hover:text-rose-400" />
+              </button>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Add/Edit Modal */}
+      {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="bg-[#030d17] border border-cyan-500/40 rounded-2xl w-full max-w-lg p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-[#030e1a] border border-white/10 rounded-xl w-full max-w-md p-6 relative shadow-2xl">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-lg bg-cyan-950/40 border border-cyan-800/40 text-cyan-400 hover:text-white"
+              className="absolute top-4 right-4 p-1.5 rounded text-white hover:bg-white/[0.04]"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 text-white" />
             </button>
 
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              {editingItem ? <Edit2 className="w-5 h-5 text-cyan-400" /> : <Plus className="w-5 h-5 text-cyan-400" />}
-              {editingItem ? 'Edit Case Study' : 'Add New Portfolio Project'}
+            <h3 className="text-base font-bold text-white mb-4">
+              {editingItem ? 'Edit Project' : 'New Project'}
             </h3>
 
-            <form onSubmit={handleSave} className="space-y-4">
+            <form onSubmit={handleSave} className="space-y-3 text-xs">
               <div>
-                <label className="text-xs text-cyan-400 font-medium block mb-1">Project / Case Study Title *</label>
+                <label className="text-slate-400 block mb-1">Project Title *</label>
                 <input
                   type="text"
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.g. Autonomous Customer Support Swarm"
-                  className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
+                  placeholder="Project name"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-xs text-cyan-400 font-medium block mb-1">Client / Company Name</label>
+                  <label className="text-slate-400 block mb-1">Client</label>
                   <input
                     type="text"
                     value={formData.client}
                     onChange={(e) => setFormData({ ...formData, client: e.target.value })}
-                    placeholder="e.g. FinScale Dynamics"
-                    className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
+                    placeholder="Client or industry"
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-cyan-400 font-medium block mb-1">Domain / Category</label>
+                  <label className="text-slate-400 block mb-1">Category</label>
                   <input
                     type="text"
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    placeholder="e.g. AI Agents, Full-Stack"
-                    className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-cyan-400 font-medium block mb-1">Key Impact Metric</label>
-                  <input
-                    type="text"
-                    value={formData.metric}
-                    onChange={(e) => setFormData({ ...formData, metric: e.target.value })}
-                    placeholder="e.g. 70% Resolution in <10s"
-                    className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs text-cyan-400 font-medium block mb-1">Live / Case URL</label>
-                  <input
-                    type="text"
-                    value={formData.link}
-                    onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
+                    placeholder="AI, App, Web"
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs text-cyan-400 font-medium block mb-1">Project Description *</label>
+                <label className="text-slate-400 block mb-1">Key Result / Highlight</label>
+                <input
+                  type="text"
+                  value={formData.metric}
+                  onChange={(e) => setFormData({ ...formData, metric: e.target.value })}
+                  placeholder="e.g. 4x Faster or 99% Accuracy"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
+                />
+              </div>
+
+              <div>
+                <label className="text-slate-400 block mb-1">Description *</label>
                 <textarea
                   rows="3"
                   required
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Summary of challenges solved, engineering architecture, and ROI delivered..."
-                  className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
+                  placeholder="What was built and how it helped..."
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 resize-none"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-cyan-400 font-medium block mb-1">Technologies Used (comma separated)</label>
+                <label className="text-slate-400 block mb-1">Tags (comma separated)</label>
                 <input
                   type="text"
                   value={formData.tagsInput}
                   onChange={(e) => setFormData({ ...formData, tagsInput: e.target.value })}
-                  placeholder="e.g. Python, LangChain, Pinecone, FastAPI, Next.js"
-                  className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500 font-mono"
+                  placeholder="Python, React, API"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
                 />
               </div>
 
-              <div className="flex items-center gap-2 pt-2">
+              <div className="flex items-center gap-2 pt-1">
                 <input
                   type="checkbox"
                   id="featuredCheck"
                   checked={formData.featured}
                   onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                  className="w-4 h-4 rounded bg-[#02070e] border-cyan-700 text-cyan-500 focus:ring-0"
+                  className="w-3.5 h-3.5 rounded bg-white/[0.03] border-white/20 accent-cyan-400 cursor-pointer"
                 />
-                <label htmlFor="featuredCheck" className="text-xs text-cyan-300 cursor-pointer">
-                  Feature prominently on Work & Case Studies showcase
+                <label htmlFor="featuredCheck" className="text-slate-300 cursor-pointer">
+                  Feature on website homepage
                 </label>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-cyan-900/40">
+              <div className="flex items-center justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-cyan-950/40 text-cyan-400 text-xs hover:bg-cyan-900/50"
+                  className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold text-xs hover:from-cyan-400 hover:to-blue-500 transition-all shadow-md flex items-center gap-1.5"
+                  className="btn-primary !px-4 !py-1.5 !text-xs !rounded-lg"
                 >
-                  <Save className="w-3.5 h-3.5" />
-                  {editingItem ? 'Save Changes' : 'Create Case Study'}
+                  Save
                 </button>
               </div>
             </form>

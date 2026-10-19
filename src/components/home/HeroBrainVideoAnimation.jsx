@@ -1,20 +1,13 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  Play, 
-  Pause, 
-  Cpu, 
-  Activity, 
-  Scan, 
-  ShieldCheck, 
-  Maximize2, 
-  Radio, 
-  Sliders, 
-  RefreshCw,
-  Zap,
-  Flame
-} from 'lucide-react';
+  faPlay, 
+  faPause, 
+  faFire, 
+  faShieldHalved 
+} from '@fortawesome/free-solid-svg-icons';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import heroSectionImg from '../../assets/HeroSection.png';
+import heroSectionImg from '../../assets/HeroSection.webp';
 
 export const HeroBrainVideoAnimation = () => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -67,12 +60,12 @@ export const HeroBrainVideoAnimation = () => {
     return () => clearInterval(interval);
   }, [isPlaying]);
 
-  // Neural node coordinates on the chip image
+  // Interactive demonstration markers on the chip visual
   const nodes = useMemo(() => [
-    { id: 1, top: '28%', left: '30%', label: 'Neural Core Alpha', val: '99.8% Acc' },
-    { id: 2, top: '34%', right: '28%', label: 'Edge TensorRT', val: '13.8ms Latency' },
-    { id: 3, bottom: '30%', left: '36%', label: 'Vision Stream', val: '4K · 60 FPS' },
-    { id: 4, bottom: '24%', right: '32%', label: 'Autonomous Agent', val: '100% Synced' },
+    { id: 1, top: '28%', left: '30%', label: 'Smart Assistant', val: '99.8% Accuracy' },
+    { id: 2, top: '34%', right: '28%', label: 'Camera AI', val: 'Instant Speed' },
+    { id: 3, bottom: '30%', left: '36%', label: 'Live Video', val: '4K · Smooth 60 FPS' },
+    { id: 4, bottom: '24%', right: '32%', label: 'Automated Agent', val: '100% Active' },
   ], []);
 
   return (
@@ -127,23 +120,23 @@ export const HeroBrainVideoAnimation = () => {
               className={`px-2 sm:px-2.5 py-1 rounded-lg text-[9px] sm:text-[10px] font-mono font-bold flex items-center gap-1 transition-all border cursor-pointer ${
                 hudMode === 'thermal'
                   ? 'bg-amber-500 text-black border-amber-400 shadow-[0_0_12px_#f59e0b]'
-                  : 'bg-[#08233b] text-cyan-300 border-cyan-500/40 hover:text-white'
+                  : 'bg-[#08233b] text-white border-cyan-500/40 hover:text-white'
               }`}
               title="Toggle Thermal/Optical AI Lens"
               aria-label="Toggle Thermal/Optical AI Lens"
             >
-              <Flame className="w-3 h-3" />
+              <FontAwesomeIcon icon={faFire} className="w-3 h-3 text-white" />
               <span>{hudMode === 'thermal' ? 'THERMAL' : 'OPTICAL'}</span>
             </button>
 
             {/* Play/Pause Button */}
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="p-1 sm:p-1.5 rounded-lg bg-[#08233b] text-cyan-300 hover:text-white border border-cyan-500/30 transition-colors cursor-pointer"
+              className="p-1 sm:p-1.5 rounded-lg bg-[#08233b] text-white hover:text-cyan-300 border border-cyan-500/30 transition-colors cursor-pointer"
               title={isPlaying ? "Pause Animation" : "Play Animation"}
               aria-label={isPlaying ? "Pause Animation" : "Play Animation"}
             >
-              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              {isPlaying ? <FontAwesomeIcon icon={faPause} className="w-3.5 h-3.5 text-white" /> : <FontAwesomeIcon icon={faPlay} className="w-3.5 h-3.5 text-white" />}
             </button>
           </div>
         </div>
@@ -203,6 +196,8 @@ export const HeroBrainVideoAnimation = () => {
             <img 
               src={heroSectionImg} 
               alt="BrixelLabs AI Neural Processor Architecture"
+              width="669"
+              height="373"
               loading="eager"
               decoding="async"
               className={`w-full h-auto object-contain transition-all duration-500 ${
@@ -267,12 +262,12 @@ export const HeroBrainVideoAnimation = () => {
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
               {fps} FPS
             </span>
-            <span>LATENCY: 13.8ms</span>
-            <span className="text-teal-300 hidden sm:inline">GPU: 48°C</span>
+            <span>SPEED: REAL-TIME</span>
+            <span className="text-teal-300 hidden sm:inline">STATUS: OPTIMAL</span>
           </div>
 
           <div className="absolute bottom-2.5 sm:bottom-3 right-2.5 sm:right-3 bg-[#030e18]/90 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-cyan-500/30 text-[9px] sm:text-[10px] font-mono text-cyan-300 pointer-events-none z-20 hidden sm:flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <FontAwesomeIcon icon={faShieldHalved} className="w-3.5 h-3.5 text-white" />
             <span>ACCURACY: 99.8%</span>
           </div>
 
@@ -282,7 +277,7 @@ export const HeroBrainVideoAnimation = () => {
         <div className="px-3 sm:px-4 py-2 sm:py-2.5 bg-[#041626] border-t border-cyan-500/25 flex items-center justify-between text-xs">
           
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <span className="text-[10px] sm:text-[11px] font-mono text-cyan-400 font-semibold">NEURAL STREAM:</span>
+            <span className="text-[10px] sm:text-[11px] font-mono text-cyan-400 font-semibold">LIVE PREVIEW:</span>
             {/* Animated Audio/Frequency Spectrum */}
             <div className="flex items-center gap-1 h-3.5 sm:h-4">
               <span className="w-1 h-3.5 bg-cyan-400 rounded-full animate-wave-1"></span>
@@ -296,7 +291,7 @@ export const HeroBrainVideoAnimation = () => {
 
           <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg bg-[#06192a]/90 border border-cyan-500/30">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#00f0ff]"></span>
-            <span className="text-[9px] sm:text-[11px] font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-white tracking-wider uppercase">
+            <span className="text-[9px] sm:text-[11px] font-mono font-bold text-white tracking-wider uppercase">
               Design · Build · Automate
             </span>
           </div>

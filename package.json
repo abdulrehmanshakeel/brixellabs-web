@@ -5,11 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "vercel-build": "vite build",
-    "preview": "vite preview"
+    "build": "vite build && node scripts/prerender.js",
+    "vercel-build": "vite build && node scripts/prerender.js",
+    "prerender": "node scripts/prerender.js",
+    "preview": "vite preview",
+    "check-secrets": "node scripts/check_secrets.js",
+    "backup-keys": "powershell -ExecutionPolicy Bypass -File scripts/backup_signing_key.ps1",
+    "backup-db": "powershell -ExecutionPolicy Bypass -File scripts/backup_database.ps1",
+    "load-test": "python backend/load_test.py --requests 1000 --concurrency 25",
+    "load-balancer": "python backend/load_balancer.py --port 8000 --workers 8001 8002 8003"
   },
   "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^7.3.1",
+    "@fortawesome/free-solid-svg-icons": "^7.3.1",
+    "@fortawesome/react-fontawesome": "^3.5.0",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "framer-motion": "^12.4.7",
@@ -26,5 +35,16 @@
     "postcss": "^8.5.2",
     "tailwindcss": "^3.4.17",
     "vite": "^6.1.0"
+  },
+  "overrides": {
+    "braces": "^3.0.3",
+    "micromatch": "^4.0.8",
+    "chokidar": {
+      "braces": "^3.0.3"
+    },
+    "fast-glob": {
+      "micromatch": "^4.0.8"
+    },
+    "postcss-selector-parser": "^7.1.6"
   }
 }

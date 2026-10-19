@@ -1,71 +1,80 @@
 import React, { useState } from 'react';
-import { Send, Upload, CheckCircle2, Globe, FileText, ArrowRight, Clock, ShieldCheck, Wifi } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faArrowRight,
+  faEnvelope,
+  faPhone,
+  faShieldHalved
+} from '@fortawesome/free-solid-svg-icons';
 import { adminStorage } from '../../utils/adminStorage';
 import { apiClient } from '../../api/client';
-import { TurnstileWidget } from './TurnstileWidget';
 import { trackFormSubmission } from '../../utils/analytics';
+import { TurnstileWidget } from './TurnstileWidget';
+import { sanitizeInput, sanitizeEmail, isValidEmail } from '../../utils/sanitize';
 
 export const ScheduleConsultationSection = ({ 
-  title = "Schedule Free Consultation", 
-  subtitle = "Contact our senior engineers to evaluate technical feasibility, AI models, and delivery roadmaps." 
+  title = "Schedule a Consultation", 
+  subtitle = "Direct evaluation with lead engineers covering architecture, custom AI models, and delivery timelines.",
+  className = ""
 }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     company: '',
+    service: 'AI & Machine Learning Solutions',
     projectBrief: '',
-    fileName: '',
     honeypot: ''
   });
-  const [turnstileToken, setTurnstileToken] = useState(null);
+  const [turnstileToken, setTurnstileToken] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({ ...prev, fileName: e.target.files[0].name }));
-    }
-  };
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Honeypot check
     if (formData.honeypot) {
       console.warn('Bot spam caught by honeypot.');
       return;
     }
 
-    if (!formData.name || !formData.email) return;
+    const cleanName = sanitizeInput(formData.name);
+    const cleanEmail = sanitizeEmail(formData.email);
+    const cleanCompany = sanitizeInput(formData.company);
+    const cleanBrief = sanitizeInput(formData.projectBrief);
+
+    if (!cleanName || !cleanEmail) return;
+    if (!isValidEmail(cleanEmail)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
-      // 1. Save inquiry to Admin CRM
       adminStorage.addInquiry({
-        name: formData.name,
-        email: formData.email,
-        company: formData.company,
-        service: 'Consultation & Architecture',
+        name: cleanName,
+        email: cleanEmail,
+        company: cleanCompany || '',
+        service: formData.service || 'Consultation & Architecture',
         budget: '$15,000 - $35,000',
         timeline: '2-3 Weeks',
-        message: `${formData.projectBrief || ''} ${formData.fileName ? `[Attached file: ${formData.fileName}]` : ''}`.trim(),
+        message: cleanBrief || '',
         source: 'Schedule Consultation Section'
       });
 
-      // 2. Sync with backend API
       apiClient.createInquiry({
-        name: formData.name,
-        email: formData.email,
-        company: formData.company || '',
-        service: 'Consultation & Architecture',
-        message: `${formData.projectBrief || ''} ${formData.fileName ? `[Attached file: ${formData.fileName}]` : ''}`.trim(),
-        source: 'Schedule Consultation Section'
+        name: cleanName,
+        email: cleanEmail,
+        company: cleanCompany || '',
+        service: formData.service || 'Consultation & Architecture',
+        message: cleanBrief || '',
+        source: 'Schedule Consultation Section',
+        turnstile_token: turnstileToken
       }).catch(err => console.warn('API inquiry sync:', err));
 
-      // 3. Track GA conversion
-      trackFormSubmission('Schedule Consultation Section', 'Consultation & Architecture');
+      trackFormSubmission('Schedule Consultation Section', formData.service || 'Consultation & Architecture');
 
-      // 4. Redirect to thank-you page
+      setIsSubmitted(true);
       window.history.pushState({}, '', '/thank-you');
       window.dispatchEvent(new PopStateEvent('popstate'));
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -77,191 +86,220 @@ export const ScheduleConsultationSection = ({
   };
 
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10" id="consultation">
-      <div className="gradient-card rounded-3xl p-6 sm:p-10 lg:p-12 border border-cyan-500/35 shadow-2xl relative overflow-hidden bg-[#031525]/95">
+    <section className={`relative py-16 sm:py-24 border-t border-slate-800/80 ${className}`} id="consultation">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
         
-        {/* Subtle glowing corner accents */}
-        <div className="absolute -top-20 -right-20 w-80 h-80 bg-gradient-to-br from-cyan-400/20 to-teal-400/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-gradient-to-tr from-blue-600/15 to-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
+        {/* Header: Focused & Balanced */}
+        <div className="text-center mb-10 sm:mb-12 space-y-3">
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            {title}
+          </h2>
           
-          {/* Left: Form Area */}
-          <div className="lg:col-span-8">
-            <div className="mb-8">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                <span>{title}</span>
-                <ShieldCheck className="w-6 h-6 text-cyan-400" />
-              </h2>
-              <p className="text-sm sm:text-base text-slate-300 mt-2">
-                {subtitle}
-              </p>
+          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
+            {subtitle}
+          </p>
+        </div>
+
+        {isSubmitted ? (
+          <div className="p-8 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 text-center space-y-4">
+            <div className="w-16 h-16 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto text-2xl">
+              ✓
+            </div>
+            <h3 className="text-2xl font-bold text-white">Consultation Request Received!</h3>
+            <p className="text-slate-300 max-w-lg mx-auto text-sm leading-relaxed">
+              Thank you for reaching out. One of our lead software architects will review your project details and connect with you within 24 hours.
+            </p>
+            <div className="pt-2 flex flex-wrap justify-center gap-3">
+              <a
+                href="tel:+923449254864"
+                className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center gap-2 border border-slate-700"
+              >
+                <FontAwesomeIcon icon={faPhone} className="text-cyan-400" />
+                <span>Direct Call: +92 344 9254864</span>
+              </a>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSubmitted(false);
+                  setFormData({ name: '', email: '', company: '', service: 'AI & Machine Learning Solutions', projectBrief: '', honeypot: '' });
+                }}
+                className="px-5 py-2.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs font-semibold border border-cyan-500/30"
+              >
+                Send Another Request
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* The Open Form (No Card Box) */
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Bot Trapping Honeypot */}
+            <div className="hidden" aria-hidden="true">
+              <input
+                type="text"
+                tabIndex="-1"
+                autoComplete="off"
+                value={formData.honeypot}
+                onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+              />
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Hidden honeypot */}
-              <div className="hidden" aria-hidden="true">
+            {/* Row 1: Name and Email */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Your Name <span className="text-cyan-400">*</span>
+                </label>
                 <input
                   type="text"
-                  tabIndex="-1"
-                  autoComplete="off"
-                  value={formData.honeypot}
-                  onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                  required
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Your Name *"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
-                  />
-                </div>
-                <div>
-                  <input
-                    type="email"
-                    required
-                    placeholder="Work Email *"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
-                  />
-                </div>
-              </div>
-
               <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Email Address <span className="text-cyan-400">*</span>
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="name@company.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Row 2: Company and What are you looking to build? */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Company / Organization <span className="text-slate-500 font-normal">(Optional)</span>
+                </label>
                 <input
                   type="text"
-                  placeholder="Company / Organization"
+                  placeholder="Company Name"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                 />
               </div>
 
-              <div>
-                <textarea
-                  rows={3}
-                  required
-                  placeholder="Project Brief & Requirements *"
-                  value={formData.projectBrief}
-                  onChange={(e) => setFormData({ ...formData, projectBrief: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all shadow-inner resize-none"
-                ></textarea>
-              </div>
-
-              {/* File Upload Row */}
-              <div className="flex items-center gap-3">
-                <label className="flex-1 flex items-center justify-between px-4 py-3 rounded-xl bg-[#081f33]/90 border border-cyan-500/30 text-sm text-slate-300 cursor-pointer hover:border-cyan-400/60 transition-colors group">
-                  <div className="flex items-center gap-2.5 truncate">
-                    <FileText className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                    <span className="truncate text-slate-400 group-hover:text-slate-300">
-                      {formData.fileName || "Attach Architecture / PRD File (Optional)"}
-                    </span>
-                  </div>
-                  <span className="text-xs px-2.5 py-0.5 rounded bg-cyan-900/50 text-cyan-300 border border-cyan-500/30">
-                    20MB
-                  </span>
-                  <input
-                    type="file"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </label>
-              </div>
-
-              {/* Turnstile Spam Protection */}
-              <TurnstileWidget 
-                onVerify={(token) => setTurnstileToken(token)}
-                onExpire={() => setTurnstileToken(null)}
-              />
-
-              {/* Submit button with Gradient */}
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031422] font-extrabold text-sm transition-all duration-300 shadow-[0_0_25px_rgba(0,240,255,0.6)] hover:shadow-[0_0_40px_rgba(0,240,255,0.9)] hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+            <div>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                What are you looking to build? <span className="text-cyan-400">*</span>
+              </label>
+              <div className="relative">
+                <select
+                  value={formData.service}
+                  onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all appearance-none cursor-pointer pr-10"
                 >
-                  {isSubmitting ? (
-                    <span>Transmitting...</span>
-                  ) : (
-                    <>
-                      <span>Book Free Discovery Session</span>
-                      <Send className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Right: Remote-First Global Team Info Card */}
-          <div className="lg:col-span-4">
-            <div className="gradient-card rounded-2xl p-6 border border-cyan-500/25 space-y-5 bg-[#020e18]/80">
-              <div>
-                <div className="text-xs uppercase tracking-wider font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-300">
-                  FREE DISCOVERY SESSION
+                  <option value="AI & Machine Learning Solutions">AI &amp; Machine Learning Solutions</option>
+                  <option value="Computer Vision & Camera AI">Computer Vision &amp; Camera AI</option>
+                  <option value="Shopify Store Development">Shopify Store Development &amp; Custom Themes</option>
+                  <option value="AI Agents & AI Automations">AI Agents &amp; AI Automations</option>
+                  <option value="Custom Software & SaaS Development">Custom Software &amp; SaaS Development</option>
+                  <option value="Full-Stack Web & Mobile Apps">Full-Stack Web &amp; Mobile Apps</option>
+                  <option value="Custom API Development & Integrations">Custom API Development &amp; Integrations</option>
+                  <option value="Cloud Infrastructure & Databases">Cloud Infrastructure &amp; Databases</option>
+                  <option value="General Project Consultation">General Project Consultation</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-400">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
                 </div>
-                <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                  Free 30-minute consultation to evaluate your project scope, technical feasibility, AI requirements, and delivery milestones.
-                </p>
-              </div>
-
-              {/* Styled 100% Global Remote Grid Visual */}
-              <div className="relative rounded-2xl overflow-hidden border border-cyan-500/30 h-44 bg-gradient-to-b from-[#061d31] to-[#03121f] p-4 flex flex-col justify-between group">
-                
-                {/* Cyber constellation network grid */}
-                <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#00f0ff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-                
-                {/* Global remote network nodes */}
-                <div className="relative z-10 flex items-center justify-between">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/90 border border-cyan-500/40 text-[11px] font-mono text-cyan-300 shadow-[0_0_12px_rgba(0,240,255,0.3)]">
-                    <Wifi className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-                    <span>100% REMOTE-FIRST</span>
-                  </div>
-                  <span className="text-[10px] text-emerald-400 font-mono font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/40">
-                    24/7 ONLINE
-                  </span>
-                </div>
-
-                {/* Animated Global Node Connections */}
-                <div className="relative z-10 my-auto text-center space-y-1">
-                  <div className="flex items-center justify-center gap-3">
-                    <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></div>
-                    <span className="text-xs font-bold text-white tracking-wide">
-                      Global Distributed Engineering
-                    </span>
-                    <div className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-ping" style={{ animationDelay: '0.4s' }}></div>
-                  </div>
-                  <p className="text-[10px] text-slate-400 font-mono">
-                    Async Sprints · Seamless Timezone Coverage
-                  </p>
-                </div>
-
-                {/* Remote Banner Badge */}
-                <div className="relative z-10 px-2.5 py-1.5 rounded-lg bg-[#030d17]/90 backdrop-blur-md border border-cyan-500/30 flex items-center justify-between text-[11px]">
-                  <div className="flex items-center gap-1.5 text-slate-200">
-                    <Globe className="w-3.5 h-3.5 text-cyan-400" />
-                    <span className="font-semibold text-cyan-200">Global Remote Team</span>
-                  </div>
-                  <span className="text-emerald-400 font-mono font-semibold">Active</span>
-                </div>
-              </div>
-
-              {/* Fast Response & Security Guarantee */}
-              <div className="text-[11px] text-slate-300 flex items-center gap-2 pt-1 border-t border-cyan-500/15">
-                <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
-                <span>NDA Protected · Guaranteed reply within 24h</span>
               </div>
             </div>
           </div>
 
-        </div>
+          {/* Project Requirements */}
+          <div>
+            <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              How can we help? <span className="text-slate-500 font-normal">(Brief project description)</span>
+            </label>
+            <textarea
+              rows={3}
+              placeholder="Describe your project requirements, scope, or key goals..."
+              value={formData.projectBrief}
+              onChange={(e) => setFormData({ ...formData, projectBrief: e.target.value })}
+              className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all resize-none"
+            />
+          </div>
+
+          {/* Verification & Submit Action */}
+          <div className="pt-2 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="shrink-0 flex justify-center sm:justify-start">
+                <TurnstileWidget 
+                  onVerify={(token) => setTurnstileToken(token)}
+                  onError={() => setTurnstileToken('dev-fallback-token')}
+                  size="normal"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn-primary w-full sm:w-auto px-8 py-3.5 rounded-xl flex items-center justify-center gap-2.5 text-sm sm:text-base font-bold shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all cursor-pointer"
+              >
+                {isSubmitting ? (
+                  <span>Scheduling consultation...</span>
+                ) : (
+                  <>
+                    <span>Book Free Consultation</span>
+                    <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5" />
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Privacy & Direct Channels Footer */}
+            <div className="pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faShieldHalved} className="text-cyan-400 text-xs shrink-0" />
+                <span>100% confidential · Direct with senior engineers · No sales spam</span>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 font-mono text-[11px]">
+                <a 
+                  href="mailto:brixellabs@gmail.com"
+                  className="hover:text-cyan-300 transition-colors flex items-center gap-1.5"
+                  title="Send Email to brixellabs@gmail.com"
+                >
+                  <FontAwesomeIcon icon={faEnvelope} className="text-cyan-400" />
+                  <span>brixellabs@gmail.com</span>
+                </a>
+                <span className="text-slate-700">·</span>
+                <a 
+                  href="tel:+923449254864"
+                  className="hover:text-cyan-300 transition-colors flex items-center gap-1.5"
+                  title="Call BrixelLabs"
+                >
+                  <FontAwesomeIcon icon={faPhone} className="text-cyan-400" />
+                  <span>+92 344 9254864</span>
+                </a>
+                <span className="text-slate-700">·</span>
+                <a 
+                  href="https://wa.me/923449254864?text=Hi%20BrixelLabs%2C%20I%20would%20like%20to%20discuss%20a%20project."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+                  title="Chat on WhatsApp"
+                >
+                  <span className="text-emerald-400 font-semibold">WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </form>
+        )}
+
       </div>
     </section>
   );

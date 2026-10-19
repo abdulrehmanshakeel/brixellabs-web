@@ -23,12 +23,35 @@ except ImportError:
     dj_database_url = None
 
 
-# Quick-start development settings - unsuitable for production
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-brixellabs-cyber-secret-key-2026-prod-ready')
+import secrets
 
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+# ==============================================================================
+# Security & Secret Key Configuration
+# ==============================================================================
+# If DJANGO_SECRET_KEY is not provided, generate a cryptographically secure 64-char key
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    _generated_key = secrets.token_urlsafe(64)
+    SECRET_KEY = _generated_key
 
-ALLOWED_HOSTS = ['*', '.vercel.app', 'localhost', '127.0.0.1']
+# Debug Mode: Strictly OFF by default. Only enable if DJANGO_DEBUG=True is explicitly set in .env
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in ('true', '1', 't')
+
+# Strict Host Header Filtering to prevent Host Header Poisoning
+_raw_hosts = os.environ.get('ALLOWED_HOSTS', '')
+if _raw_hosts:
+    ALLOWED_HOSTS = [h.strip() for h in _raw_hosts.split(',') if h.strip()]
+else:
+    # Safe defaults
+    ALLOWED_HOSTS = [
+        'localhost', 
+        '127.0.0.1', 
+        '.vercel.app', 
+        '.brixellabs.com', 
+        'brixellabs.com'
+    ]
+    if DEBUG:
+        ALLOWED_HOSTS.append('*')
 
 # Application definition
 INSTALLED_APPS = [
@@ -60,6 +83,25 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Security Headers & Cookie Protection
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True').lower() in ('true', '1')
+    SECURE_HSTS_SECONDS = int(os.environ.get('SECURE_HSTS_SECONDS', 31536000))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 ROOT_URLCONF = 'brixellabs_backend.urls'
 
@@ -92,12 +134,15 @@ def get_database_config():
     if DATABASE_URL and dj_database_url:
         # Require SSL when connecting to Supabase or hosted cloud postgres
         is_cloud_db = 'supabase.com' in DATABASE_URL or 'neon.tech' in DATABASE_URL or IS_VERCEL
-        return dj_database_url.config(
+        config = dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=0 if IS_VERCEL else 600,
             conn_health_checks=True,
             ssl_require=is_cloud_db
         )
+        if is_cloud_db:
+            config['DISABLE_SERVER_SIDE_CURSORS'] = True
+        return config
     
     if DB_ENGINE == 'postgresql':
         host = os.environ.get('POSTGRES_HOST', 'localhost')
@@ -134,13 +179,55 @@ DATABASES = {
     'default': get_database_config()
 }
 
-# Password validation
+# ==============================================================================
+# High-Performance Caching Layer (Redis / In-Memory LocMemCache)
+# ==============================================================================
+REDIS_URL = os.environ.get('REDIS_URL') or os.environ.get('KV_URL')
+if REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': REDIS_URL,
+            'TIMEOUT': 600,
+            'KEY_PREFIX': 'brixel_cache',
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'brixellabs-locmem-cache',
+            'TIMEOUT': 600,
+            'OPTIONS': {
+                'MAX_ENTRIES': 5000,
+                'CULL_FREQUENCY': 3,
+            }
+        }
+    }
+
+# Password hashing & validation
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 10,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -155,24 +242,56 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# ==============================================================================
+# Media & File Upload Security Configuration
+# ==============================================================================
 # Media files (Uploaded project screenshots, logos, documents)
 MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = Path(os.environ.get('MEDIA_ROOT', BASE_DIR / 'media')).resolve()
+SECURE_MEDIA_ROOT = Path(os.environ.get('SECURE_MEDIA_ROOT', MEDIA_ROOT)).resolve()
+
+# Strict upload file permissions: prevent executable bits on uploaded files
+FILE_UPLOAD_PERMISSIONS = 0o644
+FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
+
+# Server-side upload payload ceilings (Prevents buffer starvation and memory exhaustion)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024  # 2MB in memory before spooling to disk
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5MB maximum request payload
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS Configuration
-CORS_ALLOW_ALL_ORIGINS = True
+# ==============================================================================
+# CORS (Cross-Origin Resource Sharing) Configuration
+# ==============================================================================
+# Never allow all origins with credentials; strictly lock down to explicit whitelist
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
+CORS_PREFLIGHT_MAX_AGE = 86400
+
+_custom_cors = os.environ.get('CORS_ALLOWED_ORIGINS', '')
+if _custom_cors:
+    CORS_ALLOWED_ORIGINS = [c.strip() for c in _custom_cors.split(',') if c.strip()]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://localhost:4173',
+        'http://127.0.0.1:4173',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'https://brixellabs.com',
+        'https://www.brixellabs.com',
+    ]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/.*\.vercel\.app$",
+    r"^https:\/\/.*\.brixellabs\.com$",
 ]
 
-# Django REST Framework Configuration
+# ==============================================================================
+# Django REST Framework Configuration & API Rate Limiting / Throttling
+# ==============================================================================
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -181,16 +300,31 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
+    # Defend against DDoS, credential stuffing, and bot form spam
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '60/min',
+        'user': '300/min',
+        'inquiry_create': '10/hour',
+        'newsletter': '5/hour',
+        'auth_login': '5/min',
+        'crash_report': '60/min',
+    },
     'DEFAULT_PAGINATION_CLASS': None,
+    'EXCEPTION_HANDLER': 'core.exceptions.custom_exception_handler',
 }
 
-# Simple JWT Configuration
+# Simple JWT Configuration - Enforce secure token lifetimes and Bearer header
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': False,
-    'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 # ==============================================================================
@@ -228,6 +362,57 @@ EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT', 15))
 # HTTP-based Email APIs (Bypasses Render Free Tier SMTP port blocks completely)
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '').strip()
 BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '').strip()
+
+# ==============================================================================
+# Security Hardened Logging Infrastructure (Redacts Passwords, Tokens, DB URLs)
+# ==============================================================================
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'mask_sensitive_data': {
+            '()': 'core.logging_filters.MaskSensitiveDataFilter',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} [{name}:{lineno}] {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'filters': ['mask_sensitive_data'],
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': os.environ.get('DJANGO_LOG_LEVEL', 'INFO'),
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'core': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
 
 
 

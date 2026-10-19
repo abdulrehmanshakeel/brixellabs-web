@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Search, Plus, Edit2, Trash2, Users, Github, 
-  Linkedin, Twitter, Globe, Tag, X, Save, Shield
+  Linkedin, Twitter, Globe, X
 } from 'lucide-react';
 import { adminStorage } from '../../utils/adminStorage';
 
@@ -19,7 +19,7 @@ export default function AdminTeam({ team = [], onRefresh, showToast }) {
     github: '',
     linkedin: '',
     twitter: '',
-    tagsInput: 'Python, LLMs, Cloud'
+    tagsInput: 'React, Node, Python'
   });
 
   const filteredTeam = team.filter(member => {
@@ -30,23 +30,23 @@ export default function AdminTeam({ team = [], onRefresh, showToast }) {
     );
   });
 
-  const handleOpenAddModal = () => {
+  const handleOpenAdd = () => {
     setEditingMember(null);
     setFormData({
       id: '',
       name: '',
-      role: 'Senior AI Engineer',
-      specialty: 'Autonomous Agents & Distributed Systems',
+      role: 'Full-Stack Developer',
+      specialty: 'Web & mobile applications',
       avatar: '',
-      github: 'https://github.com',
-      linkedin: 'https://linkedin.com',
+      github: '',
+      linkedin: '',
       twitter: '',
-      tagsInput: 'Python, RAG, PyTorch'
+      tagsInput: 'React, Node, Cloud'
     });
     setIsModalOpen(true);
   };
 
-  const handleOpenEditModal = (member) => {
+  const handleOpenEdit = (member) => {
     setEditingMember(member);
     setFormData({
       id: member.id,
@@ -65,7 +65,7 @@ export default function AdminTeam({ team = [], onRefresh, showToast }) {
   const handleSave = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.role) {
-      showToast?.('Please fill in Member Name and Role', 'error');
+      showToast?.('Name and role are required', 'error');
       return;
     }
 
@@ -86,11 +86,11 @@ export default function AdminTeam({ team = [], onRefresh, showToast }) {
     };
 
     if (editingMember) {
-      adminStorage.updateTeamMember(editingMember.id, payload);
+      adminStorage.updateMember(editingMember.id, payload);
       showToast?.('Team member updated', 'success');
     } else {
-      adminStorage.addTeamMember(payload);
-      showToast?.('New team member added', 'success');
+      adminStorage.addMember(payload);
+      showToast?.('Team member added', 'success');
     }
 
     setIsModalOpen(false);
@@ -98,227 +98,222 @@ export default function AdminTeam({ team = [], onRefresh, showToast }) {
   };
 
   const handleDelete = (id, name) => {
-    if (window.confirm(`Remove "${name}" from team directory?`)) {
-      adminStorage.deleteTeamMember(id);
-      showToast?.(`Team member "${name}" removed`, 'info');
+    if (window.confirm(`Delete "${name}"?`)) {
+      adminStorage.deleteMember(id);
+      showToast?.(`"${name}" removed`, 'info');
       onRefresh?.();
     }
   };
 
   return (
-    <div className="space-y-6">
-      {/* Top Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-[#030d17]/80 border border-cyan-900/30 backdrop-blur-md">
-        <div className="relative min-w-[260px] flex-1 sm:flex-initial">
-          <Search className="w-4 h-4 text-cyan-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+    <div className="space-y-4 max-w-6xl mx-auto">
+      {/* Top Controls Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+        <div className="relative min-w-[220px]">
+          <Search className="w-3.5 h-3.5 text-white absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search team members by name or role..."
+            placeholder="Search members..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-[#02070e] border border-cyan-900/40 rounded-lg pl-10 pr-4 py-2 text-sm text-cyan-100 placeholder-cyan-700/60 focus:outline-none focus:border-cyan-500"
+            className="w-full bg-white/[0.03] border border-white/[0.08] rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400/50"
           />
         </div>
 
         <button
-          onClick={handleOpenAddModal}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold text-xs hover:from-cyan-400 hover:to-blue-500 transition-all shadow-md shadow-cyan-500/20"
+          onClick={handleOpenAdd}
+          className="btn-primary !px-3 !py-1.5 !text-xs !rounded-lg flex items-center gap-1.5 font-semibold"
         >
-          <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>Add Team Member</span>
+          <Plus className="w-3.5 h-3.5 stroke-[2.5] text-white" />
+          <span>New Member</span>
         </button>
       </div>
 
       {/* Team Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredTeam.map((member) => (
-          <div
-            key={member.id}
-            className="p-5 rounded-xl bg-[#030d17]/80 border border-cyan-900/40 hover:border-cyan-500/60 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-cyan-950/40"
-          >
-            <div>
-              {/* Member avatar & Role badge */}
-              <div className="flex items-start justify-between gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/30 border border-cyan-500/40 flex items-center justify-center font-bold text-cyan-300 text-lg group-hover:scale-105 transition-transform">
-                  {member.name ? member.name.charAt(0).toUpperCase() : 'M'}
+      {filteredTeam.length === 0 ? (
+        <div className="p-10 text-center rounded-xl bg-white/[0.02] border border-white/[0.06] text-slate-400">
+          <Users className="w-8 h-8 mx-auto text-white mb-2" />
+          <p className="text-sm font-semibold text-white">No team members found</p>
+          <p className="text-xs text-slate-400 mt-1">Add your team members to display them on the website.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {filteredTeam.map((member) => (
+            <div
+              key={member.id}
+              className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/10 transition-colors flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center font-bold text-white text-sm">
+                    {member.name ? member.name.charAt(0).toUpperCase() : 'M'}
+                  </div>
+                  <span className="text-[11px] px-2 py-0.5 rounded font-mono bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">
+                    {member.role}
+                  </span>
                 </div>
-                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-cyan-400 font-mono">
-                  {member.role}
-                </span>
-              </div>
 
-              {/* Name & Specialty */}
-              <h4 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
-                {member.name}
-              </h4>
-              <p className="text-xs text-cyan-300/80 mt-1 mb-3 leading-relaxed">
-                {member.specialty}
-              </p>
+                <h4 className="text-sm font-semibold text-white">
+                  {member.name}
+                </h4>
+                <p className="text-xs text-slate-400 mt-1 mb-2 line-clamp-2 leading-relaxed">
+                  {member.specialty}
+                </p>
 
-              {/* Tags */}
-              {Array.isArray(member.tags) && member.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {member.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="text-[11px] px-2 py-0.5 rounded bg-[#02070e] border border-cyan-900/60 text-cyan-300 font-mono"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Footer with social links & Actions */}
-            <div className="flex items-center justify-between pt-3 border-t border-cyan-900/30">
-              <div className="flex items-center gap-2">
-                {member.github && (
-                  <a
-                    href={member.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-1 rounded text-cyan-400/60 hover:text-cyan-300"
-                    title="GitHub Profile"
-                  >
-                    <Github className="w-3.5 h-3.5" />
-                  </a>
-                )}
-                {member.linkedin && (
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-1 rounded text-cyan-400/60 hover:text-cyan-300"
-                    title="LinkedIn Profile"
-                  >
-                    <Linkedin className="w-3.5 h-3.5" />
-                  </a>
+                {Array.isArray(member.tags) && member.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {member.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.03] text-slate-400 font-mono"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 )}
               </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => handleOpenEditModal(member)}
-                  className="p-1.5 rounded-lg bg-cyan-950/50 border border-cyan-800/40 text-cyan-300 hover:text-white hover:bg-cyan-900/60 transition-colors"
-                  title="Edit Member"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => handleDelete(member.id, member.name)}
-                  className="p-1.5 rounded-lg bg-red-950/30 border border-red-900/40 text-red-400 hover:text-red-200 hover:bg-red-900/50 transition-colors"
-                  title="Delete Member"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+              {/* Actions & Links */}
+              <div className="flex items-center justify-between pt-2 border-t border-white/[0.04]">
+                <div className="flex items-center gap-1.5 text-white">
+                  {member.github && (
+                    <a href={member.github} target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity" title="GitHub">
+                      <Github className="w-3.5 h-3.5 text-white" />
+                    </a>
+                  )}
+                  {member.linkedin && (
+                    <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity" title="LinkedIn">
+                      <Linkedin className="w-3.5 h-3.5 text-white" />
+                    </a>
+                  )}
+                  {member.twitter && (
+                    <a href={member.twitter} target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity" title="Twitter / X">
+                      <Twitter className="w-3.5 h-3.5 text-white" />
+                    </a>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => handleOpenEdit(member)}
+                    className="p-1.5 rounded text-white hover:bg-white/[0.08] transition-colors"
+                    title="Edit"
+                  >
+                    <Edit2 className="w-3.5 h-3.5 text-white" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(member.id, member.name)}
+                    className="p-1.5 rounded text-white hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                    title="Delete"
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-white hover:text-rose-400" />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {/* Add / Edit Member Modal */}
+      {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="bg-[#030d17] border border-cyan-500/40 rounded-2xl w-full max-w-lg p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-[#030e1a] border border-white/10 rounded-xl w-full max-w-md p-6 relative shadow-2xl">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-lg bg-cyan-950/40 border border-cyan-800/40 text-cyan-400 hover:text-white"
+              className="absolute top-4 right-4 p-1.5 rounded text-white hover:bg-white/[0.04]"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 text-white" />
             </button>
 
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              {editingMember ? <Edit2 className="w-5 h-5 text-cyan-400" /> : <Plus className="w-5 h-5 text-cyan-400" />}
-              {editingMember ? 'Edit Team Member' : 'Add New Team Member'}
+            <h3 className="text-base font-bold text-white mb-4">
+              {editingMember ? 'Edit Member' : 'New Member'}
             </h3>
 
-            <form onSubmit={handleSave} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-cyan-400 font-medium block mb-1">Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Zaid Khan"
-                    className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs text-cyan-400 font-medium block mb-1">Role / Title *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    placeholder="e.g. Lead AI Engineer"
-                    className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
-                  />
-                </div>
+            <form onSubmit={handleSave} className="space-y-3 text-xs">
+              <div>
+                <label className="text-slate-400 block mb-1">Full Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="e.g. John Doe"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
+                />
               </div>
 
               <div>
-                <label className="text-xs text-cyan-400 font-medium block mb-1">Specialty & Background</label>
+                <label className="text-slate-400 block mb-1">Role *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.role}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  placeholder="e.g. Lead AI Engineer"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
+                />
+              </div>
+
+              <div>
+                <label className="text-slate-400 block mb-1">Bio / Specialty</label>
                 <textarea
                   rows="2"
                   value={formData.specialty}
                   onChange={(e) => setFormData({ ...formData, specialty: e.target.value })}
-                  placeholder="e.g. Multi-agent systems, RAG optimization, distributed inference..."
-                  className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
+                  placeholder="Short summary of expertise..."
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 resize-none"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-cyan-400 font-medium block mb-1">GitHub Profile URL</label>
-                  <input
-                    type="text"
-                    value={formData.github}
-                    onChange={(e) => setFormData({ ...formData, github: e.target.value })}
-                    placeholder="https://github.com/..."
-                    className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs text-cyan-400 font-medium block mb-1">LinkedIn Profile URL</label>
-                  <input
-                    type="text"
-                    value={formData.linkedin}
-                    onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                    placeholder="https://linkedin.com/in/..."
-                    className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500"
-                  />
-                </div>
-              </div>
-
               <div>
-                <label className="text-xs text-cyan-400 font-medium block mb-1">Core Tech Skills (comma separated)</label>
+                <label className="text-slate-400 block mb-1">Skills & Tags (comma separated)</label>
                 <input
                   type="text"
                   value={formData.tagsInput}
                   onChange={(e) => setFormData({ ...formData, tagsInput: e.target.value })}
-                  placeholder="e.g. Python, SQL, NLP, PyTorch, FastMCP"
-                  className="w-full bg-[#02070e] border border-cyan-900/50 rounded-lg px-3 py-2 text-sm text-cyan-100 placeholder-cyan-800 focus:outline-none focus:border-cyan-500 font-mono"
+                  placeholder="Python, React, PyTorch"
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-cyan-900/40">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-slate-400 block mb-1">LinkedIn URL</label>
+                  <input
+                    type="url"
+                    value={formData.linkedin}
+                    onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                    placeholder="https://linkedin.com/in/..."
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-400 block mb-1">GitHub URL</label>
+                  <input
+                    type="url"
+                    value={formData.github}
+                    onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+                    placeholder="https://github.com/..."
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-cyan-950/40 text-cyan-400 text-xs hover:bg-cyan-900/50"
+                  className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold text-xs hover:from-cyan-400 hover:to-blue-500 transition-all shadow-md flex items-center gap-1.5"
+                  className="btn-primary !px-4 !py-1.5 !text-xs !rounded-lg"
                 >
-                  <Save className="w-3.5 h-3.5" />
-                  {editingMember ? 'Save Changes' : 'Add Member'}
+                  Save
                 </button>
               </div>
             </form>

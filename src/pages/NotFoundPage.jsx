@@ -1,16 +1,13 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  AlertTriangle, 
-  Home, 
-  Layers, 
-  FileCode, 
-  Mail, 
-  ArrowLeft, 
-  Terminal, 
-  Compass, 
-  RefreshCw,
-  Search
-} from 'lucide-react';
+  faTriangleExclamation, 
+  faHouse, 
+  faLayerGroup, 
+  faFileCode, 
+  faEnvelope, 
+  faArrowLeft 
+} from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
 
 export const NotFoundPage = ({ navigate }) => {
@@ -19,25 +16,25 @@ export const NotFoundPage = ({ navigate }) => {
       title: 'Home Architecture',
       desc: 'Return to our primary engineering overview & capabilities.',
       path: '/',
-      icon: Home
+      icon: faHouse
     },
     {
       title: 'Engineering Services',
       desc: 'Explore AI, ML, Computer Vision, and Full-Stack offerings.',
       path: '/services',
-      icon: Layers
+      icon: faLayerGroup
     },
     {
       title: 'Case Studies',
       desc: 'Inspect real deployed systems (YOLOv8, LangGraph, Edge AI).',
       path: '/case-studies',
-      icon: FileCode
+      icon: faFileCode
     },
     {
       title: 'Contact Engineering',
       desc: 'Connect directly with senior engineers or request a demo.',
       path: '/contact',
-      icon: Mail
+      icon: faEnvelope
     }
   ];
 
@@ -52,24 +49,14 @@ export const NotFoundPage = ({ navigate }) => {
           {/* Glitch Glow Behind */}
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 via-teal-500/20 to-indigo-500/30 blur-3xl -z-10 rounded-full" />
 
-          {/* Cyber Status Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/60 border border-red-500/40 text-red-300 text-xs font-mono uppercase tracking-widest mb-6 shadow-[0_0_20px_rgba(239,68,68,0.25)]"
-          >
-            <AlertTriangle className="w-3.5 h-3.5 text-red-400 animate-pulse" />
-            <span>ERROR CODE 404 // MODULE_NOT_FOUND</span>
-          </motion.div>
-
           {/* Huge 404 text */}
           <motion.h1 
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-            className="text-7xl sm:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-cyan-700/60 font-mono tracking-tighter drop-shadow-[0_0_40px_rgba(0,240,255,0.4)] select-none"
+            className="text-7xl sm:text-9xl font-black text-white font-mono tracking-tighter select-none"
           >
-            404
+            404 <span className="sr-only">: Page Not Found</span>
           </motion.h1>
         </div>
 
@@ -81,7 +68,7 @@ export const NotFoundPage = ({ navigate }) => {
             transition={{ delay: 0.1 }}
             className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight"
           >
-            System Node <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-300">Unreachable</span>
+            System Node Unreachable
           </motion.h2>
 
           <motion.p 
@@ -104,17 +91,19 @@ export const NotFoundPage = ({ navigate }) => {
           {quickLinks.map((item) => {
             const Icon = item.icon;
             return (
-              <button
+              <a
                 key={item.path}
-                onClick={() => {
+                href={item.path}
+                onClick={(e) => {
+                  e.preventDefault();
                   navigate(item.path);
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="gradient-card rounded-2xl p-5 border border-cyan-500/30 hover:border-cyan-400 group transition-all duration-300 flex flex-col justify-between text-left cursor-pointer hover:shadow-[0_0_20px_rgba(0,240,255,0.2)]"
+                className="bg-slate-950/60 rounded-xl p-5 border border-slate-800/80 hover:border-cyan-500/50 hover:bg-slate-900/40 group transition-all duration-300 flex flex-col justify-between text-left cursor-pointer no-underline block"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#092b45] to-[#041525] border border-cyan-500/40 flex items-center justify-center text-cyan-400 mb-3 group-hover:text-cyan-300 group-hover:border-cyan-400 transition-colors">
-                    <Icon className="w-5 h-5" />
+                  <div className="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-white group-hover:border-slate-700 transition-colors mb-3">
+                    <FontAwesomeIcon icon={item.icon} className="w-4 h-4 text-white" />
                   </div>
                   <div className="font-bold text-white text-sm group-hover:text-cyan-300 transition-colors">
                     {item.title}
@@ -124,11 +113,11 @@ export const NotFoundPage = ({ navigate }) => {
                   </div>
                 </div>
 
-                <div className="mt-4 pt-2 border-t border-cyan-500/20 text-[11px] font-mono text-cyan-400 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                <div className="mt-4 pt-2 border-t border-slate-800/80 text-[11px] font-mono text-slate-400 group-hover:text-cyan-400 font-medium flex items-center gap-1 group-hover:translate-x-0.5 transition-all">
                   <span>Go to page</span>
                   <span>→</span>
                 </div>
-              </button>
+              </a>
             );
           })}
         </motion.div>
@@ -140,29 +129,19 @@ export const NotFoundPage = ({ navigate }) => {
           transition={{ delay: 0.4 }}
           className="pt-6"
         >
-          <button
-            onClick={() => {
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
               navigate('/');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031422] font-extrabold text-sm transition-all duration-300 shadow-[0_0_25px_rgba(0,240,255,0.6)] cursor-pointer"
+            className="btn-primary inline-flex items-center gap-2 no-underline"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <FontAwesomeIcon icon={faArrowLeft} className="w-4 h-4" />
             <span>Return to Main System</span>
-          </button>
+          </a>
         </motion.div>
-
-        {/* Terminal Telemetry Output */}
-        <div className="pt-8 max-w-md mx-auto">
-          <div className="p-3 rounded-xl bg-[#03101c] border border-cyan-500/20 text-[11px] font-mono text-slate-400 flex items-center justify-between">
-            <span className="flex items-center gap-2">
-              <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-              <span>CORE CLUSTER: STABLE</span>
-            </span>
-            <span className="text-cyan-400">STATUS 404</span>
-          </div>
-        </div>
-
       </div>
 
     </div>

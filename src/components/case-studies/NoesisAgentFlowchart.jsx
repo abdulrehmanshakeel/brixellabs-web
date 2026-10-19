@@ -47,8 +47,8 @@ export const NoesisAgentFlowchart = () => {
       stateSnapshot: {
         topic: 'Python Decorators',
         tool_required: false,
-        source: 'Groq LLaMA 3.3 70B (Internal Weights)',
-        retrieval_latency: '120ms',
+        source: 'Groq LLaMA 3.3 70B (Internal Knowledge)',
+        response_speed: 'Instant (<0.2s)',
         notes_status: 'Generated (Structured Markdown)',
         quiz_mode: 'Active (10 MCQs generated)'
       }
@@ -73,7 +73,7 @@ export const NoesisAgentFlowchart = () => {
         tool_required: true,
         level: 'Advanced / Specialized',
         source: 'Tavily Deep Web Search API (Docs & Github)',
-        retrieval_latency: '480ms',
+        response_speed: 'Fast (<0.5s)',
         notes_status: 'Generated with Flowchart & Code',
         quiz_mode: 'Calibrated Hard (Architecture MCQs)'
       }
@@ -98,7 +98,7 @@ export const NoesisAgentFlowchart = () => {
         tool_required: true,
         level: 'Basic / Foundational',
         source: 'Wikipedia API (Curated Knowledge)',
-        retrieval_latency: '240ms',
+        response_speed: 'Fast (<0.3s)',
         notes_status: 'Synthesized (Intuitive Analogies)',
         quiz_mode: 'Calibrated Beginner (Foundational MCQs)'
       }
@@ -152,7 +152,7 @@ export const NoesisAgentFlowchart = () => {
       title: 'Answer directly',
       subtitle: 'LLM knowledge only',
       icon: Brain,
-      role: 'Zero-latency retrieval from Groq LLaMA 3.3 70B parameter memory',
+      role: 'Instant response directly from LLM memory without external search',
       badge: 'DIRECT LLM',
       borderGrad: 'border-indigo-400/60',
       glow: 'shadow-[0_0_20px_rgba(129,140,248,0.35)]',
@@ -221,20 +221,15 @@ export const NoesisAgentFlowchart = () => {
   };
 
   return (
-    <div className="gradient-card rounded-3xl p-6 sm:p-8 border border-cyan-500/30 shadow-2xl overflow-hidden relative mb-16">
+    <div className="rounded-2xl p-6 sm:p-8 bg-slate-950/80 border border-slate-800 shadow-2xl overflow-hidden relative mb-16">
       
-      {/* Background Cyber Ambient Glows */}
-      <div className="absolute -top-32 -left-32 w-80 h-80 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-      <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-teal-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      {/* Background Ambient Glows */}
+      <div className="absolute -top-32 -left-32 w-80 h-80 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-teal-500/5 rounded-full blur-[100px] pointer-events-none"></div>
 
       {/* Header & Controls Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-cyan-500/20 mb-8 relative z-10">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-800 mb-8 relative z-10">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-wider mb-2">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-            <span>LangGraph Stateful Multi-Agent Architecture</span>
-          </div>
           <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
             <span>Noesis Agentic Routing & Synthesis Graph</span>
           </h3>
@@ -250,7 +245,7 @@ export const NoesisAgentFlowchart = () => {
               onClick={() => handleRouteSelect('direct')}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                 selectedRoute === 'direct'
-                  ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-[0_0_12px_rgba(99,102,241,0.5)]'
+                  ? 'bg-white text-[#031525] shadow-[0_0_12px_rgba(255,255,255,0.35)] font-extrabold'
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -261,7 +256,7 @@ export const NoesisAgentFlowchart = () => {
               onClick={() => handleRouteSelect('tavily')}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                 selectedRoute === 'tavily'
-                  ? 'bg-gradient-to-r from-cyan-400 to-teal-300 text-[#031525] shadow-[0_0_12px_rgba(0,240,255,0.5)] font-extrabold'
+                  ? 'bg-white text-[#031525] shadow-[0_0_12px_rgba(255,255,255,0.35)] font-extrabold'
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -272,7 +267,7 @@ export const NoesisAgentFlowchart = () => {
               onClick={() => handleRouteSelect('wikipedia')}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                 selectedRoute === 'wikipedia'
-                  ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-[#031525] shadow-[0_0_12px_rgba(0,229,208,0.5)] font-extrabold'
+                  ? 'bg-white text-[#031525] shadow-[0_0_12px_rgba(255,255,255,0.35)] font-extrabold'
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -285,16 +280,16 @@ export const NoesisAgentFlowchart = () => {
             <button
               onClick={() => setIsPlaying(!isPlaying)}
               title={isPlaying ? "Pause Execution Simulation" : "Play Execution Simulation"}
-              className="p-1.5 rounded-lg bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 hover:text-white transition-all cursor-pointer"
+              className="p-1.5 rounded-lg bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-white transition-all cursor-pointer"
             >
-              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              {isPlaying ? <Pause className="w-4 h-4 text-white" /> : <Play className="w-4 h-4 text-white" />}
             </button>
             <button
               onClick={() => setActiveStepIndex(0)}
               title="Reset to Start Node"
-              className="p-1.5 rounded-lg bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 hover:text-white transition-all cursor-pointer"
+              className="p-1.5 rounded-lg bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-white transition-all cursor-pointer"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-4 h-4 text-white" />
             </button>
           </div>
         </div>
@@ -709,9 +704,9 @@ export const NoesisAgentFlowchart = () => {
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                    isStepActive ? 'bg-cyan-500 text-black font-bold' : 'bg-cyan-950 text-cyan-400'
+                    isStepActive ? 'bg-cyan-500/30 text-white font-bold' : 'bg-cyan-950 text-white'
                   }`}>
-                    <StepIcon className="w-4 h-4" />
+                    <StepIcon className="w-4 h-4 text-white" />
                   </div>
                   <div>
                     <h6 className="font-mono font-bold text-xs text-white">{details.title}</h6>
@@ -738,7 +733,7 @@ export const NoesisAgentFlowchart = () => {
         <div className="lg:col-span-6 p-5 rounded-2xl bg-[#041624]/90 border border-cyan-500/25 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-cyan-500/20">
             <span className="text-xs font-mono text-cyan-300 font-bold uppercase flex items-center gap-2">
-              <Zap className="w-3.5 h-3.5 text-cyan-400" />
+              <Zap className="w-3.5 h-3.5 text-white" />
               Live Execution Step Log (Step {activeStepIndex + 1} of {currentRouteData.steps.length})
             </span>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30">
@@ -749,7 +744,7 @@ export const NoesisAgentFlowchart = () => {
           <div>
             <h5 className="text-sm font-bold text-white flex items-center gap-2">
               <span>{currentRouteData.steps[activeStepIndex]?.label}</span>
-              <ArrowRight className="w-3.5 h-3.5 text-cyan-400" />
+              <ArrowRight className="w-3.5 h-3.5 text-white" />
               <span className="text-cyan-300 font-mono text-xs">{nodeDetails[currentActiveNodeId]?.subtitle}</span>
             </h5>
             <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
@@ -771,7 +766,7 @@ export const NoesisAgentFlowchart = () => {
         <div className="lg:col-span-6 p-5 rounded-2xl bg-[#041624]/90 border border-cyan-500/25 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-cyan-500/20">
             <span className="text-xs font-mono text-teal-300 font-bold uppercase flex items-center gap-2">
-              <Terminal className="w-3.5 h-3.5 text-teal-400" />
+              <Terminal className="w-3.5 h-3.5 text-white" />
               StateGraph TypedDict Checkpoint Snapshot
             </span>
             <span className="text-[10px] font-mono text-slate-400">thread_id: #noesis-9021</span>
@@ -799,8 +794,8 @@ export const NoesisAgentFlowchart = () => {
               <span className="text-white text-[11px]">"{currentRouteData.stateSnapshot.source}"</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">retrieval_latency:</span>
-              <span className="text-emerald-400 font-bold">{currentRouteData.stateSnapshot.retrieval_latency}</span>
+              <span className="text-slate-400">response_speed:</span>
+              <span className="text-emerald-400 font-bold">{currentRouteData.stateSnapshot.response_speed}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-slate-400">notes_synthesis:</span>
@@ -813,7 +808,7 @@ export const NoesisAgentFlowchart = () => {
           </div>
 
           <p className="text-[11px] text-slate-400 font-mono flex items-center gap-1.5 pt-1">
-            <Info className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <Info className="w-3.5 h-3.5 text-white shrink-0" />
             <span>State persisted in MemorySaver for seamless multi-turn retry loops.</span>
           </p>
         </div>

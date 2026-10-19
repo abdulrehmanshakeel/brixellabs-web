@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { HeroSection } from '../components/home/HeroSection';
+import { TechStackSection } from '../components/home/TechStackSection';
 import { ServicesGrid } from '../components/home/ServicesGrid';
 import { FeaturedCaseStudies } from '../components/home/FeaturedCaseStudies';
 import { ProcessSummary } from '../components/home/ProcessSummary';
-import { VerifiedTestimonials } from '../components/common/VerifiedTestimonials';
 import { FAQSection } from '../components/common/FAQSection';
 import { ScheduleConsultationSection } from '../components/common/ScheduleConsultationSection';
 import { VideoShowreelModal } from '../components/common/VideoShowreelModal';
@@ -26,20 +26,20 @@ export const HomePage = ({ navigate, openConsultation }) => {
         openShowreel={handleOpenShowreel} 
       />
 
-      {/* 2. 8 Service Cards Grid with 3D Tilt */}
+      {/* 2. Enterprise Technologies Infinite Marquee */}
+      <TechStackSection />
+
+      {/* 3. Engineering Capabilities Grid */}
       <ServicesGrid navigate={navigate} />
 
-      {/* 3. Featured Case Studies */}
+      {/* 4. Featured Case Studies */}
       <FeaturedCaseStudies navigate={navigate} openShowreel={handleOpenShowreel} />
 
-      {/* 4. Process (1. Design, 2. Build, 3. Automate) */}
+      {/* 5. Agile Engineering Process */}
       <ProcessSummary navigate={navigate} />
 
-      {/* 5. Real Verified Case Study Testimonials */}
-      <VerifiedTestimonials navigate={navigate} />
-
-      {/* 6. Interactive FAQ Accordion */}
-      <FAQSection openConsultation={openConsultation} />
+      {/* 7. Interactive FAQ Accordion */}
+      <FAQSection openConsultation={openConsultation} showCta={false} />
 
       {/* 7. Schedule Free Consultation */}
       <ScheduleConsultationSection />

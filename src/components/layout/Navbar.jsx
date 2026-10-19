@@ -1,288 +1,197 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  ChevronDown, 
-  Menu, 
-  X, 
-  ArrowRight, 
-  BarChart3, 
-  Cpu, 
-  Layers, 
-  MessageSquareCode, 
-  ShieldCheck,
-  Play,
-  Activity
-} from 'lucide-react';
+  faBars, 
+  faXmark, 
+  faArrowRight, 
+  faMagnifyingGlass,
+  faPhone,
+  faEnvelope
+} from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
-import logoImg from '../../assets/logo.png';
+import logoImg from '../../assets/logo.webp';
 
-export const Navbar = ({ currentPath, navigate, openConsultation, openShowreel }) => {
+export const Navbar = ({ currentPath, navigate, openConsultation, onOpenSearch }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesDropdown, setServicesDropdown] = useState(false);
-  const [companyDropdown, setCompanyDropdown] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleNav = (path) => {
     navigate(path);
     setMobileMenuOpen(false);
-    setServicesDropdown(false);
-    setCompanyDropdown(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Exact 5 navigation links
   const navItems = [
-    { label: 'Services', path: '/services', hasDropdown: true },
+    { label: 'Services', path: '/services' },
     { label: 'Process', path: '/process' },
     { label: 'Case Studies', path: '/case-studies', matchPrefix: true },
-    { label: 'Company', path: '/about', hasDropdownCompany: true },
+    { label: 'About', path: '/about' },
+    { label: 'Contact', path: '/contact' },
   ];
+
+  const isItemActive = (item) => {
+    if (item.matchPrefix) {
+      return currentPath.startsWith(item.path);
+    }
+    return currentPath === item.path;
+  };
 
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
-          ? 'bg-[#030c14]/90 backdrop-blur-xl border-b border-cyan-500/25 py-2.5 shadow-lg shadow-black/60' 
-          : 'bg-transparent py-4 sm:py-5'
+          ? 'bg-[#02070f]/85 backdrop-blur-2xl border-b border-white/[0.07] py-3 shadow-[0_10px_35px_rgba(0,0,0,0.7)]' 
+          : 'bg-transparent py-5 sm:py-6 border-b border-transparent'
       }`}
     >
+      {/* Subtle top ambient hairline glow on scroll */}
+      {scrolled && (
+        <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent pointer-events-none" />
+      )}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           
-          {/* Brand Logo with Rotating Cyber Ring */}
-          <button 
-            onClick={() => handleNav('/')}
-            className="flex items-center gap-3 group text-left cursor-pointer focus:outline-none"
+          {/* Brand Logo & Name (Clean, Professional & Human-Crafted) */}
+          <a 
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNav('/');
+            }}
+            className="flex items-center gap-3 group text-left cursor-pointer focus:outline-none select-none text-white no-underline"
+            aria-label="BrixelLabs Home"
           >
-            <div className="relative w-10 h-10 flex items-center justify-center">
-              {/* Rotating outer cyber ring */}
-              <div className="absolute inset-0 rounded-full border border-cyan-400/40 border-dashed animate-spin" style={{ animationDuration: '14s' }}></div>
-              <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-md group-hover:bg-cyan-400/50 transition-all"></div>
-              
+            {/* Elegant Logo Container with Subtle Hover Reaction */}
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-b from-slate-900 via-[#071929] to-[#030d17] border border-cyan-500/25 flex items-center justify-center shadow-md group-hover:border-cyan-400/60 group-hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all duration-300"
+            >
               <img 
                 src={logoImg} 
                 alt="BrixelLabs Logo" 
-                className="w-8 h-8 object-contain relative z-10 drop-shadow-[0_0_10px_rgba(0,240,255,0.7)] group-hover:scale-110 transition-transform duration-300"
+                width="28"
+                height="28"
+                loading="eager"
+                decoding="async"
+                className="w-6 h-6 sm:w-7 sm:h-7 object-contain relative z-10 transition-transform duration-300"
               />
-            </div>
+            </motion.div>
             
             <div className="flex flex-col">
-              <span className="text-xl font-extrabold tracking-tight text-white group-hover:text-cyan-300 transition-colors">
-                Brixel<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">Labs</span>
+              <div className="flex items-center">
+                <span className="font-heading text-lg sm:text-xl font-black tracking-tight text-white group-hover:text-cyan-300 transition-colors">
+                  Brixel<span className="text-cyan-400">Labs</span>
+                </span>
+              </div>
+              <span className="hidden sm:block text-[9px] font-mono text-slate-400 group-hover:text-cyan-300/80 tracking-widest uppercase transition-colors -mt-0.5 font-medium">
+                Engineering &amp; AI
               </span>
-              <span className="hidden sm:flex items-center gap-1.5 text-[9px] font-mono text-cyan-300/90 font-semibold tracking-wider -mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#00f0ff]"></span>
-                Design · Build · Automate
-              </span>
             </div>
-          </button>
+          </a>
 
-          {/* Desktop Navigation with Animated Glide Pill */}
-          <nav className="hidden md:flex items-center gap-1 bg-[#061e31]/70 p-1.5 rounded-full border border-cyan-500/25 backdrop-blur-xl shadow-inner text-xs font-medium text-slate-300">
-            
-            {/* Home */}
-            <button
-              onClick={() => handleNav('/')}
-              className={`relative px-4 py-2 rounded-full transition-colors cursor-pointer ${
-                currentPath === '/' ? 'text-white font-semibold' : 'hover:text-cyan-300 text-slate-300'
-              }`}
-            >
-              {currentPath === '/' && (
-                <motion.div
-                  layoutId="activeNavPill"
-                  className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-teal-500/20 border border-cyan-400/50 rounded-full shadow-[0_0_15px_rgba(0,240,255,0.4)] z-0"
-                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                />
-              )}
-              <span className="relative z-10">Home</span>
-            </button>
+          {/* Desktop Navigation: Fluid Interactive Floating Island */}
+          <nav 
+            onMouseLeave={() => setHoveredIndex(null)}
+            className="hidden md:flex items-center p-1 rounded-full bg-[#030e1a]/80 backdrop-blur-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.06)_inset] text-xs font-medium text-slate-300"
+          >
+            {navItems.map((item, index) => {
+              const active = isItemActive(item);
+              const isHovered = hoveredIndex === index;
 
-            {/* Services with Dropdown */}
-            <div 
-              className="relative"
-              onMouseEnter={() => setServicesDropdown(true)}
-              onMouseLeave={() => setServicesDropdown(false)}
-            >
-              <button 
-                onClick={() => handleNav('/services')}
-                className={`relative px-4 py-2 rounded-full transition-colors flex items-center gap-1 cursor-pointer ${
-                  currentPath === '/services' ? 'text-white font-semibold' : 'hover:text-cyan-300 text-slate-300'
-                }`}
-              >
-                {currentPath === '/services' && (
-                  <motion.div
-                    layoutId="activeNavPill"
-                    className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-teal-500/20 border border-cyan-400/50 rounded-full shadow-[0_0_15px_rgba(0,240,255,0.4)] z-0"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <span className="relative z-10">Services</span>
-                <ChevronDown className={`w-3.5 h-3.5 relative z-10 transition-transform duration-200 ${servicesDropdown ? 'rotate-180 text-cyan-400' : ''}`} />
-              </button>
+              return (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNav(item.path);
+                  }}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  className={`relative px-4 py-2 rounded-full transition-colors cursor-pointer select-none no-underline ${
+                    active ? 'text-white font-semibold' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {/* Floating Smooth Hover Pill for Inactive Links */}
+                  {isHovered && !active && (
+                    <motion.div
+                      layoutId="navHoverPill"
+                      className="absolute inset-0 bg-white/[0.08] rounded-full border border-white/[0.08] -z-10"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                    />
+                  )}
 
-              {/* Services Dropdown Menu */}
-              {servicesDropdown && (
-                <div className="absolute top-full left-0 w-72 pt-3 z-50">
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="glass-panel rounded-2xl p-3 shadow-2xl shadow-black/80 border border-cyan-500/40 backdrop-blur-2xl bg-[#031524]/95"
-                  >
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-cyan-400/90 px-3 py-1">
-                      Full-Stack & AI Capabilities
-                    </div>
-                    <button 
-                      onClick={() => handleNav('/services')}
-                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-cyan-950/60 hover:text-cyan-300 text-slate-200 flex items-center gap-2.5 text-xs transition-colors"
-                    >
-                      <Layers className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                      <div>
-                        <div className="font-semibold text-white">Design & Development</div>
-                        <div className="text-[10px] text-slate-400">UI/UX, Full-Stack Web & Apps</div>
-                      </div>
-                    </button>
-                    <button 
-                      onClick={() => handleNav('/services')}
-                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-cyan-950/60 hover:text-cyan-300 text-slate-200 flex items-center gap-2.5 text-xs transition-colors"
-                    >
-                      <Cpu className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                      <div>
-                        <div className="font-semibold text-white">AI & Intelligence</div>
-                        <div className="text-[10px] text-slate-400">Vision, Chatbots & RAG, Agents</div>
-                      </div>
-                    </button>
-                    <button 
-                      onClick={() => handleNav('/services')}
-                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-cyan-950/60 hover:text-cyan-300 text-slate-200 flex items-center gap-2.5 text-xs transition-colors"
-                    >
-                      <BarChart3 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                      <div>
-                        <div className="font-semibold text-white">Data Analytics</div>
-                        <div className="text-[10px] text-slate-400">Python, Excel & SQL Dashboards</div>
-                      </div>
-                    </button>
-                  </motion.div>
-                </div>
-              )}
-            </div>
+                  {/* Active Indicator: Refined Frosted Cyber-Cyan Pill */}
+                  {active && (
+                    <motion.div
+                      layoutId="activeNavIndicator"
+                      className="absolute inset-0 bg-cyan-500/15 border border-cyan-400/35 rounded-full shadow-[0_0_14px_rgba(0,240,255,0.25)] -z-10"
+                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    />
+                  )}
 
-            {/* Process */}
-            <button 
-              onClick={() => handleNav('/process')}
-              className={`relative px-4 py-2 rounded-full transition-colors cursor-pointer ${
-                currentPath === '/process' ? 'text-white font-semibold' : 'hover:text-cyan-300 text-slate-300'
-              }`}
-            >
-              {currentPath === '/process' && (
-                <motion.div
-                  layoutId="activeNavPill"
-                  className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-teal-500/20 border border-cyan-400/50 rounded-full shadow-[0_0_15px_rgba(0,240,255,0.4)] z-0"
-                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                />
-              )}
-              <span className="relative z-10">Process</span>
-            </button>
-
-            {/* Case Studies */}
-            <button 
-              onClick={() => handleNav('/case-studies')}
-              className={`relative px-4 py-2 rounded-full transition-colors cursor-pointer ${
-                currentPath.startsWith('/case-studies') ? 'text-white font-semibold' : 'hover:text-cyan-300 text-slate-300'
-              }`}
-            >
-              {currentPath.startsWith('/case-studies') && (
-                <motion.div
-                  layoutId="activeNavPill"
-                  className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-teal-500/20 border border-cyan-400/50 rounded-full shadow-[0_0_15px_rgba(0,240,255,0.4)] z-0"
-                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                />
-              )}
-              <span className="relative z-10">Case Studies</span>
-            </button>
-
-            {/* Company / About */}
-            <div 
-              className="relative"
-              onMouseEnter={() => setCompanyDropdown(true)}
-              onMouseLeave={() => setCompanyDropdown(false)}
-            >
-              <button 
-                onClick={() => handleNav('/about')}
-                className={`relative px-4 py-2 rounded-full transition-colors flex items-center gap-1 cursor-pointer ${
-                  currentPath === '/about' ? 'text-white font-semibold' : 'hover:text-cyan-300 text-slate-300'
-                }`}
-              >
-                {currentPath === '/about' && (
-                  <motion.div
-                    layoutId="activeNavPill"
-                    className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-teal-500/20 border border-cyan-400/50 rounded-full shadow-[0_0_15px_rgba(0,240,255,0.4)] z-0"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <span className="relative z-10">Company</span>
-                <ChevronDown className={`w-3.5 h-3.5 relative z-10 transition-transform duration-200 ${companyDropdown ? 'rotate-180 text-cyan-400' : ''}`} />
-              </button>
-
-              {/* Company Dropdown */}
-              {companyDropdown && (
-                <div className="absolute top-full left-0 w-64 pt-3 z-50">
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="glass-panel rounded-2xl p-3 shadow-2xl shadow-black/80 border border-cyan-500/40 backdrop-blur-2xl bg-[#031524]/95"
-                  >
-                    <button 
-                      onClick={() => handleNav('/about')}
-                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-cyan-950/60 hover:text-cyan-300 text-slate-200 flex items-center gap-2.5 text-xs transition-colors"
-                    >
-                      <ShieldCheck className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                      <div>
-                        <div className="font-semibold text-white">About BrixelLabs</div>
-                        <div className="text-[10px] text-slate-400">Our Story & Mission</div>
-                      </div>
-                    </button>
-                    <button 
-                      onClick={() => handleNav('/about')}
-                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-cyan-950/60 hover:text-cyan-300 text-slate-200 flex items-center gap-2.5 text-xs transition-colors"
-                    >
-                      <MessageSquareCode className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                      <div>
-                        <div className="font-semibold text-white">Our Team & Values</div>
-                        <div className="text-[10px] text-slate-400">Engineers & Creators</div>
-                      </div>
-                    </button>
-                  </motion.div>
-                </div>
-              )}
-            </div>
-
+                  <span className={`relative z-10 ${active ? 'text-cyan-300' : ''}`}>{item.label}</span>
+                </a>
+              );
+            })}
           </nav>
 
-          {/* Right Action Buttons */}
-          <div className="hidden md:flex items-center gap-3">
-            {/* Contact CTA */}
+          {/* Right Header Action Button: Search & Unified Master btn-primary */}
+          <div className="hidden md:flex items-center gap-2.5">
+            {/* Quick Site Search Trigger (⌘K) */}
             <button
-              onClick={() => handleNav('/contact')}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031525] font-extrabold text-xs transition-all duration-300 shadow-[0_0_20px_rgba(0,240,255,0.55)] hover:shadow-[0_0_30px_rgba(0,240,255,0.85)] hover:scale-105 active:scale-95 cursor-pointer"
+              type="button"
+              onClick={() => onOpenSearch ? onOpenSearch() : window.dispatchEvent(new CustomEvent('open-site-search'))}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800 border border-slate-700/60 hover:border-cyan-400/50 text-slate-300 hover:text-white text-xs transition-all cursor-pointer shadow-sm group"
+              aria-label="Search website (Ctrl+K or Cmd+K)"
+              title="Search website (⌘K)"
             >
-              Contact Us
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="text-[11px] text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span className="hidden lg:inline text-slate-400 group-hover:text-slate-200">Search</span>
+              <kbd className="hidden lg:inline px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-slate-400">⌘K</kbd>
+            </button>
+
+            {/* Consultation CTA */}
+            <button
+              onClick={openConsultation}
+              className="btn-primary !px-5 !py-2 !text-xs !rounded-full"
+            >
+              <span>Book Consultation</span>
+              <FontAwesomeIcon 
+                icon={faArrowRight} 
+                className="text-[11px]" 
+              />
             </button>
           </div>
 
-          {/* Mobile Hamburger Menu Toggle */}
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl text-slate-300 hover:text-cyan-400 hover:bg-cyan-950/50 border border-cyan-500/20 transition-all cursor-pointer"
-            aria-label="Toggle Menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile Right Controls: Hamburger Toggle */}
+          <div className="flex md:hidden items-center gap-2">
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2.5 rounded-xl text-white bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-all cursor-pointer outline-none"
+              aria-label="Toggle Menu"
+            >
+              {mobileMenuOpen ? (
+                <FontAwesomeIcon icon={faXmark} className="w-4 h-4 text-white" />
+              ) : (
+                <FontAwesomeIcon icon={faBars} className="w-4 h-4 text-white" />
+              )}
+            </button>
+          </div>
 
         </div>
       </div>
@@ -294,72 +203,86 @@ export const Navbar = ({ currentPath, navigate, openConsultation, openShowreel }
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-panel border-b border-cyan-500/30 px-6 py-6 mt-3 space-y-4 backdrop-blur-2xl bg-[#030c14]/98 shadow-2xl overflow-hidden"
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="md:hidden border-b border-white/[0.08] px-5 py-5 mt-2 space-y-3 backdrop-blur-2xl bg-[#02070f]/98 shadow-2xl max-h-[calc(100vh-80px)] overflow-y-auto overscroll-contain"
           >
-            <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20">
-              <span className="text-xs font-mono text-cyan-400">NAVIGATION</span>
-              <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                LIVE
+            {/* Mobile Site Search Bar */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onOpenSearch) onOpenSearch();
+                else window.dispatchEvent(new CustomEvent('open-site-search'));
+              }}
+              className="w-full py-2.5 px-3.5 rounded-xl text-xs font-medium text-slate-300 bg-slate-900/70 border border-slate-700/60 hover:border-cyan-400/50 flex items-center justify-between transition-colors mb-2 text-left"
+            >
+              <span className="flex items-center gap-2.5">
+                <FontAwesomeIcon icon={faMagnifyingGlass} className="text-cyan-400 text-xs" />
+                <span>Search services, studies, pages...</span>
               </span>
+              <kbd className="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 border border-slate-700 rounded text-slate-400">⌘K</kbd>
+            </button>
+
+            <div className="pb-1 border-b border-white/[0.06] flex items-center justify-between">
+              <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider">Navigation</span>
+              <span className="text-[10px] font-mono text-slate-500">Menu</span>
             </div>
 
-            <button 
-              onClick={() => handleNav('/')}
-              className={`block w-full text-left py-2 text-sm font-medium ${
-                currentPath === '/' ? 'text-cyan-400 font-bold' : 'text-slate-200'
-              }`}
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => handleNav('/services')}
-              className={`block w-full text-left py-2 text-sm font-medium ${
-                currentPath === '/services' ? 'text-cyan-400 font-bold' : 'text-slate-200'
-              }`}
-            >
-              Services
-            </button>
-            <button 
-              onClick={() => handleNav('/process')}
-              className={`block w-full text-left py-2 text-sm font-medium ${
-                currentPath === '/process' ? 'text-cyan-400 font-bold' : 'text-slate-200'
-              }`}
-            >
-              Process
-            </button>
-            <button 
-              onClick={() => handleNav('/case-studies')}
-              className={`block w-full text-left py-2 text-sm font-medium ${
-                currentPath.startsWith('/case-studies') ? 'text-cyan-400 font-bold' : 'text-slate-200'
-              }`}
-            >
-              Case Studies
-            </button>
-            <button 
-              onClick={() => handleNav('/about')}
-              className={`block w-full text-left py-2 text-sm font-medium ${
-                currentPath === '/about' ? 'text-cyan-400 font-bold' : 'text-slate-200'
-              }`}
-            >
-              Company & About
-            </button>
-            <button 
-              onClick={() => handleNav('/contact')}
-              className={`block w-full text-left py-2 text-sm font-medium ${
-                currentPath === '/contact' ? 'text-cyan-400 font-bold' : 'text-slate-200'
-              }`}
-            >
-              Contact
-            </button>
+            <div className="space-y-1">
+              {navItems.map((item) => {
+                const active = isItemActive(item);
+                return (
+                  <a 
+                    key={item.path}
+                    href={item.path}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNav(item.path);
+                    }}
+                    className={`block w-full text-left py-3 px-3 rounded-lg text-sm font-semibold transition-all min-h-[44px] flex items-center no-underline ${
+                      active 
+                        ? 'text-cyan-400 bg-cyan-950/40 font-bold border-l-2 border-cyan-400 pl-3' 
+                        : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
+                    }`}
+                  >
+                    {item.label}
+                  </a>
+                );
+              })}
 
-            <div className="pt-2 border-t border-cyan-500/20">
+            </div>
+
+            <div className="pt-3 border-t border-white/[0.06] space-y-2.5">
               <button
-                onClick={() => handleNav('/contact')}
-                className="w-full py-3 rounded-xl bg-cyan-400 text-[#031525] font-bold text-center shadow-[0_0_20px_rgba(0,240,255,0.5)] active:scale-95"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openConsultation();
+                }}
+                className="btn-primary w-full !py-3 !text-xs !rounded-xl"
               >
-                Get Started
+                <span>Book Free Consultation</span>
+                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
               </button>
+
+              {/* Direct Clickable Contact Options on Mobile */}
+              <div className="grid grid-cols-2 gap-2 pt-1 font-mono text-xs">
+                <a
+                  href="tel:+923449254864"
+                  className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 flex items-center justify-center gap-2 text-cyan-300 hover:text-cyan-200 transition-colors text-center"
+                  title="Call BrixelLabs"
+                >
+                  <FontAwesomeIcon icon={faPhone} className="text-xs text-cyan-400" />
+                  <span>Call Us</span>
+                </a>
+                <a
+                  href="mailto:brixellabs@gmail.com"
+                  className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 flex items-center justify-center gap-2 text-cyan-300 hover:text-cyan-200 transition-colors text-center"
+                  title="Email BrixelLabs"
+                >
+                  <FontAwesomeIcon icon={faEnvelope} className="text-xs text-cyan-400" />
+                  <span>Email Us</span>
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

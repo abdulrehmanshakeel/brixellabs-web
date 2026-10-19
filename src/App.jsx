@@ -5,6 +5,14 @@ import { Footer } from './components/layout/Footer';
 import { ConsultationModal } from './components/common/ConsultationModal';
 import { CyberSpotlight } from './components/common/CyberSpotlight';
 import { SEOHead } from './components/common/SEOHead';
+import { StickySocialBar } from './components/common/StickySocialBar';
+import { ScrollProgressBar } from './components/common/ScrollProgressBar';
+import { BackToTop } from './components/common/BackToTop';
+import { CookieBanner } from './components/common/CookieBanner';
+import { SiteSearchModal } from './components/common/SiteSearchModal';
+import { ForceUpdateScreen } from './components/common/ForceUpdateScreen';
+import { ToastContainer } from './components/common/Toast';
+import { captureUTMParams } from './utils/utm';
 
 // Lazy-loaded route components for instant initial page loading & minimal JS payload
 const HomePage = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
@@ -20,6 +28,11 @@ const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
 const ThankYouPage = lazy(() => import('./pages/ThankYouPage').then(m => ({ default: m.ThankYouPage })));
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })));
+const TermsOfServicePage = lazy(() => import('./pages/TermsOfServicePage').then(m => ({ default: m.TermsOfServicePage })));
+const RefundPolicyPage = lazy(() => import('./pages/RefundPolicyPage').then(m => ({ default: m.RefundPolicyPage })));
+const CookiePolicyPage = lazy(() => import('./pages/CookiePolicyPage').then(m => ({ default: m.CookiePolicyPage })));
+const DataDeletionPage = lazy(() => import('./pages/DataDeletionPage').then(m => ({ default: m.DataDeletionPage })));
+const UnsubscribePage = lazy(() => import('./pages/UnsubscribePage').then(m => ({ default: m.UnsubscribePage })));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
 
@@ -39,6 +52,25 @@ const PageLoader = () => (
 export function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Initialize UTM capture on first landing, enforce dark theme, and setup search listener
+  useEffect(() => {
+    captureUTMParams();
+
+    // Enforce dark mode permanently and purge light theme state
+    try {
+      localStorage.removeItem('brixel_theme');
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    } catch (e) {
+      // ignore
+    }
+
+    const handleOpenSearch = () => setIsSearchOpen(true);
+    window.addEventListener('open-site-search', handleOpenSearch);
+    return () => window.removeEventListener('open-site-search', handleOpenSearch);
+  }, []);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -54,10 +86,49 @@ export function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Normalize path (remove trailing slash except root)
-  const normalizedPath = currentPath.length > 1 && currentPath.endsWith('/') 
-    ? currentPath.slice(0, -1) 
-    : currentPath;
+  // Canonical URL slug mapping for legacy aliases, typos, and alternate slugs
+  const CANONICAL_SLUG_MAP = {
+    '/case-studies/neosis': '/case-studies/noesis',
+    '/case-studies/fabric-defect-detection': '/case-studies/threadeye',
+    '/case-studies/watcher': '/case-studies/the-watcher',
+    '/privacy': '/privacy-policy',
+    '/terms': '/terms-of-service',
+    '/tos': '/terms-of-service',
+    '/refund': '/refund-policy',
+    '/refunds': '/refund-policy',
+    '/cookies': '/cookie-policy',
+    '/cookie': '/cookie-policy',
+    '/delete-my-data': '/data-deletion',
+    '/gdpr-erasure': '/data-deletion',
+    '/opt-out': '/unsubscribe',
+    '/optout': '/unsubscribe'
+  };
+
+  // Normalize path (lowercase, strip trailing slash except root, remap aliases)
+  let cleanPath = (currentPath || '/').toLowerCase();
+  if (cleanPath.length > 1 && cleanPath.endsWith('/')) {
+    cleanPath = cleanPath.slice(0, -1);
+  }
+  if (CANONICAL_SLUG_MAP[cleanPath]) {
+    cleanPath = CANONICAL_SLUG_MAP[cleanPath];
+  }
+  const normalizedPath = cleanPath;
+
+  // Auto-clean browser address bar URL slugs
+  useEffect(() => {
+    const rawPath = window.location.pathname || '/';
+    let expected = rawPath.toLowerCase();
+    if (expected.length > 1 && expected.endsWith('/')) {
+      expected = expected.slice(0, -1);
+    }
+    if (CANONICAL_SLUG_MAP[expected]) {
+      expected = CANONICAL_SLUG_MAP[expected];
+    }
+    if (window.location.pathname !== expected) {
+      window.history.replaceState({}, '', expected + window.location.search + window.location.hash);
+      setCurrentPath(expected);
+    }
+  }, [currentPath]);
 
   // If on Admin Portal route, render standalone Admin Command Center
   if (normalizedPath === '/admin') {
@@ -87,6 +158,7 @@ export function App() {
       case '/case-studies/neosis':
         return <NoesisCaseStudyPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
       case '/case-studies/the-watcher':
+      case '/case-studies/watcher':
         return <WatcherCaseStudyPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
       case '/case-studies/frontdesk-ai':
         return <FrontDeskAICaseStudyPage navigate={navigate} openConsultation={() => setIsConsultationOpen(true)} />;
@@ -104,6 +176,23 @@ export function App() {
       case '/privacy-policy':
       case '/privacy':
         return <PrivacyPolicyPage navigate={navigate} />;
+      case '/terms-of-service':
+      case '/terms':
+      case '/tos':
+        return <TermsOfServicePage navigate={navigate} />;
+      case '/refund-policy':
+      case '/refund':
+      case '/refunds':
+        return <RefundPolicyPage navigate={navigate} />;
+      case '/cookie-policy':
+      case '/cookies':
+        return <CookiePolicyPage navigate={navigate} />;
+      case '/data-deletion':
+      case '/delete-my-data':
+        return <DataDeletionPage navigate={navigate} />;
+      case '/unsubscribe':
+      case '/opt-out':
+        return <UnsubscribePage navigate={navigate} />;
       default:
         // Custom 404 Page
         return <NotFoundPage navigate={navigate} />;
@@ -111,7 +200,18 @@ export function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#030c14] text-slate-100 flex flex-col justify-between selection:bg-cyan-400 selection:text-black">
+    <div className="relative min-h-screen bg-[#030c14] text-slate-100 flex flex-col justify-between selection:bg-cyan-400 selection:text-black overflow-x-hidden max-w-[100vw] w-full">
+      {/* Skip to Main Content Link for Accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:px-4 focus:py-2.5 focus:bg-cyan-400 focus:text-slate-950 focus:font-extrabold focus:rounded-xl focus:shadow-[0_0_25px_rgba(0,240,255,0.7)] focus:outline-none focus:ring-2 focus:ring-white transition-all text-xs uppercase tracking-wider"
+      >
+        Skip to main content
+      </a>
+
+      {/* Top Hairline Scroll Progress Bar (0 - 100%) */}
+      <ScrollProgressBar />
+
       {/* Dynamic SEO Meta & Canonical Manager */}
       <SEOHead currentPath={normalizedPath} />
 
@@ -121,15 +221,16 @@ export function App() {
       {/* Mouse Cursor Cyber Spotlight */}
       <CyberSpotlight />
 
-      {/* Global Navbar */}
+      {/* Global Sticky / Fixed Navbar */}
       <Navbar 
         currentPath={normalizedPath} 
         navigate={navigate} 
-        openConsultation={() => setIsConsultationOpen(true)} 
+        openConsultation={() => setIsConsultationOpen(true)}
+        onOpenSearch={() => setIsSearchOpen(true)}
       />
 
-      {/* Dynamic Page Body with Lazy Suspense */}
-      <main className="flex-grow z-10">
+      {/* Dynamic Page Body with Accessible ID & Lazy Suspense */}
+      <main id="main-content" className="flex-grow z-10">
         <Suspense fallback={<PageLoader />}>
           {renderPage()}
         </Suspense>
@@ -137,6 +238,28 @@ export function App() {
 
       {/* Global Footer */}
       <Footer navigate={navigate} />
+
+      {/* Global Sticky Social Media Quick-Action Bar (Bottom-Right) */}
+      <StickySocialBar />
+
+      {/* Floating Back to Top Button with Circular Scroll Progress Ring (Bottom-Left) */}
+      <BackToTop />
+
+      {/* GDPR / CCPA Compliant Glassmorphic Cookie Consent Banner */}
+      <CookieBanner navigate={navigate} />
+
+      {/* Global Quick Search Modal (Cmd+K / Ctrl+K) */}
+      <SiteSearchModal 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)} 
+        navigate={navigate} 
+      />
+
+      {/* Remote Force-Update Screen & Version Manager */}
+      <ForceUpdateScreen />
+
+      {/* Global Toast Notification System */}
+      <ToastContainer />
 
       {/* Reusable Consultation Discovery Modal */}
       <ConsultationModal 

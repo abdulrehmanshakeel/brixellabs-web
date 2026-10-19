@@ -1,18 +1,16 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  PhoneCall, 
-  Monitor, 
-  Code2, 
-  Rocket, 
-  Clock, 
-  Workflow, 
-  CheckCircle2, 
-  ArrowRight,
-  ShieldCheck,
-  Cpu
-} from 'lucide-react';
+  faPhone, 
+  faDesktop, 
+  faCode, 
+  faRocket, 
+  faClock, 
+  faNetworkWired, 
+  faCircleCheck,
+  faArrowRight
+} from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
-import { TiltCard } from '../components/common/TiltCard';
 import { FAQSection } from '../components/common/FAQSection';
 
 export const ProcessPage = ({ navigate, openConsultation }) => {
@@ -23,7 +21,7 @@ export const ProcessPage = ({ navigate, openConsultation }) => {
       title: 'Discover & Scope',
       duration: '1-3 days',
       desc: 'We start with an in-depth call to understand your business objectives, data assets, and architecture constraints. Our senior engineers analyze existing infrastructure and formulate the optimal technical delivery approach.',
-      icon: PhoneCall,
+      icon: faPhone,
       deliverables: ['Requirements Brief', 'Technical Architecture Map', 'Milestone Roadmapping'],
       gradient: 'from-cyan-400 via-teal-300 to-indigo-400',
       bgGrad: 'from-cyan-500/20 to-blue-600/10'
@@ -33,8 +31,8 @@ export const ProcessPage = ({ navigate, openConsultation }) => {
       num: '02',
       title: 'Design & Prototype',
       duration: '3-7 days',
-      desc: 'We map out the complete solution — UI/UX wireframes, system architecture, database schema, and custom AI model benchmarks tailored to your project scope.',
-      icon: Monitor,
+      desc: 'We map out the complete technical blueprint: UI/UX wireframes, Shopify storefront designs, API contracts, database schemas, or automated data extraction targets.',
+      icon: faDesktop,
       deliverables: ['Figma High-Fi Prototype', 'API Contracts & DB Schema', 'AI Benchmark Criteria'],
       gradient: 'from-teal-300 via-cyan-400 to-blue-400',
       bgGrad: 'from-teal-500/20 to-emerald-600/10'
@@ -44,20 +42,20 @@ export const ProcessPage = ({ navigate, openConsultation }) => {
       num: '03',
       title: 'Build & Train',
       duration: '1-4 weeks',
-      desc: 'We develop, test, and refine the product with weekly sprint demos so you can provide continuous feedback and review working code incrementally.',
-      icon: Code2,
-      deliverables: ['Production Web/Mobile Frontend', 'Cloud Backend & Microservices', 'Trained & Tuned AI Models'],
+      desc: 'We develop, test, and ship your solution with weekly sprint demos—building custom Shopify storefronts, high-throughput APIs, automated scraping pipelines, and fine-tuned AI models.',
+      icon: faCode,
+      deliverables: ['Production Web & Shopify Stores', 'APIs, Scraping & Cloud Backends', 'Trained & Tuned AI Models'],
       gradient: 'from-blue-400 via-indigo-400 to-cyan-400',
       bgGrad: 'from-blue-500/20 to-indigo-600/10'
     },
     {
       id: 'step-04',
       num: '04',
-      title: 'Launch & 24/7 SLA',
+      title: 'Launch & Dedicated Support',
       duration: 'Ongoing',
-      desc: 'We deploy the solution to your production environment and provide 24/7 telemetry monitoring and SLA support to ensure zero downtime.',
-      icon: Rocket,
-      deliverables: ['CI/CD Zero-Downtime Deployment', 'Telemetry & Error Monitoring', 'SLA Maintenance & Support'],
+      desc: 'We launch your project smoothly to the live environment and provide continuous monitoring and dedicated support to ensure everything runs reliably.',
+      icon: faRocket,
+      deliverables: ['Smooth Zero-Downtime Launch', 'Live Performance & Error Monitoring', 'Dedicated Maintenance & Support'],
       gradient: 'from-indigo-400 via-teal-300 to-cyan-400',
       bgGrad: 'from-indigo-500/20 to-teal-600/10'
     }
@@ -68,15 +66,6 @@ export const ProcessPage = ({ navigate, openConsultation }) => {
       
       {/* Hero / Header */}
       <div className="text-center mb-16 space-y-4">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-950/80 via-[#07243c]/80 to-teal-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.2)]"
-        >
-          <Workflow className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Execution Roadmap</span>
-        </motion.div>
-
         {/* Title with glowing cyber conduits */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -90,7 +79,7 @@ export const ProcessPage = ({ navigate, openConsultation }) => {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight">
-            How We <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(0,240,255,0.45)]">Work</span>
+            How We Work
           </h1>
 
           <div className="hidden sm:flex items-center gap-1.5 opacity-60">
@@ -109,95 +98,75 @@ export const ProcessPage = ({ navigate, openConsultation }) => {
         </motion.p>
       </div>
 
-      {/* 4 Process Cards Stack */}
-      <div className="relative space-y-8 mb-20">
+      {/* 4 Process Stages: Connected Timeline (No Cards) */}
+      <div className="relative mb-24 border-t border-slate-800/80 divide-y divide-slate-800/80">
         <h2 className="sr-only">4-Stage Iterative Delivery Methodology</h2>
-        
-        {/* Vertical glowing connector line */}
-        <div className="hidden md:block absolute left-12 top-10 bottom-10 w-[2px] bg-gradient-to-b from-cyan-400 via-teal-400 to-indigo-500 opacity-40 z-0"></div>
 
         {steps.map((step, index) => {
-          const IconComp = step.icon;
           return (
             <motion.div
               key={step.num}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40, scale: 0.95 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{
-                type: "spring",
-                stiffness: 260,
-                damping: 24,
-                delay: index * 0.12
-              }}
-              className="relative z-10"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className="py-12 sm:py-16"
             >
-              <TiltCard className="h-full">
-                <div className="gradient-card rounded-3xl p-6 sm:p-8 lg:p-10 border border-cyan-500/30 group hover:border-cyan-400/80 transition-all duration-400 relative overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.5)] bg-[#031525]/90">
-                  <div className={`absolute -top-16 -right-16 w-36 h-36 rounded-full blur-3xl opacity-35 bg-gradient-to-br ${step.bgGrad} pointer-events-none group-hover:opacity-75 transition-opacity`}></div>
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10 mb-4">
-                    
-                    {/* Left: Giant Glowing Number & Icon */}
-                    <div className="flex items-center gap-5 sm:gap-6 flex-shrink-0">
-                      <div className={`text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b ${step.gradient} font-mono drop-shadow-[0_0_25px_rgba(0,240,255,0.6)]`}>
-                        {step.num}
-                      </div>
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#092b45] to-[#041525] border border-cyan-500/35 flex items-center justify-center text-cyan-400 group-hover:text-cyan-300 group-hover:border-cyan-400 group-hover:shadow-[0_0_25px_rgba(0,240,255,0.5)] transition-all">
-                        <IconComp className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
-                      </div>
-                    </div>
-
-                    {/* Center: Title & Description */}
-                    <div className="flex-1 space-y-2">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <h3 className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors">
-                          {step.title}
-                        </h3>
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-cyan-950/90 to-[#07243c]/90 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-semibold">
-                          <Clock className="w-3.5 h-3.5" />
-                          {step.duration}
-                        </span>
-                      </div>
-                      <p className="text-sm text-slate-300 leading-relaxed max-w-2xl">
-                        {step.desc}
-                      </p>
-                    </div>
-
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Left: Stage Number & Duration */}
+                <div className="lg:col-span-3 flex lg:flex-col items-center lg:items-start justify-between gap-4">
+                  <div className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight">
+                    {step.num}
                   </div>
-
-                  {/* Deliverable pills */}
-                  <div className="mt-4 pt-4 border-t border-cyan-500/15 flex flex-wrap items-center gap-2.5 relative z-10">
-                    <span className="text-xs text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-300 font-mono font-bold mr-1">
-                      Deliverables:
-                    </span>
-                    {step.deliverables.map((item, idx) => (
-                      <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-cyan-950/80 to-[#07243c]/80 border border-cyan-500/30 text-xs text-slate-200">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-cyan-400 text-xs font-mono font-semibold">
+                    <FontAwesomeIcon icon={faClock} className="w-3 h-3 text-white" />
+                    {step.duration}
+                  </span>
                 </div>
-              </TiltCard>
+
+                {/* Center & Right: Title & Description */}
+                <div className="lg:col-span-9">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-3">
+                    {step.title}
+                  </h3>
+                  <p className="text-base text-slate-300 leading-relaxed max-w-3xl">
+                    {step.desc}
+                  </p>
+                </div>
+
+              </div>
             </motion.div>
           );
         })}
-
       </div>
 
       {/* FAQ Section */}
-      <FAQSection openConsultation={openConsultation} />
+      <FAQSection openConsultation={openConsultation} showCta={false} />
 
-      {/* Bottom CTA */}
-      <div className="mt-16 text-center">
-        <button
-          onClick={openConsultation}
-          className="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031525] font-extrabold text-base transition-all duration-300 shadow-[0_0_30px_rgba(0,240,255,0.65)] hover:shadow-[0_0_45px_rgba(0,240,255,0.95)] hover:scale-105 active:scale-95 cursor-pointer"
-        >
-          Start Your Project With Us
-        </button>
+      {/* Bottom CTA Banner with Luminous Gradient */}
+      <div className="gradient-card rounded-3xl p-8 sm:p-12 border border-cyan-500/35 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden mt-16 text-center md:text-left">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/15 via-teal-500/10 to-transparent blur-3xl pointer-events-none"></div>
+
+        <div className="relative z-10 max-w-xl">
+
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Start Your Project With Us
+          </h2>
+          <p className="text-slate-300 text-sm sm:text-base mt-2 leading-relaxed">
+            Have an architectural question or ready to scope your project? Our lead engineers provide immediate feasibility feedback and delivery roadmaps.
+          </p>
+        </div>
+
+        <div className="relative z-10 flex-shrink-0">
+          <button
+            onClick={openConsultation}
+            className="btn-primary !px-8 !py-4 !text-base flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:shadow-[0_0_45px_rgba(0,240,255,0.7)]"
+          >
+            <span>Start Your Project With Us</span>
+            <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+          </button>
+        </div>
       </div>
 
     </div>

@@ -1,26 +1,33 @@
 import React, { useState } from 'react';
-import { X, Send, ShieldCheck, Clock } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark, faPaperPlane, faShieldHalved, faArrowRight, faTriangleExclamation, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { adminStorage } from '../../utils/adminStorage';
 import { apiClient } from '../../api/client';
-import { TurnstileWidget } from './TurnstileWidget';
 import { trackFormSubmission } from '../../utils/analytics';
+import { getStoredUTMParams } from '../../utils/utm';
+import { TurnstileWidget } from './TurnstileWidget';
+import { sanitizeInput, sanitizeEmail, isValidEmail } from '../../utils/sanitize';
 
 export const ConsultationModal = ({ isOpen, onClose, navigate }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    service: 'AI & Machine Learning',
+    company: '',
+    service: 'AI & Machine Learning Solutions',
     budget: '$10k - $25k',
     message: '',
     honeypot: ''
   });
-  const [turnstileToken, setTurnstileToken] = useState(null);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const [hasAgreed, setHasAgreed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setFormError('');
 
     // Honeypot spam check
     if (formData.honeypot) {
@@ -28,30 +35,55 @@ export const ConsultationModal = ({ isOpen, onClose, navigate }) => {
       return;
     }
 
-    if (!formData.name || !formData.email) return;
+    const cleanName = sanitizeInput(formData.name);
+    const cleanEmail = sanitizeEmail(formData.email);
+    const cleanCompany = sanitizeInput(formData.company);
+    const cleanMessage = sanitizeInput(formData.message);
+
+    if (!cleanName || !cleanEmail) {
+      setFormError('Please enter your name and email address.');
+      return;
+    }
+
+    if (!isValidEmail(cleanEmail)) {
+      setFormError('Please enter a valid email address.');
+      return;
+    }
+
+    if (!hasAgreed) {
+      setFormError('Please agree to the Terms of Service & Privacy Policy.');
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
-      // 1. Save inquiry to Admin CRM
+      const utm = getStoredUTMParams();
+
+      // 1. Save inquiry to Admin CRM with UTM data
       adminStorage.addInquiry({
-        name: formData.name,
-        email: formData.email,
+        name: cleanName,
+        email: cleanEmail,
+        company: cleanCompany || '',
         service: formData.service || 'Full-Stack & AI Solutions',
         budget: formData.budget || '$10k - $25k',
         timeline: '1-2 Months',
-        message: formData.message || 'Scheduled discovery consultation',
-        source: 'Discovery Consultation Modal'
+        message: cleanMessage || 'Scheduled discovery consultation',
+        source: 'Discovery Consultation Modal',
+        ...utm
       });
 
       // 2. Sync with backend API
       apiClient.createInquiry({
-        name: formData.name,
-        email: formData.email,
+        name: cleanName,
+        email: cleanEmail,
+        company: cleanCompany || '',
         service: formData.service,
         budget: formData.budget,
-        message: formData.message || 'Discovery consultation request',
-        source: 'Discovery Consultation Modal'
+        message: cleanMessage || 'Discovery consultation request',
+        source: 'Discovery Consultation Modal',
+        turnstile_token: turnstileToken,
+        ...utm
       }).catch(err => console.warn('API sync warning:', err));
 
       // 3. Track GA conversion
@@ -69,6 +101,7 @@ export const ConsultationModal = ({ isOpen, onClose, navigate }) => {
       }
     } catch (err) {
       console.error('Error submitting consultation:', err);
+      setFormError('Unable to send request. Please try again or message us directly on WhatsApp.');
     } finally {
       setIsSubmitting(false);
     }
@@ -76,27 +109,23 @@ export const ConsultationModal = ({ isOpen, onClose, navigate }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-lg glass-panel rounded-3xl p-6 sm:p-8 border border-cyan-500/40 shadow-[0_0_50px_rgba(0,240,255,0.25)] bg-[#041525]/95">
+      <div className="relative w-full max-w-lg rounded-2xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl bg-[#030e1a]/95 backdrop-blur-xl">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-cyan-950/60 transition-colors cursor-pointer"
+          className="absolute top-5 right-5 p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors cursor-pointer"
         >
-          <X className="w-5 h-5" />
+          <FontAwesomeIcon icon={faXmark} className="w-4 h-4 text-slate-400 hover:text-white" />
         </button>
 
         <div>
           <div className="mb-5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-semibold uppercase tracking-wider mb-2">
-              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-              Free Technical Discovery
-            </div>
-            <h3 className="text-2xl font-bold text-white tracking-tight">
-              Schedule a Consultation
+            <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+              Schedule a Free Consultation
             </h3>
-            <p className="text-xs text-slate-400 mt-1">
-              Tell us about your project requirements and target timeline.
+            <p className="text-xs text-slate-300 mt-1">
+              Tell us a bit about what you want to build and we'll reach out to schedule a friendly, no-pressure call.
             </p>
           </div>
 
@@ -112,27 +141,54 @@ export const ConsultationModal = ({ isOpen, onClose, navigate }) => {
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Your Name *</label>
-              <input
-                type="text"
-                required
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-[#081f33] border border-cyan-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 text-sm"
-              />
+            {formError && (
+              <div className="p-3 rounded-xl bg-red-950/80 border border-red-500/40 text-red-200 text-xs flex items-center gap-2">
+                <FontAwesomeIcon icon={faTriangleExclamation} className="text-red-400 flex-shrink-0" />
+                <span>{formError}</span>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  Your Name <span className="text-cyan-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Your name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 text-sm transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">
+                  Company / Organization <span className="text-cyan-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Company or brand"
+                  value={formData.company}
+                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 text-sm transition-all"
+                />
+              </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Work Email *</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1">
+                Email Address <span className="text-cyan-400">*</span>
+              </label>
               <input
                 type="email"
                 required
                 placeholder="you@company.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-[#081f33] border border-cyan-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 text-sm transition-all"
               />
             </div>
 
@@ -142,28 +198,33 @@ export const ConsultationModal = ({ isOpen, onClose, navigate }) => {
                 <select
                   value={formData.service}
                   onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                  className="w-full px-3 py-2.5 rounded-xl bg-[#081f33] border border-cyan-500/30 text-white text-xs focus:outline-none focus:border-cyan-400"
+                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white text-xs focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                 >
-                  <option>AI & Machine Learning</option>
-                  <option>NLP, Chatbots & RAG Services</option>
-                  <option>Computer Vision & Edge AI</option>
-                  <option>Agentic AI & Automation</option>
-                  <option>Web & Mobile Full-Stack</option>
-                  <option>Data Analytics (Python, Excel, SQL)</option>
-                  <option>UI/UX Design</option>
+                  <option>AI &amp; Machine Learning Solutions</option>
+                  <option>Smart Chatbots &amp; WhatsApp Assistants</option>
+                  <option>Computer Vision &amp; Camera Quality AI</option>
+                  <option>AI Agents &amp; AI Automations</option>
+                  <option>Web &amp; Mobile App Development</option>
+                  <option>Custom Software &amp; SaaS Development</option>
+                  <option>Shopify Store Development</option>
+                  <option>API Development &amp; System Integration</option>
+                  <option>Web Scraping &amp; Data Extraction</option>
+                  <option>Data Analytics &amp; Dashboards</option>
+                  <option>UI/UX Design &amp; Prototyping</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Budget Range</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1">Estimated Budget</label>
                 <select
                   value={formData.budget}
                   onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                  className="w-full px-3 py-2.5 rounded-xl bg-[#081f33] border border-cyan-500/30 text-white text-xs focus:outline-none focus:border-cyan-400"
+                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white text-xs focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                 >
-                  <option>&lt; $10k</option>
-                  <option>$10k - $25k</option>
-                  <option>$25k - $50k</option>
-                  <option>$50k+</option>
+                  <option>&lt; $1,000</option>
+                  <option>$1,000 - $3,000</option>
+                  <option>$3,000 - $10,000</option>
+                  <option>$10,000+</option>
+                  <option>Flexible / To Discuss</option>
                 </select>
               </div>
             </div>
@@ -171,34 +232,69 @@ export const ConsultationModal = ({ isOpen, onClose, navigate }) => {
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1">Project Details</label>
               <textarea
-                rows={2}
-                placeholder="Describe your vision, tech stack requirements, or bottlenecks..."
+                rows={3}
+                placeholder="Tell us what you'd like to build, your goals, or any specific questions..."
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-[#081f33] border border-cyan-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 text-sm resize-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/70 border border-slate-700/60 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 text-sm resize-none transition-all"
               ></textarea>
             </div>
 
-            {/* Cloudflare Turnstile */}
+            {/* Cloudflare Turnstile Bot Defense */}
             <TurnstileWidget 
               onVerify={(token) => setTurnstileToken(token)}
-              onExpire={() => setTurnstileToken(null)}
+              onError={() => setTurnstileToken('dev-fallback-token')}
+              size="normal"
             />
+
+            <div className="pt-1 pb-1">
+              <label className="flex items-start gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  required
+                  checked={hasAgreed}
+                  onChange={(e) => setHasAgreed(e.target.checked)}
+                  className="mt-0.5 accent-cyan-400 w-3.5 h-3.5 cursor-pointer rounded flex-shrink-0"
+                />
+                <span className="text-[11px] text-slate-300 leading-snug">
+                  I agree to the{' '}
+                  <a 
+                    href="/terms-of-service" 
+                    onClick={(e) => { e.preventDefault(); onClose(); navigate('/terms-of-service'); }} 
+                    className="text-cyan-400 underline hover:text-cyan-300"
+                  >
+                    Terms
+                  </a>
+                  {' '}&amp;{' '}
+                  <a 
+                    href="/privacy-policy" 
+                    onClick={(e) => { e.preventDefault(); onClose(); navigate('/privacy-policy'); }} 
+                    className="text-cyan-400 underline hover:text-cyan-300"
+                  >
+                    Privacy Policy
+                  </a>, and confirm I am 18+ years of age.
+                </span>
+              </label>
+            </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-[#031422] font-bold text-sm transition-all duration-300 shadow-[0_0_20px_rgba(0,240,255,0.5)] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+              className="btn-primary w-full disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
-                <span>Scheduling Session...</span>
+                <span>Scheduling consultation...</span>
               ) : (
                 <>
-                  <span>Book Free Discovery Call</span>
-                  <Send className="w-4 h-4" />
+                  <span>Book Free Consultation</span>
+                  <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5" />
                 </>
               )}
             </button>
+
+            <p className="text-center text-[11px] text-slate-400 pt-1">
+              Free 30-min call · No sales pressure · 100% confidential
+            </p>
           </form>
         </div>
       </div>

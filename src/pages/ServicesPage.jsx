@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
   UIUXIcon, 
   WebDevIcon, 
@@ -7,14 +7,27 @@ import {
   NLPIcon, 
   ComputerVisionIcon, 
   AgenticAIIcon, 
-  DataAnalyticsIcon 
+  DataAnalyticsIcon,
+  ShopifyDevIcon,
+  WebScrapingIcon,
+  APIDevIcon,
+  CustomSoftwareIcon
 } from '../assets/icons';
-import { Check, Layers, ArrowRight, Cpu, Database, Sparkles, ExternalLink } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
 import { TiltCard } from '../components/common/TiltCard';
 import { FAQSection } from '../components/common/FAQSection';
 
 export const ServicesPage = ({ navigate, openConsultation }) => {
+  useEffect(() => {
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    }
+  }, []);
   const cat1 = [
     {
       id: 'srv-uiux',
@@ -24,7 +37,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
       caseStudyLink: '/case-studies/noesis',
       caseStudyTitle: 'See Noesis UI/UX Case Study',
       bullets: ['User Research & Journeys', 'Wireframing & Interactive Prototypes', 'Design System Token Architecture'],
-      gradient: 'from-cyan-500/20 via-blue-500/10 to-transparent'
+      gradient: 'from-cyan-500/30 via-blue-500/20 to-transparent'
     },
     {
       id: 'srv-webdev',
@@ -34,7 +47,15 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
       caseStudyLink: '/case-studies/getscry',
       caseStudyTitle: 'See GetScry Web Platform',
       bullets: ['High-Performance React/Next.js', 'Django & Node Cloud APIs', 'Distributed DB & Redis Caching'],
-      gradient: 'from-teal-500/20 via-cyan-500/10 to-transparent'
+      gradient: 'from-teal-500/30 via-cyan-500/20 to-transparent'
+    },
+    {
+      id: 'srv-saas',
+      title: 'Custom Software & SaaS Development',
+      desc: 'End-to-end bespoke software engineering and cloud-native multi-tenant SaaS platforms built for high availability, security, and scalability.',
+      icon: CustomSoftwareIcon,
+      bullets: ['Multi-Tenant SaaS Architecture', 'Custom Business & Enterprise Software', 'Scalable Cloud Microservices & DBs'],
+      gradient: 'from-blue-600/30 via-cyan-500/20 to-transparent'
     },
     {
       id: 'srv-mobiledev',
@@ -44,7 +65,23 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
       caseStudyLink: '/case-studies/the-watcher',
       caseStudyTitle: 'See The Watcher Mobile App',
       bullets: ['React Native & Flutter', 'Native Device Features & Sensors', 'Offline-First Cloud Sync'],
-      gradient: 'from-blue-500/20 via-indigo-500/10 to-transparent'
+      gradient: 'from-blue-500/30 via-indigo-500/20 to-transparent'
+    },
+    {
+      id: 'srv-shopify',
+      title: 'Shopify Store Development',
+      desc: 'Custom Shopify stores with modern designs, lightning-fast loading speeds, and smooth checkout experiences.',
+      icon: ShopifyDevIcon,
+      bullets: ['Custom Shopify Store Design', 'Fast Loading & Checkout', 'Payment Gateways & App Integrations'],
+      gradient: 'from-emerald-500/30 via-teal-500/20 to-transparent'
+    },
+    {
+      id: 'srv-apidev',
+      title: 'API Development & Integration',
+      desc: 'High-performance custom REST & GraphQL APIs, secure database communication, and seamless integration into existing systems and legacy architectures.',
+      icon: APIDevIcon,
+      bullets: ['Custom REST & GraphQL APIs', 'Existing System & Legacy Integration', 'High-Throughput & Secure Endpoints'],
+      gradient: 'from-indigo-500/30 via-cyan-500/20 to-transparent'
     }
   ];
 
@@ -52,42 +89,42 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
     {
       id: 'srv-aiml',
       title: 'AI & Machine Learning',
-      desc: 'Custom deep neural networks, predictive models, regression pipelines, and continuous automated model retraining.',
+      desc: 'Custom AI and predictive models that automate manual tasks, make accurate forecasts, and deliver actionable business insights.',
       icon: AIMLIcon,
       caseStudyLink: '/case-studies/getscry',
       caseStudyTitle: 'See GetScry ML Case Study',
-      bullets: ['Custom Neural Architectures', 'Supervised & Unsupervised ML', 'Model Evaluation & Benchmarking'],
-      gradient: 'from-fuchsia-500/20 via-cyan-500/10 to-transparent'
+      bullets: ['Smart Business Automation', 'Predictive Analysis', 'Tailored AI Solutions'],
+      gradient: 'from-fuchsia-500/30 via-cyan-500/20 to-transparent'
     },
     {
       id: 'srv-nlp',
-      title: 'NLP, Chatbots & RAG Services',
-      desc: 'Enterprise Natural Language Processing (NLP), semantic search, sentiment classification, multi-channel AI chatbots (WhatsApp, Web, Telegram), and contextual RAG pipelines.',
+      title: 'Smart Chatbots & Virtual Assistants',
+      desc: 'Smart AI assistants for WhatsApp and your website that answer customer questions and handle bookings 24/7.',
       icon: NLPIcon,
       caseStudyLink: '/case-studies/frontdesk-ai',
       caseStudyTitle: 'See FrontDesk AI WhatsApp Bot',
-      bullets: ['Natural Language Processing (NLP) & Semantic Search', 'WhatsApp, Web & Telegram Chatbot Integration', 'Contextual RAG Retrieval & Custom LLM Fine-Tuning'],
-      gradient: 'from-indigo-500/20 via-teal-500/10 to-transparent'
+      bullets: ['WhatsApp & Website Chatbots', 'Instant 24/7 Customer Support', 'Answers from Your Documents'],
+      gradient: 'from-indigo-500/30 via-teal-500/20 to-transparent'
     },
     {
       id: 'srv-computervision',
-      title: 'Computer Vision',
-      desc: 'Real-time object detection, automated visual inspection, industrial defect classification under 14ms, and video telemetry.',
+      title: 'Computer Vision & Camera AI',
+      desc: 'Smart camera AI that detects objects, spots production defects, and automates visual inspections in real time.',
       icon: ComputerVisionIcon,
       caseStudyLink: '/case-studies/threadeye',
-      caseStudyTitle: 'See ThreadEye <14ms Vision Study',
-      bullets: ['YOLOv9 Real-Time Detection', 'TensorRT Edge Inference <14ms', 'Camera Stream Processing'],
-      gradient: 'from-cyan-500/25 via-teal-500/15 to-transparent'
+      caseStudyTitle: 'See ThreadEye Inspection Study',
+      bullets: ['Instant Defect Detection', 'Camera & Image Recognition', 'Automated Visual Inspection'],
+      gradient: 'from-cyan-500/30 via-teal-500/20 to-transparent'
     },
     {
       id: 'srv-agenticai',
-      title: 'Agentic AI & Automation',
-      desc: 'Autonomous multi-agent workflows, self-healing task queues, robotic process automation, and zero-downtime API connectors.',
+      title: 'AI Agents & AI Automations',
+      desc: 'Autonomous multi-agent workflows, tool-calling loops, and custom AI automations engineered with LangGraph to execute complex business tasks 24/7.',
       icon: AgenticAIIcon,
       caseStudyLink: '/case-studies/noesis',
-      caseStudyTitle: 'See Noesis LangGraph Agent',
-      bullets: ['Multi-Agent Task Orchestration', 'Self-Healing Workflows', 'Zero-Downtime Pipeline Sync'],
-      gradient: 'from-teal-500/25 via-indigo-500/15 to-transparent'
+      caseStudyTitle: 'See Noesis Study Assistant',
+      bullets: ['Autonomous Multi-Agent Systems (LangGraph)', 'Custom AI Tool-Calling & Workflows', '24/7 Self-Operating Business Automations'],
+      gradient: 'from-teal-500/30 via-indigo-500/20 to-transparent'
     }
   ];
 
@@ -96,22 +133,13 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
       
       {/* Header */}
       <div className="text-left mb-16 space-y-3">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-950/80 via-[#07243c]/80 to-teal-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.2)]"
-        >
-          <Layers className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Full-Spectrum Engineering</span>
-        </motion.div>
-
         <motion.h1 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight"
         >
-          Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(0,240,255,0.45)]">Services</span>
+          Our Services
         </motion.h1>
 
         <motion.p 
@@ -126,19 +154,19 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
 
       {/* Category 1: Design & Development */}
       <div className="mb-24">
-        <div className="flex items-center justify-between mb-8 pb-3 border-b border-cyan-500/20">
+        <div className="mb-8 pb-3 border-b border-cyan-500/25">
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-3">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300 font-mono font-black">01.</span> Design &amp; Full-Stack Development
+            Design &amp; Full-Stack Development
           </h2>
-          <span className="text-xs font-mono text-cyan-400 bg-cyan-950/80 px-2.5 py-1 rounded-lg border border-cyan-500/30">3 Active Capabilities</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cat1.map((service, index) => {
             const IconComp = service.icon;
             return (
               <motion.div
                 key={service.id}
+                id={service.id}
                 initial={{ opacity: 0, x: 60, scale: 0.92 }}
                 whileInView={{ opacity: 1, x: 0, scale: 1 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -146,47 +174,51 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                   type: "spring",
                   stiffness: 260,
                   damping: 24,
-                  delay: index * 0.15
+                  delay: index * 0.1
                 }}
-                className="h-full"
+                className="h-full scroll-mt-24"
               >
                 <TiltCard className="h-full">
-                  <div className="gradient-card rounded-3xl p-8 flex flex-col justify-between border border-cyan-500/30 group hover:border-cyan-400/80 transition-all duration-400 h-full relative overflow-hidden min-h-[380px] shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
+                  <div className="gradient-card rounded-3xl p-7 flex flex-col justify-between border border-cyan-500/30 group hover:border-cyan-400/80 transition-all duration-400 h-full relative overflow-hidden min-h-[380px] shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
+                    {/* Glowing Ambient Gradient Orb */}
                     <div className={`absolute -top-16 -right-16 w-36 h-36 rounded-full blur-3xl opacity-35 bg-gradient-to-br ${service.gradient} pointer-events-none group-hover:opacity-75 transition-opacity`}></div>
                     
                     <div>
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#082842] to-[#041525] border border-cyan-500/35 flex items-center justify-center text-cyan-400 group-hover:text-cyan-300 group-hover:border-cyan-400 group-hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transition-all mb-6">
-                        <IconComp className="w-9 h-9 transition-transform duration-300 group-hover:scale-110" />
+                      {/* Luminous Cyber Icon Box */}
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#082842] to-[#041525] border border-cyan-500/35 flex items-center justify-center text-white group-hover:border-cyan-400 group-hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transition-all mb-5">
+                        <IconComp className="w-8 h-8 text-white transition-transform duration-300 group-hover:scale-110" />
                       </div>
 
-                      <h3 className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-3">
+                      <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-2.5">
                         {service.title}
                       </h3>
 
-                      <p className="text-sm text-slate-300 leading-relaxed mb-6">
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">
                         {service.desc}
                       </p>
                     </div>
 
-                    <div className="space-y-3 pt-5 border-t border-cyan-500/15">
+                    <div className="space-y-2.5 pt-4 border-t border-cyan-500/20">
                       {service.bullets.map((bullet, i) => (
-                        <div key={i} className="flex items-center gap-3 text-xs sm:text-sm text-slate-200">
-                          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] flex-shrink-0"></div>
+                        <div key={i} className="flex items-center gap-2.5 text-xs text-slate-200">
+                          <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_6px_#00f0ff] flex-shrink-0"></div>
                           <span>{bullet}</span>
                         </div>
                       ))}
 
                       {navigate && service.caseStudyLink && (
-                        <button
-                          onClick={() => {
+                        <a
+                          href={service.caseStudyLink}
+                          onClick={(e) => {
+                            e.preventDefault();
                             navigate(service.caseStudyLink);
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                           }}
-                          className="pt-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link"
+                          className="pt-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link no-underline"
                         >
                           <span>{service.caseStudyTitle}</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
-                        </button>
+                          <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5 text-cyan-400 group-hover/link:translate-x-1 transition-transform" />
+                        </a>
                       )}
                     </div>
                   </div>
@@ -199,11 +231,10 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
 
       {/* Category 2: AI & Intelligence */}
       <div className="mb-24">
-        <div className="flex items-center justify-between mb-8 pb-3 border-b border-cyan-500/20">
+        <div className="mb-8 pb-3 border-b border-cyan-500/25">
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-3">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-indigo-400 font-mono font-black">02.</span> AI &amp; Intelligent Automation
+            AI &amp; Intelligent Automation
           </h2>
-          <span className="text-xs font-mono text-teal-300 bg-teal-950/80 px-2.5 py-1 rounded-lg border border-teal-500/30">4 Active Capabilities</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -212,6 +243,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
             return (
               <motion.div
                 key={service.id}
+                id={service.id}
                 initial={{ opacity: 0, x: 60, scale: 0.92 }}
                 whileInView={{ opacity: 1, x: 0, scale: 1 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -219,17 +251,19 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                   type: "spring",
                   stiffness: 260,
                   damping: 24,
-                  delay: index * 0.12
+                  delay: index * 0.1
                 }}
-                className="h-full"
+                className="h-full scroll-mt-24"
               >
                 <TiltCard className="h-full">
                   <div className="gradient-card rounded-3xl p-7 flex flex-col justify-between border border-cyan-500/30 group hover:border-cyan-400/80 transition-all duration-400 h-full relative overflow-hidden min-h-[380px] shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
+                    {/* Glowing Ambient Gradient Orb */}
                     <div className={`absolute -top-16 -right-16 w-36 h-36 rounded-full blur-3xl opacity-35 bg-gradient-to-br ${service.gradient} pointer-events-none group-hover:opacity-75 transition-opacity`}></div>
                     
                     <div>
-                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#082842] to-[#041525] border border-cyan-500/35 flex items-center justify-center text-cyan-400 group-hover:text-cyan-300 group-hover:border-cyan-400 group-hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transition-all mb-5">
-                        <IconComp className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
+                      {/* Luminous Cyber Icon Box */}
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#082842] to-[#041525] border border-cyan-500/35 flex items-center justify-center text-white group-hover:border-cyan-400 group-hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transition-all mb-5">
+                        <IconComp className="w-8 h-8 text-white transition-transform duration-300 group-hover:scale-110" />
                       </div>
 
                       <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-2.5">
@@ -241,7 +275,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                       </p>
                     </div>
 
-                    <div className="space-y-2.5 pt-4 border-t border-cyan-500/15">
+                    <div className="space-y-2.5 pt-4 border-t border-cyan-500/20">
                       {service.bullets.map((bullet, i) => (
                         <div key={i} className="flex items-center gap-2.5 text-xs text-slate-200">
                           <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_6px_#00f0ff] flex-shrink-0"></div>
@@ -250,16 +284,18 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                       ))}
 
                       {navigate && service.caseStudyLink && (
-                        <button
-                          onClick={() => {
+                        <a
+                          href={service.caseStudyLink}
+                          onClick={(e) => {
+                            e.preventDefault();
                             navigate(service.caseStudyLink);
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                           }}
-                          className="pt-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link"
+                          className="pt-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link no-underline"
                         >
                           <span>{service.caseStudyTitle}</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
-                        </button>
+                          <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5 text-cyan-400 group-hover/link:translate-x-1 transition-transform" />
+                        </a>
                       )}
                     </div>
                   </div>
@@ -270,78 +306,131 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
         </div>
       </div>
 
-      {/* Category 3: Data Analytics */}
+      {/* Category 3: Data Analytics & Web Scraping */}
       <div className="mb-24">
-        <div className="flex items-center justify-between mb-8 pb-3 border-b border-cyan-500/20">
+        <div className="mb-8 pb-3 border-b border-cyan-500/25">
           <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-3">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-300 font-mono font-black">03.</span> Data Analytics &amp; Dashboard Creation
+            Data Analytics &amp; Web Scraping
           </h2>
-          <span className="text-xs font-mono text-cyan-400 bg-cyan-950/80 px-2.5 py-1 rounded-lg border border-cyan-500/30">Python • Excel • SQL Analytics</span>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 shadow-2xl relative overflow-hidden"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Icon Graphic */}
-            <div className="lg:col-span-4 flex items-center justify-center">
-              <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-3xl bg-gradient-to-br from-[#082e4f] to-[#041627] border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-[0_0_40px_rgba(0,240,255,0.45)]">
-                <DataAnalyticsIcon className="w-20 h-20 drop-shadow-[0_0_15px_rgba(0,240,255,0.7)]" />
-              </div>
-            </div>
+        <div className="space-y-8">
+          {/* Card 1: Data Analytics */}
+          <motion.div
+            id="srv-analytics"
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 shadow-2xl relative overflow-hidden scroll-mt-24"
+          >
+            {/* Luminous ambient glow */}
+            <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full blur-3xl opacity-35 bg-gradient-to-br from-blue-500/30 to-cyan-400/20 pointer-events-none"></div>
 
-            {/* Right Content */}
-            <div className="lg:col-span-8 space-y-4">
-              <h3 className="text-2xl sm:text-3xl font-bold text-white">
-                Data Analytics &amp; Custom Dashboard Creation
-              </h3>
-              <p className="text-sm text-slate-300 leading-relaxed">
-                Transform raw business numbers and database records into clear executive foresight. We analyze your data exclusively through <strong>Python</strong>, <strong>Microsoft Excel</strong>, and <strong>SQL</strong> to build clean statistical models, automated KPI dashboards, and high-clarity reporting decks.
-              </p>
-
-              <div className="space-y-3 pt-2">
-                <div className="flex items-start gap-3 text-sm text-slate-200">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
-                  <span><strong>Python Data Analysis:</strong> Data wrangling, exploratory data analysis, statistical computation, and visualization with Pandas, NumPy, Matplotlib &amp; Seaborn.</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm text-slate-200">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
-                  <span><strong>Advanced Excel Dashboards:</strong> Dynamic pivot models, multi-parameter summary tables, financial modeling, and automated executive spreadsheets.</span>
-                </div>
-                <div className="flex items-start gap-3 text-sm text-slate-200">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
-                  <span><strong>SQL Database Analytics:</strong> Complex aggregation queries, window functions, relational joins, and database reporting across PostgreSQL &amp; MySQL.</span>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+              {/* Left Icon Graphic */}
+              <div className="lg:col-span-3 flex items-center justify-center">
+                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-br from-[#082e4f] to-[#041627] border border-cyan-500/40 flex items-center justify-center text-white shadow-[0_0_40px_rgba(0,240,255,0.45)]">
+                  <DataAnalyticsIcon className="w-16 h-16 sm:w-20 sm:h-20 text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.7)]" />
                 </div>
               </div>
+
+              {/* Right Content */}
+              <div className="lg:col-span-9 space-y-4">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white">
+                  Data Analytics &amp; Custom Dashboard Creation
+                </h3>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Transform raw business numbers and database records into clear executive foresight. We analyze your data exclusively through <strong>Python</strong>, <strong>Microsoft Excel</strong>, and <strong>SQL</strong> to build clean statistical models, automated KPI dashboards, and high-clarity reporting decks.
+                </p>
+
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-start gap-3 text-sm text-slate-200">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
+                    <span><strong>Python Data Analysis:</strong> Data wrangling, exploratory data analysis, statistical computation, and visualization with Pandas, NumPy, Matplotlib &amp; Seaborn.</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-sm text-slate-200">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
+                    <span><strong>Advanced Excel Dashboards:</strong> Dynamic pivot models, multi-parameter summary tables, financial modeling, and automated executive spreadsheets.</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-sm text-slate-200">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
+                    <span><strong>SQL Database Analytics:</strong> Complex aggregation queries, window functions, relational joins, and database reporting across PostgreSQL &amp; MySQL.</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+
+          {/* Card 2: Web Scraping & Data Extraction */}
+          <motion.div
+            id="srv-webscraping"
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 shadow-2xl relative overflow-hidden scroll-mt-24"
+          >
+            {/* Luminous ambient glow */}
+            <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full blur-3xl opacity-35 bg-gradient-to-br from-amber-500/30 to-orange-400/20 pointer-events-none"></div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+              {/* Left Icon Graphic */}
+              <div className="lg:col-span-3 flex items-center justify-center">
+                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-br from-[#082e4f] to-[#041627] border border-cyan-500/40 flex items-center justify-center text-white shadow-[0_0_40px_rgba(0,240,255,0.45)]">
+                  <WebScrapingIcon className="w-16 h-16 sm:w-20 sm:h-20 text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.7)]" />
+                </div>
+              </div>
+
+              {/* Right Content */}
+              <div className="lg:col-span-9 space-y-4">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white">
+                  Web Scraping &amp; Automated Data Extraction
+                </h3>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Industrial-scale web scraping and data harvesting engines. We develop automated crawlers using <strong>Playwright</strong>, <strong>Puppeteer</strong>, and <strong>Scrapy</strong> to extract structured datasets, bypass anti-bot protections and captchas, and stream records directly into PostgreSQL, MongoDB, or executive spreadsheets.
+                </p>
+
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-start gap-3 text-sm text-slate-200">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
+                    <span><strong>Headless Browser Scraping:</strong> High-concurrency browser automation with Playwright and Puppeteer for dynamic Single-Page Applications (SPAs) and JavaScript-rendered DOMs.</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-sm text-slate-200">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
+                    <span><strong>Anti-Bot &amp; Proxy Orchestration:</strong> Cloudflare Turnstile, perimeter bypass, and rotating residential IP pools with intelligent human-interaction emulation.</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-sm text-slate-200">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
+                    <span><strong>Automated Scheduled Pipelines:</strong> Scheduled cron extraction, differential incremental scraping, and structured database synchronization via PostgreSQL, JSON feeds, or Excel.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       {/* Services FAQ Section */}
-      <FAQSection openConsultation={openConsultation} />
+      <FAQSection openConsultation={openConsultation} showCta={false} />
 
-      {/* Bottom CTA Banner */}
-      <div className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden mt-12">
+      {/* Bottom CTA Banner with Luminous Gradient */}
+      <div className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden mt-16">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/15 via-teal-500/10 to-transparent blur-3xl pointer-events-none"></div>
 
         <div className="relative z-10">
           <h2 className="text-2xl sm:text-3xl font-bold text-white">
             Not sure what technical architecture you need?
           </h2>
-          <p className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-white text-lg font-medium mt-1">
+          <p className="text-slate-300 text-base sm:text-lg font-medium mt-1">
             Book a free 30-minute discovery consultation with our senior engineers
           </p>
         </div>
 
         <button
           onClick={openConsultation}
-          className="relative z-10 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 hover:to-teal-200 text-[#031525] font-extrabold text-base transition-all duration-300 shadow-[0_0_30px_rgba(0,240,255,0.65)] hover:shadow-[0_0_45px_rgba(0,240,255,0.95)] hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
+          className="btn-primary !px-8 !py-4 !text-base flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:shadow-[0_0_45px_rgba(0,240,255,0.7)] cursor-pointer whitespace-nowrap"
         >
-          Book Consultation
+          <span>Book Consultation</span>
+          <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
         </button>
       </div>
 

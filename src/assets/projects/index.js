@@ -1,14 +1,20 @@
-import noesisHero from './noesis_hero.jpg';
-import noesisNotes from './noesis_notes.jpg';
-import noesisQuiz from './noesis_quiz.jpg';
-import noesisResult from './noesis_result.jpg';
-import watcherBrowsing from './watcher_browsing.jpg';
-import watcherAlerts from './watcher_alerts.jpg';
-import threadeyeInspection from './threadeye_inspection.jpg';
-import threadeyeMainPreview from './threadeye_main_preview.jpg';
-import getscryDashboard from './getscry_dashboard.jpg';
-import getscrySessions from './getscry_sessions.jpg';
-import getscryStorefront from './getscry_storefront.jpg';
+import noesisHero from './noesis_hero.webp';
+import noesisNotes from './noesis_notes.webp';
+import noesisQuiz from './noesis_quiz.webp';
+import noesisResult from './noesis_result.webp';
+import watcherBrowsing from './watcher_browsing.webp';
+import watcherAlerts from './watcher_alerts.webp';
+import watcherFrame1 from './TheWatcher_frame_1.webp';
+import watcherFrame2 from './TheWatcher_frame_2.webp';
+import threadeyeInspection from './threadeye_inspection.webp';
+import threadeyeMainPreview from './threadeye_main_preview.webp';
+import threadeyeSample1 from './ThreadEye_sample_1.webp';
+import threadeyeSample2 from './ThreadEye_sample_2.webp';
+import threadeyeSample3 from './ThreadEye_sample_3.webp';
+import getscryDashboard from './getscry_dashboard.webp';
+import getscrySessions from './getscry_sessions.webp';
+import getscryStorefront from './getscry_storefront.webp';
+import frontdeskPreview from './frontdesk_ai_preview.webp';
 
 export const projectImages = {
   noesisHero,
@@ -17,9 +23,16 @@ export const projectImages = {
   noesisResult,
   watcherBrowsing,
   watcherAlerts,
+  watcherFrame1,
+  watcherFrame2,
   threadeyeInspection,
   threadeyeMainPreview,
+  threadeyeSample1,
+  threadeyeSample2,
+  threadeyeSample3,
   getscryDashboard,
   getscrySessions,
-  getscryStorefront
+  getscryStorefront,
+  frontdeskPreview
 };
+

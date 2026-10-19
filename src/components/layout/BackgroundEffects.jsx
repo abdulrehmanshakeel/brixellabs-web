@@ -96,7 +96,7 @@ export const BackgroundEffects = () => {
       {/* Interactive Particle Constellation Canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-60 pointer-events-none will-change-transform" />
 
-      {/* Radial neon cyan orb top-center (Desktop only to prevent mobile GPU overdraw) */}
+      {/* Radial neon cyan orb top-center */}
       <motion.div
         animate={{
           scale: [1, 1.15, 1],

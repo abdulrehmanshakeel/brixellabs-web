@@ -9,10 +9,17 @@ class ApiClient {
 
   getAuthToken() {
     try {
-      const auth = localStorage.getItem('brixel_admin_auth');
+      const jwt = localStorage.getItem('brixel_jwt_token') || sessionStorage.getItem('brixel_jwt_token');
+      if (jwt) return jwt;
+
+      const auth = localStorage.getItem('brixel_admin_auth') || sessionStorage.getItem('brixel_admin_auth');
       if (auth) {
-        const parsed = JSON.parse(auth);
-        return parsed.token || parsed.access || null;
+        try {
+          const parsed = JSON.parse(auth);
+          if (parsed && typeof parsed === 'object') {
+            return parsed.token || parsed.access || null;
+          }
+        } catch (_) {}
       }
     } catch (e) {
       console.warn('Could not read auth token', e);
@@ -81,6 +88,26 @@ class ApiClient {
     return this.request('/auth/login/', {
       method: 'POST',
       body: { username: usernameOrEmail, password },
+    });
+  }
+
+  async verify2FA(tempToken, code) {
+    return this.request('/auth/2fa/verify/', {
+      method: 'POST',
+      body: { temp_token: tempToken, code },
+    });
+  }
+
+  async setup2FA() {
+    return this.request('/auth/2fa/setup/', {
+      method: 'POST',
+    });
+  }
+
+  async confirm2FA(code) {
+    return this.request('/auth/2fa/confirm/', {
+      method: 'POST',
+      body: { code },
     });
   }
 
@@ -221,7 +248,23 @@ class ApiClient {
       method: 'DELETE',
     });
   }
+
+  // --- Privacy & Consent Compliance APIs ---
+  async requestDataDeletion(email, reason = 'GDPR/CCPA Self-Service Request') {
+    return this.request('/privacy/data-deletion/', {
+      method: 'POST',
+      body: { email, reason },
+    });
+  }
+
+  async unsubscribeEmail(email) {
+    return this.request('/privacy/unsubscribe/', {
+      method: 'POST',
+      body: { email },
+    });
+  }
 }
 
 export const apiClient = new ApiClient();
+
 

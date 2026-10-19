@@ -1,64 +1,87 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Layers,
-  Code2,
-  Smartphone,
-  Brain,
-  MessageSquareText,
-  ScanEye,
-  Workflow,
-  BarChart3,
-  PenTool,
-  Wrench,
-  Cog,
-  Rocket
-} from 'lucide-react';
+  faLayerGroup,
+  faCode,
+  faMobileScreenButton,
+  faBrain,
+  faComments,
+  faEye,
+  faNetworkWired,
+  faChartSimple,
+  faPenRuler,
+  faWrench,
+  faGear,
+  faRocket,
+  faSpider,
+  faPlug,
+  faCubes
+} from '@fortawesome/free-solid-svg-icons';
+import { faShopify } from '@fortawesome/free-brands-svg-icons';
 
-// Clean, standard pixel-perfect icons from the iconic/feather open-source icon system
+// Consistent Font Awesome icon exports across the website (pure crisp white by default)
 export const UIUXIcon = ({ className = "w-10 h-10" }) => (
-  <Layers className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faLayerGroup} className={`text-white ${className}`} />
 );
 
 export const WebDevIcon = ({ className = "w-10 h-10" }) => (
-  <Code2 className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faCode} className={`text-white ${className}`} />
 );
 
 export const MobileDevIcon = ({ className = "w-10 h-10" }) => (
-  <Smartphone className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faMobileScreenButton} className={`text-white ${className}`} />
 );
 
 export const AIMLIcon = ({ className = "w-10 h-10" }) => (
-  <Brain className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faBrain} className={`text-white ${className}`} />
 );
 
 export const NLPIcon = ({ className = "w-10 h-10" }) => (
-  <MessageSquareText className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faComments} className={`text-white ${className}`} />
 );
 
 export const ComputerVisionIcon = ({ className = "w-10 h-10" }) => (
-  <ScanEye className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faEye} className={`text-white ${className}`} />
 );
 
 export const AgenticAIIcon = ({ className = "w-10 h-10" }) => (
-  <Workflow className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faNetworkWired} className={`text-white ${className}`} />
 );
 
 export const DataAnalyticsIcon = ({ className = "w-10 h-10" }) => (
-  <BarChart3 className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faChartSimple} className={`text-white ${className}`} />
 );
 
 export const DesignRulerPencilIcon = ({ className = "w-12 h-12" }) => (
-  <PenTool className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faPenRuler} className={`text-white ${className}`} />
 );
 
 export const BuildGearSearchIcon = ({ className = "w-12 h-12" }) => (
-  <Wrench className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faWrench} className={`text-white ${className}`} />
 );
 
 export const AutomateGearsIcon = ({ className = "w-12 h-12" }) => (
-  <Cog className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faGear} className={`text-white ${className}`} />
 );
 
 export const LaunchRocketIcon = ({ className = "w-12 h-12" }) => (
-  <Rocket className={className} strokeWidth={2} />
+  <FontAwesomeIcon icon={faRocket} className={`text-white ${className}`} />
 );
+
+export const ShopifyDevIcon = ({ className = "w-10 h-10" }) => (
+  <FontAwesomeIcon icon={faShopify} className={`text-white ${className}`} />
+);
+
+export const WebScrapingIcon = ({ className = "w-10 h-10" }) => (
+  <FontAwesomeIcon icon={faSpider} className={`text-white ${className}`} />
+);
+
+export const APIDevIcon = ({ className = "w-10 h-10" }) => (
+  <FontAwesomeIcon icon={faPlug} className={`text-white ${className}`} />
+);
+
+export const CustomSoftwareIcon = ({ className = "w-10 h-10" }) => (
+  <FontAwesomeIcon icon={faCubes} className={`text-white ${className}`} />
+);
+
+

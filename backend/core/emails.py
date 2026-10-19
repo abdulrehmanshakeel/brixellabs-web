@@ -37,10 +37,25 @@ def send_mail_universal(subject, message, recipient_list, from_email=None, html_
     default_from = getattr(settings, 'DEFAULT_FROM_EMAIL', 'brixellabs@gmail.com')
     sender = from_email or default_from
 
+def mask_recipients(recipient_list):
+    """Mask email addresses for safe logging without leaking PII."""
+    if isinstance(recipient_list, str):
+        recipient_list = [recipient_list]
+    masked = []
+    for r in recipient_list:
+        parts = str(r).split('@')
+        if len(parts) == 2:
+            name, domain = parts
+            prefix = name[:2] + '***' if len(name) > 2 else '***'
+            masked.append(f"{prefix}@{domain}")
+        else:
+            masked.append("***")
+    return ', '.join(masked)
+
     # --- Option 1: Resend HTTPS API (Recommended on Cloud) ---
     if resend_key:
         try:
-            print(f"[EMAIL-HTTP] Sending via Resend API to {recipient_list}...")
+            logger.info(f"[EMAIL-HTTP] Sending via Resend API to {mask_recipients(recipient_list)}...")
             url = "https://api.resend.com/emails"
             # In free testing without custom domain, Resend requires onboarding@resend.dev as sender
             resend_sender = "BrixelLabs <onboarding@resend.dev>" if "@gmail.com" in sender.lower() else sender
@@ -59,20 +74,18 @@ def send_mail_universal(subject, message, recipient_list, from_email=None, html_
             req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method="POST")
             with urllib.request.urlopen(req, timeout=12) as response:
                 result = json.loads(response.read().decode('utf-8'))
-                print(f"[EMAIL-HTTP SUCCESS] Resend delivered email ID: {result.get('id')}")
+                logger.info(f"[EMAIL-HTTP SUCCESS] Resend delivered email ID: {result.get('id')}")
                 return True
         except urllib.error.HTTPError as he:
             err_body = he.read().decode('utf-8')
-            print(f"[EMAIL-HTTP ERROR] Resend API Error {he.code}: {err_body}")
-            logger.error(f"Resend API Error: {err_body}")
+            logger.error(f"[EMAIL-HTTP ERROR] Resend API Error {he.code}: {err_body}")
         except Exception as e:
-            print(f"[EMAIL-HTTP ERROR] Resend Request Exception: {str(e)}")
-            logger.error(f"Resend Request Exception: {str(e)}")
+            logger.error(f"[EMAIL-HTTP ERROR] Resend Request Exception: {str(e)}")
 
     # --- Option 2: Brevo HTTPS API ---
     if brevo_key:
         try:
-            print(f"[EMAIL-HTTP] Sending via Brevo API to {recipient_list}...")
+            logger.info(f"[EMAIL-HTTP] Sending via Brevo API to {mask_recipients(recipient_list)}...")
             url = "https://api.brevo.com/v3/smtp/email"
             headers = {
                 "api-key": brevo_key.strip(),
@@ -88,15 +101,14 @@ def send_mail_universal(subject, message, recipient_list, from_email=None, html_
             }
             req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method="POST")
             with urllib.request.urlopen(req, timeout=12) as response:
-                print(f"[EMAIL-HTTP SUCCESS] Brevo delivered email successfully.")
+                logger.info("[EMAIL-HTTP SUCCESS] Brevo delivered email successfully.")
                 return True
         except Exception as e:
-            print(f"[EMAIL-HTTP ERROR] Brevo Request Exception: {str(e)}")
-            logger.error(f"Brevo Request Exception: {str(e)}")
+            logger.error(f"[EMAIL-HTTP ERROR] Brevo Request Exception: {str(e)}")
 
     # --- Option 3: Fallback to Django Standard SMTP (Only if no HTTP API configured) ---
     if not resend_key and not brevo_key:
-        print(f"[EMAIL-SMTP] Attempting SMTP delivery to {recipient_list}...")
+        logger.info(f"[EMAIL-SMTP] Attempting SMTP delivery to {mask_recipients(recipient_list)}...")
         return send_mail(
             subject=subject,
             message=message,
@@ -128,6 +140,21 @@ def _send_lead_notifications_sync(inquiry):
         submission_time_str = datetime.now(pkt_tz).strftime('%d %b %Y, %I:%M %p (GMT+5)')
 
     # =========================================================================
+    # Contextual HTML & URL Escaping for Email Templates
+    # =========================================================================
+    import html as html_lib
+    import urllib.parse
+    esc_name = html_lib.escape(str(inquiry.name or ''))
+    esc_email = html_lib.escape(str(inquiry.email or ''))
+    esc_phone = html_lib.escape(str(inquiry.phone or 'Not Provided'))
+    esc_company = html_lib.escape(str(inquiry.company or 'Not Provided'))
+    esc_service = html_lib.escape(str(inquiry.service or ''))
+    esc_budget = html_lib.escape(str(inquiry.budget or 'Undisclosed'))
+    esc_source = html_lib.escape(str(inquiry.source or 'Website'))
+    esc_brief = html_lib.escape(str(inquiry.project_brief or 'No additional brief provided.'))
+    quoted_email = urllib.parse.quote(str(inquiry.email or ''))
+
+    # =========================================================================
     # 1. ADMIN NOTIFICATION EMAIL
     # =========================================================================
     admin_subject = f"🚀 [New BrixelLabs Lead] {inquiry.name} ({inquiry.service})"
@@ -156,33 +183,33 @@ def _send_lead_notifications_sync(inquiry):
             <div class="header">
                 <div class="logo">⚡ BrixelLabs AI Platform</div>
                 <h2 style="color: #ffffff; margin: 12px 0 6px 0; font-size: 20px;">New Consultation Request Received</h2>
-                <span class="badge">{inquiry.source}</span>
+                <span class="badge">{esc_source}</span>
             </div>
             
             <table class="grid">
                 <tr>
                     <td class="label">Client Name:</td>
-                    <td class="val"><strong>{inquiry.name}</strong></td>
+                    <td class="val"><strong>{esc_name}</strong></td>
                 </tr>
                 <tr>
                     <td class="label">Email Address:</td>
-                    <td class="val"><a href="mailto:{inquiry.email}" style="color: #38bdf8; text-decoration: none;">{inquiry.email}</a></td>
+                    <td class="val"><a href="mailto:{esc_email}" style="color: #38bdf8; text-decoration: none;">{esc_email}</a></td>
                 </tr>
                 <tr>
                     <td class="label">Phone Number:</td>
-                    <td class="val">{inquiry.phone or 'Not Provided'}</td>
+                    <td class="val">{esc_phone}</td>
                 </tr>
                 <tr>
                     <td class="label">Company / Org:</td>
-                    <td class="val">{inquiry.company or 'Not Provided'}</td>
+                    <td class="val">{esc_company}</td>
                 </tr>
                 <tr>
                     <td class="label">Requested Service:</td>
-                    <td class="val" style="color: #818cf8; font-weight: 600;">{inquiry.service}</td>
+                    <td class="val" style="color: #818cf8; font-weight: 600;">{esc_service}</td>
                 </tr>
                 <tr>
                     <td class="label">Estimated Budget:</td>
-                    <td class="val" style="color: #34d399; font-weight: 600;">{inquiry.budget or 'Undisclosed'}</td>
+                    <td class="val" style="color: #34d399; font-weight: 600;">{esc_budget}</td>
                 </tr>
                 <tr>
                     <td class="label">Submission Date:</td>
@@ -192,7 +219,7 @@ def _send_lead_notifications_sync(inquiry):
 
             <div style="margin-top: 16px;">
                 <p style="font-size: 13px; font-weight: 600; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">Project Brief / Message:</p>
-                <div class="brief-box">{inquiry.project_brief or 'No additional brief provided.'}</div>
+                <div class="brief-box">{esc_brief}</div>
             </div>
 
             <div class="footer">
@@ -260,20 +287,22 @@ Project Brief:
             <div class="container">
                 <div class="logo">⚡ BRIXELLABS</div>
                 <div class="content">
-                    <p>Hi <strong>{inquiry.name}</strong>,</p>
-                    <p>Thank you for reaching out to <strong>BrixelLabs</strong>. We have received your consultation request regarding <strong>{inquiry.service}</strong>.</p>
+                    <p>Hi <strong>{esc_name}</strong>,</p>
+                    <p>Thank you for reaching out to <strong>BrixelLabs</strong>. We have received your consultation request regarding <strong>{esc_service}</strong>.</p>
                     <p>Our team of AI architects and full-stack engineers is currently reviewing your project requirements. We will connect with you via email or phone within <strong>24 business hours</strong> to discuss the next steps.</p>
                     
                     <div class="summary">
-                        <div class="summary-item"><span style="color: #94a3b8;">Requested Service:</span> <span class="highlight">{inquiry.service}</span></div>
-                        <div class="summary-item"><span style="color: #94a3b8;">Budget Scope:</span> <span class="highlight">{inquiry.budget or 'Undisclosed'}</span></div>
+                        <div class="summary-item"><span style="color: #94a3b8;">Requested Service:</span> <span class="highlight">{esc_service}</span></div>
+                        <div class="summary-item"><span style="color: #94a3b8;">Budget Scope:</span> <span class="highlight">{esc_budget}</span></div>
                     </div>
 
                     <p>If you have any urgent details to add, feel free to reply directly to this email.</p>
                     <p style="margin-top: 24px;">Best regards,<br><strong style="color: #ffffff;">The BrixelLabs Team</strong><br><span style="font-size: 13px; color: #94a3b8;">Autonomous AI Solutions & Full-Stack Engineering</span></p>
                 </div>
                 <div class="footer">
-                    &copy; 2026 BrixelLabs Inc. All rights reserved.
+                    <p style="margin: 0 0 6px 0;"><strong>BrixelLabs</strong> · Tech &amp; AI Solutions</p>
+                    <p style="margin: 0 0 6px 0;">You received this transactional confirmation because you submitted a technical consultation request on <a href="https://brixellabs.com" style="color: #38bdf8; text-decoration: none;">brixellabs.com</a>.</p>
+                    <p style="margin: 0;"><a href="https://brixellabs.com/privacy-policy" style="color: #94a3b8; text-decoration: underline;">Privacy Policy</a> · <a href="https://brixellabs.com/unsubscribe?email={quoted_email}" style="color: #94a3b8; text-decoration: underline;">Manage Preferences / Unsubscribe</a></p>
                 </div>
             </div>
         </body>
@@ -289,6 +318,9 @@ Our team of AI architects and engineers is reviewing your requirements and will 
 Best regards,
 The BrixelLabs Team
 https://brixellabs.com
+
+BrixelLabs · Tech & AI Solutions
+Unsubscribe: https://brixellabs.com/unsubscribe?email={inquiry.email}
         """
         try:
             print(f"[EMAIL] Dispatching Auto-Reply to client: {inquiry.email}...")
@@ -360,13 +392,15 @@ def _send_newsletter_emails_sync(subscriber):
                     <p>Have an upcoming AI or full-stack project? You can reach us anytime at <a href="mailto:brixellabs@gmail.com" style="color: #38bdf8;">brixellabs@gmail.com</a>.</p>
                 </div>
                 <div class="footer">
-                    &copy; 2026 BrixelLabs Inc. · Design · Build · Automate
+                    <p style="margin: 0 0 6px 0;"><strong>BrixelLabs</strong> · Tech &amp; AI Solutions</p>
+                    <p style="margin: 0 0 6px 0;">You are receiving this because you subscribed to BrixelLabs Engineering Insights.</p>
+                    <p style="margin: 0;"><a href="https://brixellabs.com/privacy-policy" style="color: #94a3b8; text-decoration: underline;">Privacy Policy</a> · <a href="https://brixellabs.com/unsubscribe?email={subscriber.email}" style="color: #38bdf8; text-decoration: underline;">Unsubscribe Instantly</a></p>
                 </div>
             </div>
         </body>
         </html>
         """
-        sub_plain = "Welcome to BrixelLabs Engineering Insights!\nThank you for subscribing to our updates on AI, Machine Learning, and Full-Stack Engineering."
+        sub_plain = f"Welcome to BrixelLabs Engineering Insights!\nThank you for subscribing to our updates on AI, Machine Learning, and Full-Stack Engineering.\n\nBrixelLabs · Tech & AI Solutions\nTo unsubscribe: https://brixellabs.com/unsubscribe?email={subscriber.email}"
         try:
             send_mail_universal(
                 subject=sub_subject,

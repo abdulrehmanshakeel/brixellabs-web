@@ -1,22 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  X, 
-  Play, 
-  Pause, 
-  Volume2, 
-  VolumeX, 
-  Maximize, 
-  Minimize, 
-  RefreshCw, 
-  Bot, 
-  Cpu, 
-  Layers, 
-  ShieldCheck, 
-  Camera, 
-  Sliders, 
-  Activity, 
-  Radio
-} from 'lucide-react';
+  faXmark, 
+  faPlay, 
+  faPause, 
+  faVolumeHigh, 
+  faVolumeXmark 
+} from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const VideoShowreelModal = ({ isOpen, onClose, defaultChannel = 0 }) => {
@@ -33,35 +23,35 @@ export const VideoShowreelModal = ({ isOpen, onClose, defaultChannel = 0 }) => {
   const channels = [
     {
       id: 'vision-ai',
-      title: '01. ThreadEye — Fabric Defect Detection',
-      badge: '4K · 60 FPS INFERENCE',
+      title: '01. ThreadEye: Fabric Defect Detection',
+      badge: '4K · REAL-TIME AI',
       videoSrc: '/assets/videos/threadeye-demo.mp4',
-      description: 'Ultra-low latency industrial fabric inspection model isolating micro-holes and warp defects under 14ms.',
-      metrics: { fps: '60 FPS', latency: '13.8ms', accuracy: '99.8%', engine: 'YOLOv8 + TensorRT' },
+      description: 'Real-time industrial camera inspection detecting fabric holes and defects instantly on factory production lines.',
+      metrics: { fps: '60 FPS', speed: 'Instant', accuracy: '99.8%', tech: 'Vision AI' },
     },
     {
       id: 'agentic-ai',
-      title: '02. Noesis — Multi-Agent Study Assistant',
-      badge: 'LANGGRAPH MULTI-AGENT',
+      title: '02. Noesis: Multi-Agent Study Assistant',
+      badge: 'SMART AI ASSISTANT',
       videoSrc: '/assets/videos/noesis-demo.mp4',
-      description: 'Self-healing workflow agents synthesizing study notes, conducting dual-engine web research, and verifying comprehension.',
-      metrics: { agents: '4 Core Nodes', engine: 'LLaMA 3.3 70B', latency: '38ms', HITL: 'Active' },
+      description: 'Intelligent multi-step AI generating personalized study summaries, researching trusted sources, and testing comprehension.',
+      metrics: { team: 'AI Helpers', engine: 'Smart LLM', speed: 'Instant', review: 'Verified' },
     },
     {
       id: 'watcher-ai',
-      title: '03. The Watcher — Child Protection & Monitoring',
-      badge: 'MOBILE ML + AGENTS',
+      title: '03. The Watcher: Child Protection & Monitoring',
+      badge: 'SAFE MOBILE APP',
       videoSrc: '/assets/videos/watcher-demo.mp4',
-      description: 'Real-time Flutter & Kotlin companion app classifying mobile activity with contextual reasoning.',
-      metrics: { response: '<0.4s', platform: 'Flutter/Kotlin', engine: 'LangGraph', accuracy: '98.5%' },
+      description: 'Real-time mobile safety app protecting children from harmful online content with zero battery drain.',
+      metrics: { speed: 'Instant', platform: 'iOS & Android', type: 'Mobile AI', accuracy: '98.5%' },
     },
     {
       id: 'getscry-analytics',
-      title: '04. GetScry — Real-Time Shopper Analytics',
+      title: '04. GetScry: Real-Time Shopper Analytics',
       badge: 'REAL-TIME DATA STREAM',
       videoSrc: '/assets/videos/getscry-demo.mp4',
-      description: 'High-throughput stream processing clustering sensor telemetry and rendering executive predictive insights.',
-      metrics: { throughput: '840k req/m', latency: '11.4ms', accuracy: '99.2%', sync: 'Instant' },
+      description: 'Real-time e-commerce analytics tracking visitor purchase intent and rendering instant sales insights.',
+      metrics: { capacity: '840k visits/m', speed: 'Real-Time', accuracy: '99.2%', sync: 'Instant' },
     },
   ];
 
@@ -183,7 +173,7 @@ export const VideoShowreelModal = ({ isOpen, onClose, defaultChannel = 0 }) => {
                 className="p-1.5 rounded-xl bg-[#082238] text-slate-300 hover:text-white hover:bg-cyan-950 border border-cyan-500/30 transition-all cursor-pointer"
                 aria-label="Close modal"
               >
-                <X className="w-5 h-5" />
+                <FontAwesomeIcon icon={faXmark} className="w-5 h-5 text-white" />
               </button>
             </div>
           </div>
@@ -238,7 +228,7 @@ export const VideoShowreelModal = ({ isOpen, onClose, defaultChannel = 0 }) => {
               aria-label={isPlaying ? "Pause Video" : "Play Video"}
             >
               <div className="w-16 h-16 rounded-full bg-cyan-400/90 text-[#031422] flex items-center justify-center shadow-[0_0_30px_#00f0ff] hover:scale-110 transition-transform">
-                {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
+                {isPlaying ? <FontAwesomeIcon icon={faPause} className="w-7 h-7" /> : <FontAwesomeIcon icon={faPlay} className="w-7 h-7 ml-1" />}
               </div>
             </button>
           </div>
@@ -287,18 +277,18 @@ export const VideoShowreelModal = ({ isOpen, onClose, defaultChannel = 0 }) => {
               <div className="flex items-center gap-3">
                 <button
                   onClick={togglePlay}
-                  className="p-2 rounded-xl bg-[#082238] hover:bg-cyan-950 text-cyan-300 border border-cyan-500/30 transition-colors cursor-pointer"
+                  className="p-2 rounded-xl bg-[#082238] hover:bg-cyan-950 text-white border border-cyan-500/30 transition-colors cursor-pointer"
                   title={isPlaying ? "Pause" : "Play"}
                 >
-                  {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                  {isPlaying ? <FontAwesomeIcon icon={faPause} className="w-4 h-4 text-white" /> : <FontAwesomeIcon icon={faPlay} className="w-4 h-4 text-white" />}
                 </button>
 
                 <button
                   onClick={toggleMute}
-                  className="p-2 rounded-xl bg-[#082238] hover:bg-cyan-950 text-cyan-300 border border-cyan-500/30 transition-colors cursor-pointer"
+                  className="p-2 rounded-xl bg-[#082238] hover:bg-cyan-950 text-white border border-cyan-500/30 transition-colors cursor-pointer"
                   title={isMuted ? "Unmute" : "Mute"}
                 >
-                  {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                  {isMuted ? <FontAwesomeIcon icon={faVolumeXmark} className="w-4 h-4 text-white" /> : <FontAwesomeIcon icon={faVolumeHigh} className="w-4 h-4 text-white" />}
                 </button>
 
                 <div>

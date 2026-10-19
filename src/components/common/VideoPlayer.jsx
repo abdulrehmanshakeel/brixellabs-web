@@ -1,10 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, RefreshCw, AlertCircle } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faPlay, 
+  faPause, 
+  faVolumeHigh, 
+  faVolumeXmark, 
+  faExpand, 
+  faCompress, 
+  faArrowsRotate, 
+  faTriangleExclamation 
+} from '@fortawesome/free-solid-svg-icons';
 
 export const VideoPlayer = ({
   src,
   poster,
-  title = "System Telemetry Stream",
+  title = "Live Demonstration",
   badge = "LIVE DEMO",
   autoPlay = true,
   loop = true,
@@ -90,7 +100,7 @@ export const VideoPlayer = ({
   return (
     <div 
       ref={containerRef}
-      className={`relative rounded-2xl overflow-hidden gradient-card border border-cyan-500/35 shadow-2xl group bg-[#020c15] select-none ${className}`}
+      className={`relative rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl group select-none ${className}`}
     >
       {/* Video Element */}
       <div className="relative aspect-video w-full flex items-center justify-center bg-black overflow-hidden">
@@ -134,14 +144,14 @@ export const VideoPlayer = ({
         {/* Buffering Spinner */}
         {isBuffering && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-10 pointer-events-none">
-            <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin" />
+            <FontAwesomeIcon icon={faArrowsRotate} className="w-8 h-8 text-white animate-spin" />
           </div>
         )}
 
         {/* Error Fallback */}
         {hasError && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#061929] text-center p-4 z-20">
-            <AlertCircle className="w-8 h-8 text-amber-400 mb-2" />
+            <FontAwesomeIcon icon={faTriangleExclamation} className="w-8 h-8 text-amber-400 mb-2" />
             <div className="text-xs font-mono text-slate-300">Video Demonstration Available via Channel Stream</div>
             <div className="text-[10px] text-slate-500 mt-1">{src}</div>
           </div>
@@ -156,7 +166,7 @@ export const VideoPlayer = ({
           aria-label={isPlaying ? "Pause video" : "Play video"}
         >
           <div className="w-14 h-14 rounded-full bg-cyan-400/90 text-[#031525] flex items-center justify-center shadow-[0_0_25px_#00f0ff] hover:scale-110 transition-transform">
-            {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-0.5" />}
+            {isPlaying ? <FontAwesomeIcon icon={faPause} className="w-6 h-6" /> : <FontAwesomeIcon icon={faPlay} className="w-6 h-6 ml-0.5" />}
           </div>
         </button>
       </div>
@@ -180,18 +190,18 @@ export const VideoPlayer = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={togglePlay}
-                className="p-1.5 rounded-lg bg-[#082238] hover:bg-cyan-950 text-cyan-300 hover:text-white border border-cyan-500/30 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg bg-[#082238] hover:bg-cyan-950 text-white border border-cyan-500/30 transition-colors cursor-pointer"
                 title={isPlaying ? "Pause" : "Play"}
               >
-                {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                {isPlaying ? <FontAwesomeIcon icon={faPause} className="w-3.5 h-3.5 text-white" /> : <FontAwesomeIcon icon={faPlay} className="w-3.5 h-3.5 text-white" />}
               </button>
 
               <button
                 onClick={toggleMute}
-                className="p-1.5 rounded-lg bg-[#082238] hover:bg-cyan-950 text-cyan-300 hover:text-white border border-cyan-500/30 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg bg-[#082238] hover:bg-cyan-950 text-white border border-cyan-500/30 transition-colors cursor-pointer"
                 title={isMuted ? "Unmute" : "Mute"}
               >
-                {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                {isMuted ? <FontAwesomeIcon icon={faVolumeXmark} className="w-3.5 h-3.5 text-white" /> : <FontAwesomeIcon icon={faVolumeHigh} className="w-3.5 h-3.5 text-white" />}
               </button>
 
               <div className="text-[11px] font-mono text-slate-400 pl-1">
@@ -202,10 +212,10 @@ export const VideoPlayer = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={toggleFullscreen}
-                className="p-1.5 rounded-lg bg-[#082238] hover:bg-cyan-950 text-cyan-300 hover:text-white border border-cyan-500/30 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg bg-[#082238] hover:bg-cyan-950 text-white border border-cyan-500/30 transition-colors cursor-pointer"
                 title="Toggle Fullscreen"
               >
-                {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+                {isFullscreen ? <FontAwesomeIcon icon={faCompress} className="w-3.5 h-3.5 text-white" /> : <FontAwesomeIcon icon={faExpand} className="w-3.5 h-3.5 text-white" />}
               </button>
             </div>
           </div>

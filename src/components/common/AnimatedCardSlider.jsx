@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Play, Pause, Clock } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 
 export const AnimatedCardSlider = ({ 
@@ -210,9 +211,9 @@ export const AnimatedCardSlider = ({
               title={isAutoPlaying ? "Pause Auto Slide" : "Start Auto Slide"}
             >
               {isAutoPlaying ? (
-                <Pause className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
+                <FontAwesomeIcon icon={faPause} className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
               ) : (
-                <Play className="w-3.5 h-3.5" />
+                <FontAwesomeIcon icon={faPlay} className="w-3.5 h-3.5" />
               )}
               <span className="hidden sm:inline">{isAutoPlaying ? "Auto Slide On" : "Auto"}</span>
             </button>
@@ -223,20 +224,20 @@ export const AnimatedCardSlider = ({
             <div className="flex items-center gap-1.5">
               <button
                 onClick={handlePrev}
-                className="p-2.5 rounded-xl bg-gradient-to-br from-[#082844] to-[#041627] hover:from-cyan-400 hover:to-teal-300 hover:text-[#031525] text-cyan-300 border border-cyan-500/40 shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:shadow-[0_0_25px_rgba(0,240,255,0.6)] transition-all cursor-pointer active:scale-90"
+                className="p-2.5 rounded-xl bg-gradient-to-br from-[#082844] to-[#041627] hover:bg-white hover:text-[#031525] text-white border border-white/20 shadow-md transition-all cursor-pointer active:scale-90"
                 aria-label="Previous Slide"
                 title="Previous Slide"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <FontAwesomeIcon icon={faChevronLeft} className="w-4 h-4" />
               </button>
 
               <button
                 onClick={handleNext}
-                className="p-2.5 rounded-xl bg-gradient-to-br from-[#082844] to-[#041627] hover:from-cyan-400 hover:to-teal-300 hover:text-[#031525] text-cyan-300 border border-cyan-500/40 shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:shadow-[0_0_25px_rgba(0,240,255,0.6)] transition-all cursor-pointer active:scale-90"
+                className="p-2.5 rounded-xl bg-gradient-to-br from-[#082844] to-[#041627] hover:bg-white hover:text-[#031525] text-white border border-white/20 shadow-md transition-all cursor-pointer active:scale-90"
                 aria-label="Next Slide"
                 title="Next Slide"
               >
-                <ChevronRight className="w-4 h-4" />
+                <FontAwesomeIcon icon={faChevronRight} className="w-4 h-4" />
               </button>
             </div>
           )}
@@ -280,22 +281,22 @@ export const AnimatedCardSlider = ({
         <div className="flex items-center justify-center gap-4 mt-6">
           <button
             onClick={handlePrev}
-            className="px-4 py-2 rounded-xl bg-[#06192a]/90 hover:bg-[#092b47] text-cyan-300 border border-cyan-500/30 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-[0_0_15px_rgba(0,240,255,0.15)]"
+            className="px-4 py-2 rounded-xl bg-[#06192a]/90 hover:bg-[#092b47] text-slate-200 border border-white/15 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
           >
-            <ChevronLeft className="w-3.5 h-3.5" />
+            <ChevronLeft className="w-3.5 h-3.5 text-white" />
             <span>Prev</span>
           </button>
 
           <span className="text-[11px] font-mono text-slate-400">
-            Card <span className="text-cyan-300 font-bold">{currentIndex + 1}</span> of <span className="text-white">{total}</span>
+            Card <span className="text-white font-bold">{currentIndex + 1}</span> of <span className="text-white">{total}</span>
           </span>
 
           <button
             onClick={handleNext}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-300 hover:from-cyan-300 hover:to-teal-200 text-[#021320] text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+            className="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-[#021320] text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.4)]"
           >
             <span>Next</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#021320]" />
           </button>
         </div>
       )}

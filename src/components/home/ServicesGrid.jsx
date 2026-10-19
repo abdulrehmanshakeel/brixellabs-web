@@ -1,88 +1,125 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  UIUXIcon, 
-  WebDevIcon, 
-  MobileDevIcon, 
-  AIMLIcon, 
-  NLPIcon, 
-  ComputerVisionIcon, 
-  AgenticAIIcon, 
-  DataAnalyticsIcon 
-} from '../../assets/icons';
-import { ArrowUpRight, Layers, CheckCircle2, Play, Eye } from 'lucide-react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { TiltCard } from '../common/TiltCard';
+  faObjectGroup, 
+  faCode, 
+  faMobileScreenButton, 
+  faBrain, 
+  faComments, 
+  faEye, 
+  faNetworkWired, 
+  faChartSimple, 
+  faArrowRight,
+  faArrowUpRightFromSquare,
+  faLayerGroup,
+  faSpider,
+  faPlug,
+  faCubes
+} from '@fortawesome/free-solid-svg-icons';
+import { faShopify } from '@fortawesome/free-brands-svg-icons';
+import { motion, useInView } from 'framer-motion';
 
 export const servicesData = [
   {
     id: 'uiux',
     title: 'UI/UX Design',
-    description: 'Human-centric UI/UX design, interactive wireframing, high-fidelity prototypes, and comprehensive multi-platform design systems.',
-    icon: UIUXIcon,
+    description: 'Figma wireframes, interactive prototypes, and design token systems.',
+    icon: faObjectGroup,
     category: 'Design & Dev',
     gradient: 'from-cyan-500/20 via-blue-500/10 to-transparent'
   },
   {
     id: 'webdev',
     title: 'Web Development',
-    description: 'Scalable frontend and backend architectures with modern React, Next.js, Django, Node microservices, and distributed DBs.',
-    icon: WebDevIcon,
+    description: 'High-speed React, Next.js, and scalable cloud microservices.',
+    icon: faCode,
     category: 'Design & Dev',
     gradient: 'from-teal-500/20 via-cyan-500/10 to-transparent'
   },
   {
+    id: 'customsoftware',
+    title: 'Custom Software & SaaS',
+    description: 'Bespoke multi-tenant software platforms engineered for 10x scale.',
+    icon: faCubes,
+    category: 'Design & Dev',
+    gradient: 'from-blue-600/20 via-cyan-500/10 to-transparent'
+  },
+  {
+    id: 'apidev',
+    title: 'API Engineering',
+    description: 'High-throughput REST/GraphQL APIs and secure database pipelines.',
+    icon: faPlug,
+    category: 'Design & Dev',
+    gradient: 'from-indigo-500/20 via-cyan-500/10 to-transparent'
+  },
+  {
     id: 'mobiledev',
     title: 'Mobile Development',
-    description: 'Native & cross-platform iOS and Android mobile solutions with React Native and Flutter built for high reliability and speed.',
-    icon: MobileDevIcon,
+    description: 'Cross-platform iOS and Android apps built with Flutter and React Native.',
+    icon: faMobileScreenButton,
     category: 'Design & Dev',
     gradient: 'from-blue-500/20 via-indigo-500/10 to-transparent'
   },
   {
+    id: 'shopifydev',
+    title: 'Shopify Store Development',
+    description: 'Custom Shopify themes, instant page speeds, and optimized checkout.',
+    icon: faShopify,
+    category: 'Design & Dev',
+    gradient: 'from-emerald-500/20 via-teal-500/10 to-transparent'
+  },
+  {
     id: 'aiml',
     title: 'AI & Machine Learning',
-    description: 'Custom machine learning models, predictive intelligence, neural classification, regression pipelines, and automated retraining.',
-    icon: AIMLIcon,
-    category: 'AI & Intelligence',
+    description: 'Custom predictive intelligence models and automated retraining pipelines.',
+    icon: faBrain,
+    category: 'AI & Automation',
     gradient: 'from-fuchsia-500/20 via-cyan-500/10 to-transparent'
   },
   {
     id: 'nlp',
-    title: 'NLP, Chatbots & RAG',
-    description: 'Enterprise Natural Language Processing (NLP), semantic search, multi-channel AI chatbots (WhatsApp, Web, Telegram), and contextual RAG pipelines.',
-    icon: NLPIcon,
-    category: 'AI & Intelligence',
+    title: 'Smart Chatbots & Assistants',
+    description: 'Bilingual WhatsApp and web conversational agents with sub-second replies.',
+    icon: faComments,
+    category: 'AI & Automation',
     gradient: 'from-indigo-500/20 via-teal-500/10 to-transparent'
   },
   {
     id: 'computervision',
-    title: 'Computer Vision',
-    description: 'Real-time object detection, automated visual inspection, industrial defect classification under 14ms, and edge video analytics.',
-    icon: ComputerVisionIcon,
-    category: 'AI & Intelligence',
+    title: 'Computer Vision & Camera AI',
+    description: 'Sub-14ms camera defect inspection and edge AI on NVIDIA Jetson.',
+    icon: faEye,
+    category: 'AI & Automation',
     gradient: 'from-cyan-500/25 via-teal-500/15 to-transparent'
   },
   {
     id: 'agenticai',
-    title: 'Agentic AI & Automation',
-    description: 'Autonomous multi-agent workflows, self-healing task queues, robotic process automation, and intelligent API connectors.',
-    icon: AgenticAIIcon,
-    category: 'AI & Intelligence',
+    title: 'AI Agents & Automations',
+    description: 'Autonomous LangGraph multi-agent swarms executing business operations.',
+    icon: faNetworkWired,
+    category: 'AI & Automation',
     gradient: 'from-teal-500/25 via-indigo-500/15 to-transparent'
   },
   {
     id: 'dataanalytics',
-    title: 'Data Analytics & Dashboard Creation',
-    description: 'Deep data analysis and interactive dashboard creation through Python, Excel, and SQL with automated KPI reporting.',
-    icon: DataAnalyticsIcon,
+    title: 'Data Analytics & Dashboards',
+    description: 'Executive KPI reporting and statistical modeling in Python, SQL, and Excel.',
+    icon: faChartSimple,
     category: 'Data',
     gradient: 'from-blue-500/25 via-cyan-500/15 to-transparent'
+  },
+  {
+    id: 'webscraping',
+    title: 'Web Scraping & Pipelines',
+    description: 'High-volume web data extraction delivered directly into your databases.',
+    icon: faSpider,
+    category: 'Data',
+    gradient: 'from-cyan-500/25 via-blue-500/15 to-transparent'
   },
 ];
 
 export const ServicesGrid = ({ navigate }) => {
   const [selectedFilter, setSelectedFilter] = useState('All');
-  const [isAutoRevealing, setIsAutoRevealing] = useState(false);
   const [revealedCount, setRevealedCount] = useState(0);
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
@@ -91,67 +128,56 @@ export const ServicesGrid = ({ navigate }) => {
 
   const filteredServices = selectedFilter === 'All'
     ? servicesData
-    : servicesData.filter(s => s.category === selectedFilter);
+    : servicesData.filter(s => {
+        if (selectedFilter === 'AI & Intelligence') {
+          return s.category === 'AI & Automation' || s.category === 'AI & Intelligence';
+        }
+        return s.category === selectedFilter;
+      });
 
-  const total = filteredServices.length;
-
-  // Progressive Sequential Slide-In Effect: triggers ONLY when user scrolls down to this section!
   useEffect(() => {
     if (!isInView) return;
-
     setRevealedCount(0);
-    setIsAutoRevealing(true);
-
     let count = 0;
     const interval = setInterval(() => {
       count++;
       setRevealedCount(count);
       if (count >= filteredServices.length) {
         clearInterval(interval);
-        setIsAutoRevealing(false);
       }
-    }, 220); // Staggered slide-in speed
-
+    }, 180);
     return () => clearInterval(interval);
   }, [isInView, selectedFilter, filteredServices.length]);
 
   return (
-    <section ref={sectionRef} className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10" id="services">
+    <section ref={sectionRef} className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10" id="services">
       
       {/* Section Header */}
-      <div className="text-center mb-10 space-y-3">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-950/80 via-[#07243c]/80 to-teal-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.2)]"
-        >
-          <Layers className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Full-Spectrum Capabilities</span>
-        </motion.div>
-
+      <div className="text-center mb-14 sm:mb-16 space-y-4">
+        {/* Big Headline in Pure Crisp White */}
         <motion.h2 
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight"
+          className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight"
         >
-          What We <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-indigo-400 drop-shadow-[0_0_30px_rgba(0,240,255,0.4)]">Engineer & Ship</span>
+          What We Engineer & Ship
         </motion.h2>
 
+        {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto"
+          className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-normal leading-relaxed"
         >
-          Watch each service slide in and stay on screen. All capabilities remain available together.
+          Enterprise engineering across artificial intelligence, scalable infrastructure, and intelligent automation.
         </motion.p>
 
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
+        {/* Filter Pills with Gradient Accent */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
           {filterCategories.map((cat) => (
             <button
               key={cat}
@@ -175,90 +201,83 @@ export const ServicesGrid = ({ navigate }) => {
         </div>
       </div>
 
-      {/* Grid of Service Cards: Each Card Slides In and Stays On Screen */}
+      {/* Grid of Service Cards: Strict 4-Column Grid Alignment */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {filteredServices.map((service, index) => {
           const isRevealed = index < revealedCount;
-          const IconComponent = service.icon;
+          const iconObj = service.icon;
 
           return (
-            <motion.div
+            <motion.a
               key={service.id}
-              initial={{ opacity: 0, x: 80, scale: 0.9 }}
-              animate={isRevealed ? { 
-                opacity: 1, 
-                x: 0, 
-                scale: 1,
-              } : { 
-                opacity: 0, 
-                x: 80, 
-                scale: 0.9 
-              }}
+              href="/services"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{
-                type: "spring",
-                stiffness: 260,
-                damping: 24,
-                mass: 0.8
+                duration: 0.4,
+                delay: index * 0.05
               }}
-              className="h-full"
-            >
-              <TiltCard
-                onClick={() => {
+              className="h-full cursor-pointer focus:outline-none block no-underline"
+              onClick={(e) => {
+                if (navigate) {
+                  e.preventDefault();
                   navigate('/services');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="h-full"
-              >
-                <div className="gradient-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between items-center text-center group cursor-pointer border border-cyan-500/25 hover:border-cyan-400/80 transition-all duration-400 relative overflow-hidden h-full shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:shadow-[0_15px_35px_rgba(0,240,255,0.25)]">
-                  
-                  {/* Animated corner gradient ambient aura */}
-                  <div className={`absolute -top-12 -right-12 w-28 h-28 rounded-full blur-2xl opacity-40 bg-gradient-to-br ${service.gradient} pointer-events-none group-hover:opacity-80 transition-opacity duration-500`}></div>
-
-                  {/* Top edge gradient highlight */}
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent group-hover:via-cyan-300"></div>
-
-                  {/* Number Badge in Top Left */}
-                  <div className="w-full flex items-center justify-between mb-4">
-                    <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30 font-bold">
-                      0{index + 1}
-                    </span>
-                    <span className="text-[10px] font-mono text-emerald-300 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                      ACTIVE
-                    </span>
-                  </div>
-
-                  {/* Glowing Icon Container with Pulse */}
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#082842] to-[#041525] border border-cyan-500/35 flex items-center justify-center text-cyan-400 group-hover:text-cyan-300 group-hover:border-cyan-400 group-hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transition-all duration-300 mb-4 relative">
-                    <div className="absolute inset-0 rounded-2xl bg-cyan-400/15 blur-sm opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <IconComponent className="w-9 h-9 transition-transform duration-300 group-hover:scale-110 relative z-10" />
-                  </div>
-
-                  {/* Service Title */}
-                  <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
-                    {service.title}
-                  </h3>
-
-                  {/* Service Description */}
-                  <p className="text-xs text-slate-400 group-hover:text-slate-300 leading-relaxed transition-colors mb-5 flex-grow">
-                    {service.description}
-                  </p>
-
-                  {/* Category pill & action */}
-                  <div className="w-full pt-3 border-t border-cyan-500/20 flex items-center justify-between text-xs">
-                    <span className="text-[10px] font-mono text-cyan-300 bg-gradient-to-r from-cyan-950/80 to-[#07243c]/80 px-2.5 py-1 rounded-lg border border-cyan-500/30">
-                      {service.category}
-                    </span>
-                    <div className="flex items-center gap-1 text-cyan-400 font-semibold text-[11px] group-hover:translate-x-1 transition-transform">
-                      <span>Details</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </div>
+                }
+              }}
+            >
+              <div className="rounded-2xl p-6 sm:p-7 flex flex-col justify-between items-start text-left group h-full border border-slate-800/80 bg-[#030e1a]/70 hover:border-slate-700/80 transition-colors">
+                
+                {/* Icon Header */}
+                <div className="w-full flex items-center justify-between mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white transition-colors">
+                    <FontAwesomeIcon icon={iconObj} className="text-lg text-white transition-transform duration-300 group-hover:scale-105" />
                   </div>
                 </div>
-              </TiltCard>
-            </motion.div>
+
+                {/* Service Title */}
+                <h3 className="font-heading text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                  {service.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-xs text-slate-400 group-hover:text-slate-300 leading-relaxed transition-colors mb-6 flex-grow">
+                  {service.description}
+                </p>
+
+                {/* Category Pill & Hint */}
+                <div className="w-full pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                  <span className="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                    {service.category}
+                  </span>
+                  <div className="flex items-center gap-1 text-slate-400 font-semibold text-[11px] group-hover:text-cyan-300 group-hover:translate-x-1 transition-all">
+                    <span>View</span>
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px]" />
+                  </div>
+                </div>
+
+              </div>
+            </motion.a>
           );
         })}
+      </div>
+
+      {/* Exactly One Button Per Section: Unified Master Style */}
+      <div className="mt-14 sm:mt-16 text-center flex justify-center">
+        <a
+          href="/services"
+          onClick={(e) => {
+            if (navigate) {
+              e.preventDefault();
+              navigate('/services');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
+          className="btn-primary inline-flex items-center gap-2.5 no-underline"
+        >
+          <span>Explore All Capabilities</span>
+          <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+        </a>
       </div>
 
     </section>

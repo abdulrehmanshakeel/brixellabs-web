@@ -35,7 +35,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+        heading: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         'neon': '0 0 20px rgba(0, 240, 255, 0.45)',
