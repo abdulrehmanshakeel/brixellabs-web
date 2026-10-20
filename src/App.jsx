@@ -77,15 +77,45 @@ export function App() {
   useEffect(() => {
     const handlePopState = () => {
       setCurrentPath(window.location.pathname || '/');
+      if (window.location.hash) {
+        const id = window.location.hash.slice(1);
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   const navigate = (path) => {
+    const [pathWithoutHash, hash] = path.split('#');
+    const purePath = (pathWithoutHash || '/').split('?')[0];
+
     window.history.pushState({}, '', path);
-    setCurrentPath(path);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setCurrentPath(purePath);
+
+    if (hash) {
+      window.dispatchEvent(new Event('hashchange'));
+
+      const scrollToElement = () => {
+        const el = document.getElementById(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          return true;
+        }
+        return false;
+      };
+
+      if (!scrollToElement()) {
+        setTimeout(scrollToElement, 100);
+        setTimeout(scrollToElement, 300);
+        setTimeout(scrollToElement, 600);
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   // Canonical URL slug mapping for legacy aliases, typos, and alternate slugs
@@ -106,8 +136,8 @@ export function App() {
     '/optout': '/unsubscribe'
   };
 
-  // Normalize path (lowercase, strip trailing slash except root, remap aliases)
-  let cleanPath = (currentPath || '/').toLowerCase();
+  // Normalize path (lowercase, strip trailing slash except root, strip hash & query, remap aliases)
+  let cleanPath = (currentPath || '/').split('?')[0].split('#')[0].toLowerCase();
   if (cleanPath.length > 1 && cleanPath.endsWith('/')) {
     cleanPath = cleanPath.slice(0, -1);
   }

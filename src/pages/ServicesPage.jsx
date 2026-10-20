@@ -21,12 +21,22 @@ import { FAQSection } from '../components/common/FAQSection';
 
 export const ServicesPage = ({ navigate, openConsultation }) => {
   useEffect(() => {
-    if (window.location.hash) {
-      const el = document.querySelector(window.location.hash);
-      if (el) {
-        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
+    const scrollToHash = () => {
+      if (window.location.hash) {
+        try {
+          const el = document.querySelector(window.location.hash);
+          if (el) {
+            setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
+          }
+        } catch (e) {
+          // ignore
+        }
       }
-    }
+    };
+
+    scrollToHash();
+    window.addEventListener('hashchange', scrollToHash);
+    return () => window.removeEventListener('hashchange', scrollToHash);
   }, []);
   const cat1 = [
     {

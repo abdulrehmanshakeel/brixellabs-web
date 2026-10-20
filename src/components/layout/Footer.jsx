@@ -43,7 +43,6 @@ export const Footer = ({ navigate }) => {
 
   const handleNav = (path) => {
     navigate(path);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const scrollToTop = () => {
