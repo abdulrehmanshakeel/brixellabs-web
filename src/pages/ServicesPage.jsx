@@ -422,30 +422,30 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
       {/* Services FAQ Section */}
       <FAQSection openConsultation={openConsultation} showCta={false} />
 
-      {/* Bottom CTA Banner with Luminous Gradient Card */}
-      <div className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden mt-16">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/15 via-teal-500/10 to-transparent blur-3xl pointer-events-none"></div>
+      {/* Open Cardless Architectural Discovery CTA */}
+      <section className="mt-20 pt-16 border-t border-slate-800/80">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 text-left">
+          <div className="space-y-2 max-w-2xl">
+            <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">
+              Technical Discovery
+            </span>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+              Not sure what technical architecture you need?
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal">
+              Book a free 30-minute discovery consultation with our senior engineers to review technical feasibility and project timelines.
+            </p>
+          </div>
 
-        <div className="relative z-10 space-y-2 max-w-2xl text-left">
-          <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">
-            Technical Discovery
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Not sure what technical architecture you need?
-          </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal">
-            Book a free 30-minute discovery consultation with our senior engineers to review technical feasibility and project timelines.
-          </p>
+          <button
+            onClick={openConsultation}
+            className="btn-primary !px-8 !py-4 !text-base flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:shadow-[0_0_45px_rgba(0,240,255,0.7)] cursor-pointer whitespace-nowrap shrink-0"
+          >
+            <span>Book Consultation</span>
+            <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+          </button>
         </div>
-
-        <button
-          onClick={openConsultation}
-          className="btn-primary !px-8 !py-4 !text-base flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:shadow-[0_0_45px_rgba(0,240,255,0.7)] cursor-pointer whitespace-nowrap shrink-0 relative z-10"
-        >
-          <span>Book Consultation</span>
-          <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
-        </button>
-      </div>
+      </section>
 
     </div>
   );
