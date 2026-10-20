@@ -81,45 +81,44 @@ export const NotFoundPage = ({ navigate }) => {
           </motion.p>
         </div>
 
-        {/* Quick Navigation Cards */}
+        {/* Open Architectural Navigation Columns (NO BOXED CARDS) */}
         <motion.div 
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto pt-4 text-left"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 max-w-5xl mx-auto pt-6 text-left"
         >
-          {quickLinks.map((item) => {
-            const Icon = item.icon;
-            return (
-              <a
-                key={item.path}
-                href={item.path}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(item.path);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="bg-slate-950/60 rounded-xl p-5 border border-slate-800/80 hover:border-cyan-500/50 hover:bg-slate-900/40 group transition-all duration-300 flex flex-col justify-between text-left cursor-pointer no-underline block"
-              >
-                <div>
-                  <div className="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-white group-hover:border-slate-700 transition-colors mb-3">
-                    <FontAwesomeIcon icon={item.icon} className="w-4 h-4 text-white" />
+          {quickLinks.map((item) => (
+            <a
+              key={item.path}
+              href={item.path}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(item.path);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="group flex flex-col justify-between text-left cursor-pointer no-underline pt-5 border-t border-slate-800/80 hover:border-cyan-400 transition-colors duration-300"
+            >
+              <div>
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-slate-900/90 border border-slate-800 flex items-center justify-center text-white group-hover:border-slate-700 transition-colors flex-shrink-0">
+                    <FontAwesomeIcon icon={item.icon} className="w-3.5 h-3.5 text-white" />
                   </div>
-                  <div className="font-bold text-white text-sm group-hover:text-cyan-300 transition-colors">
+                  <h3 className="font-bold text-white text-sm sm:text-base group-hover:text-cyan-300 transition-colors">
                     {item.title}
-                  </div>
-                  <div className="text-xs text-slate-400 mt-1 leading-relaxed">
-                    {item.desc}
-                  </div>
+                  </h3>
                 </div>
+                <p className="text-xs text-slate-400 leading-relaxed font-normal">
+                  {item.desc}
+                </p>
+              </div>
 
-                <div className="mt-4 pt-2 border-t border-slate-800/80 text-[11px] font-mono text-slate-400 group-hover:text-cyan-400 font-medium flex items-center gap-1 group-hover:translate-x-0.5 transition-all">
-                  <span>Go to page</span>
-                  <span>→</span>
-                </div>
-              </a>
-            );
-          })}
+              <div className="mt-4 pt-3 border-t border-slate-800/60 text-[11px] font-mono text-cyan-400 group-hover:text-cyan-300 font-medium flex items-center gap-1 group-hover:translate-x-1 transition-all">
+                <span>Go to page</span>
+                <span>→</span>
+              </div>
+            </a>
+          ))}
         </motion.div>
 
         {/* Primary Action Button */}

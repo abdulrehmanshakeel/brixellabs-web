@@ -247,21 +247,6 @@ const ROUTES = [
         </nav>
         <h1>Engineering Studio Built by Systems Architects</h1>
         <p>BrixelLabs is an independent engineering studio founded by experienced systems architects. We build production-ready digital products with 100% intellectual property ownership transferred to clients on day one.</p>
-        <section>
-          <h2>Technical Leadership & Founders</h2>
-          <article>
-            <h3>Shahzaib Ali — Founder & Principal Systems Architect</h3>
-            <p>BS Computer Science · 6+ Years Engineering Experience. Specializing in sub-14ms computer vision pipelines, distributed microservices, and LangGraph multi-agent architectures.</p>
-          </article>
-          <article>
-            <h3>Danyal Ehsan — Lead Machine Learning & Data Pipeline Engineer</h3>
-            <p>MS Data Science & AI. Specializing in high-throughput data extraction, Playwright/Scrapy cluster topologies, and predictive XGBoost models.</p>
-          </article>
-          <article>
-            <h3>Sufyan Latif — Senior Solutions & Frontend Architect</h3>
-            <p>Senior UI/UX & Web Performance Engineer. Specializing in Core Web Vitals optimization (<2s load times, zero CLS), React, and Flutter cross-platform mobile apps.</p>
-          </article>
-        </section>
       </main>
     `,
     breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'About', url: `${BASE_URL}/about` }]

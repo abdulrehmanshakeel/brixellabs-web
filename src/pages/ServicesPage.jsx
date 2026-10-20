@@ -314,32 +314,29 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
           </h2>
         </div>
 
-        <div className="space-y-8">
-          {/* Card 1: Data Analytics */}
+        <div className="space-y-6">
+          {/* Cardless Section 1: Data Analytics */}
           <motion.div
             id="srv-analytics"
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 shadow-2xl relative overflow-hidden scroll-mt-24"
+            className="pt-10 pb-10 border-t border-slate-800/80 scroll-mt-24 relative"
           >
-            {/* Luminous ambient glow */}
-            <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full blur-3xl opacity-35 bg-gradient-to-br from-blue-500/30 to-cyan-400/20 pointer-events-none"></div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
               {/* Left Icon Graphic */}
-              <div className="lg:col-span-3 flex items-center justify-center">
-                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-br from-[#082e4f] to-[#041627] border border-cyan-500/40 flex items-center justify-center text-white shadow-[0_0_40px_rgba(0,240,255,0.45)]">
-                  <DataAnalyticsIcon className="w-16 h-16 sm:w-20 sm:h-20 text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.7)]" />
+              <div className="lg:col-span-3 flex lg:justify-start items-center">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white shadow-lg">
+                  <DataAnalyticsIcon className="w-12 h-12 sm:w-14 sm:h-14 text-white" />
                 </div>
               </div>
 
               {/* Right Content */}
               <div className="lg:col-span-9 space-y-4">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white">
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                   Data Analytics &amp; Custom Dashboard Creation
                 </h3>
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-sm text-slate-300 leading-relaxed font-normal">
                   Transform raw business numbers and database records into clear executive foresight. We analyze your data exclusively through <strong>Python</strong>, <strong>Microsoft Excel</strong>, and <strong>SQL</strong> to build clean statistical models, automated KPI dashboards, and high-clarity reporting decks.
                 </p>
 
@@ -361,31 +358,28 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
             </div>
           </motion.div>
 
-          {/* Card 2: Web Scraping & Data Extraction */}
+          {/* Cardless Section 2: Web Scraping & Data Extraction */}
           <motion.div
             id="srv-webscraping"
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 shadow-2xl relative overflow-hidden scroll-mt-24"
+            className="pt-10 pb-6 border-t border-slate-800/80 scroll-mt-24 relative"
           >
-            {/* Luminous ambient glow */}
-            <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full blur-3xl opacity-35 bg-gradient-to-br from-amber-500/30 to-orange-400/20 pointer-events-none"></div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
               {/* Left Icon Graphic */}
-              <div className="lg:col-span-3 flex items-center justify-center">
-                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-br from-[#082e4f] to-[#041627] border border-cyan-500/40 flex items-center justify-center text-white shadow-[0_0_40px_rgba(0,240,255,0.45)]">
-                  <WebScrapingIcon className="w-16 h-16 sm:w-20 sm:h-20 text-white drop-shadow-[0_0_15px_rgba(0,240,255,0.7)]" />
+              <div className="lg:col-span-3 flex lg:justify-start items-center">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white shadow-lg">
+                  <WebScrapingIcon className="w-12 h-12 sm:w-14 sm:h-14 text-white" />
                 </div>
               </div>
 
               {/* Right Content */}
               <div className="lg:col-span-9 space-y-4">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white">
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                   Web Scraping &amp; Automated Data Extraction
                 </h3>
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-sm text-slate-300 leading-relaxed font-normal">
                   Industrial-scale web scraping and data harvesting engines. We develop automated crawlers using <strong>Playwright</strong>, <strong>Puppeteer</strong>, and <strong>Scrapy</strong> to extract structured datasets, bypass anti-bot protections and captchas, and stream records directly into PostgreSQL, MongoDB, or executive spreadsheets.
                 </p>
 
@@ -412,27 +406,30 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
       {/* Services FAQ Section */}
       <FAQSection openConsultation={openConsultation} showCta={false} />
 
-      {/* Bottom CTA Banner with Luminous Gradient */}
-      <div className="gradient-card rounded-3xl p-8 sm:p-10 border border-cyan-500/35 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden mt-16">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/15 via-teal-500/10 to-transparent blur-3xl pointer-events-none"></div>
+      {/* Open Cardless Architectural Discovery CTA */}
+      <section className="mt-20 pt-16 border-t border-slate-800/80">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 text-left">
+          <div className="space-y-2 max-w-2xl">
+            <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">
+              Technical Discovery
+            </span>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+              Not sure what technical architecture you need?
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal">
+              Book a free 30-minute discovery consultation with our senior engineers to review technical feasibility and project timelines.
+            </p>
+          </div>
 
-        <div className="relative z-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white">
-            Not sure what technical architecture you need?
-          </h2>
-          <p className="text-slate-300 text-base sm:text-lg font-medium mt-1">
-            Book a free 30-minute discovery consultation with our senior engineers
-          </p>
+          <button
+            onClick={openConsultation}
+            className="btn-primary !px-8 !py-4 !text-base flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:shadow-[0_0_45px_rgba(0,240,255,0.7)] cursor-pointer whitespace-nowrap shrink-0"
+          >
+            <span>Book Consultation</span>
+            <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+          </button>
         </div>
-
-        <button
-          onClick={openConsultation}
-          className="btn-primary !px-8 !py-4 !text-base flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:shadow-[0_0_45px_rgba(0,240,255,0.7)] cursor-pointer whitespace-nowrap"
-        >
-          <span>Book Consultation</span>
-          <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
-        </button>
-      </div>
+      </section>
 
     </div>
   );

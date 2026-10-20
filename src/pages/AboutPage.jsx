@@ -10,7 +10,6 @@ import {
   faCheck,
   faArrowUpRightFromSquare
 } from '@fortawesome/free-solid-svg-icons';
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { ScheduleConsultationSection } from '../components/common/ScheduleConsultationSection';
 import { motion } from 'framer-motion';
 
@@ -43,48 +42,6 @@ export const AboutPage = ({ navigate, openConsultation }) => {
       icon: faWrench,
       desc: 'We engineer maintainable software tailored to solve real business bottlenecks and scale gracefully through 10x traffic.',
       tag: 'CRAFTSMANSHIP'
-    }
-  ];
-
-  const teamCards = [
-    {
-      id: 'team-1',
-      name: 'Shahzaib Ali',
-      initials: 'SA',
-      role: 'Founder & Principal Systems Architect',
-      focus: 'Distributed Systems, Real-Time Edge Vision & Cloud Infra',
-      credentials: 'BS Computer Science · 6+ Yrs Engineering · PyTorch & React Specialist',
-      desc: 'Architect behind sub-14ms YOLOv8 edge vision engines and distributed FastAPI/React microservices. Specialized in high-concurrency state machines, LangGraph agent swarms, and scalable cloud architectures.',
-      tags: ['React', 'FastAPI', 'LangGraph', 'PyTorch', 'PostgreSQL', 'Docker', 'TensorRT'],
-      github: 'https://github.com/brixellabs',
-      linkedin: 'https://www.linkedin.com/company/brixellabs',
-      status: 'Founder & Technical Lead'
-    },
-    {
-      id: 'team-2',
-      name: 'Danyal Ehsan',
-      initials: 'DE',
-      role: 'Lead Data & Machine Learning Engineer',
-      focus: 'Distributed Scrapers, Predictive Modeling & Applied AI',
-      credentials: 'MS Data Science & AI · Distributed Harvester Specialist',
-      desc: 'Expert in high-throughput data extraction using Playwright/Scrapy cluster topologies, feature store design, and XGBoost/SHAP real-time conversion models operating under 35ms inference latency.',
-      tags: ['Python', 'Web Scraping', 'XGBoost', 'Playwright', 'Scrapy', 'Redis', 'SQL'],
-      github: 'https://github.com/brixellabs',
-      linkedin: 'https://www.linkedin.com/company/brixellabs',
-      status: 'Pipeline & ML Lead'
-    },
-    {
-      id: 'team-3',
-      name: 'Sufyan Latif',
-      initials: 'SL',
-      role: 'Senior Solutions & Frontend Architect',
-      focus: 'Modern Web Performance, Cross-Platform Mobile & UX Architecture',
-      credentials: 'Senior UI/UX Engineer · Core Web Vitals Specialist',
-      desc: 'Specialized in ultra-responsive React SPAs, sub-2s First Contentful Paint optimization, zero layout shift (CLS < 0.01), and cross-platform Flutter applications with offline-first state synchronization.',
-      tags: ['React', 'Next.js', 'Flutter', 'TypeScript', 'Tailwind CSS', 'Vite', 'Core Web Vitals'],
-      github: 'https://github.com/brixellabs',
-      linkedin: 'https://www.linkedin.com/company/brixellabs',
-      status: 'Solutions & Frontend Lead'
     }
   ];
 
@@ -279,99 +236,6 @@ export const AboutPage = ({ navigate, openConsultation }) => {
               <div className="pt-6 mt-8 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
                 <span className="font-mono text-[10px] text-white uppercase font-semibold">STANDARD PRACTICE</span>
                 <span>Active on Day 1</span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* 5. Technical Leadership: Open Profile Grid (NO BOXED CARDS, PURE WHITE ICONS) */}
-      <div className="mb-28">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Our Engineering Leads
-          </h2>
-          <p className="text-sm text-slate-400 mt-2 max-w-xl mx-auto">
-            Senior technical builders directly involved in project scoping, architecture, and code delivery.
-          </p>
-        </div>
-
-        {/* Open 3-Column Profile Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
-          {teamCards.map((member, index) => (
-            <motion.div
-              key={member.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="pt-8 border-t border-slate-800/80 flex flex-col justify-between group hover:border-slate-600 transition-colors"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-5">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 text-white font-mono font-bold flex items-center justify-center text-sm shadow-md">
-                    {member.initials}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {member.github && (
-                      <a 
-                        href={member.github} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        aria-label={`${member.name} GitHub profile`}
-                        className="w-8 h-8 rounded-lg bg-slate-900/80 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-600 flex items-center justify-center text-sm transition-colors"
-                      >
-                        <FontAwesomeIcon icon={faGithub} />
-                      </a>
-                    )}
-                    {member.linkedin && (
-                      <a 
-                        href={member.linkedin} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        aria-label={`${member.name} LinkedIn profile`}
-                        className="w-8 h-8 rounded-lg bg-slate-900/80 border border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-cyan-800 flex items-center justify-center text-sm transition-colors"
-                      >
-                        <FontAwesomeIcon icon={faLinkedin} />
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors">
-                    {member.name}
-                  </h3>
-                  <div className="text-xs text-cyan-400 font-semibold tracking-wide">
-                    {member.role}
-                  </div>
-                </div>
-
-                <div className="mt-2.5 mb-3 inline-block">
-                  <span className="text-[11px] font-mono text-slate-300 bg-slate-900 border border-slate-800 rounded px-2.5 py-1">
-                    {member.credentials}
-                  </span>
-                </div>
-
-                <div className="text-xs text-slate-400 font-mono mb-3">
-                  Focus: {member.focus}
-                </div>
-
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-5">
-                  {member.desc}
-                </p>
-
-                {/* Technical Stack Tags */}
-                <div className="flex flex-wrap gap-1.5 pt-4 border-t border-slate-800/60">
-                  {member.tags.map((tag) => (
-                    <span 
-                      key={tag} 
-                      className="text-[10px] font-mono text-slate-400 bg-slate-900/60 border border-slate-800 px-2 py-0.5 rounded"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </div>
             </motion.div>
           ))}

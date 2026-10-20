@@ -144,30 +144,32 @@ export const ProcessPage = ({ navigate, openConsultation }) => {
       {/* FAQ Section */}
       <FAQSection openConsultation={openConsultation} showCta={false} />
 
-      {/* Bottom CTA Banner with Luminous Gradient */}
-      <div className="gradient-card rounded-3xl p-8 sm:p-12 border border-cyan-500/35 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden mt-16 text-center md:text-left">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/15 via-teal-500/10 to-transparent blur-3xl pointer-events-none"></div>
+      {/* Open Cardless Architectural CTA Section */}
+      <section className="mt-20 pt-16 border-t border-slate-800/80">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 text-left">
+          <div className="space-y-2 max-w-xl">
+            <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">
+              Ready To Deploy?
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Start Your Project With Us
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal">
+              Have an architectural question or ready to scope your project? Our lead engineers provide immediate feasibility feedback and delivery roadmaps.
+            </p>
+          </div>
 
-        <div className="relative z-10 max-w-xl">
-
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Start Your Project With Us
-          </h2>
-          <p className="text-slate-300 text-sm sm:text-base mt-2 leading-relaxed">
-            Have an architectural question or ready to scope your project? Our lead engineers provide immediate feasibility feedback and delivery roadmaps.
-          </p>
+          <div className="flex-shrink-0">
+            <button
+              onClick={openConsultation}
+              className="btn-primary !px-8 !py-4 !text-base flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:shadow-[0_0_45px_rgba(0,240,255,0.7)]"
+            >
+              <span>Start Your Project With Us</span>
+              <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+            </button>
+          </div>
         </div>
-
-        <div className="relative z-10 flex-shrink-0">
-          <button
-            onClick={openConsultation}
-            className="btn-primary !px-8 !py-4 !text-base flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:shadow-[0_0_45px_rgba(0,240,255,0.7)]"
-          >
-            <span>Start Your Project With Us</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
-          </button>
-        </div>
-      </div>
+      </section>
 
     </div>
   );
