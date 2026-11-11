@@ -41,6 +41,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
   const cat1 = [
     {
       id: 'srv-uiux',
+      serviceUrl: '/services/ui-ux-design',
       title: 'UI/UX Design',
       desc: 'Human-centered user experience design, interactive wireframing, high-fidelity prototypes, and scalable design tokens.',
       icon: UIUXIcon,
@@ -51,6 +52,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
     },
     {
       id: 'srv-webdev',
+      serviceUrl: '/services/web-development',
       title: 'Web Development',
       desc: 'Scalable frontend and backend architectures with modern React, Next.js, Django, Node microservices, and distributed DBs.',
       icon: WebDevIcon,
@@ -61,6 +63,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
     },
     {
       id: 'srv-saas',
+      serviceUrl: '/services/custom-software',
       title: 'Custom Software & SaaS Development',
       desc: 'End-to-end bespoke software engineering and cloud-native multi-tenant SaaS platforms built for high availability, security, and scalability.',
       icon: CustomSoftwareIcon,
@@ -69,6 +72,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
     },
     {
       id: 'srv-mobiledev',
+      serviceUrl: '/services/mobile-development',
       title: 'Mobile Development',
       desc: 'Native and cross-platform mobile apps for iOS and Android built for high reliability, offline sync, and smooth animations.',
       icon: MobileDevIcon,
@@ -79,6 +83,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
     },
     {
       id: 'srv-shopify',
+      serviceUrl: '/services/shopify-development',
       title: 'Shopify Store Development',
       desc: 'Custom Shopify stores with modern designs, lightning-fast loading speeds, and smooth checkout experiences.',
       icon: ShopifyDevIcon,
@@ -87,6 +92,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
     },
     {
       id: 'srv-apidev',
+      serviceUrl: '/services/api-development',
       title: 'API Development & Integration',
       desc: 'High-performance custom REST & GraphQL APIs, secure database communication, and seamless integration into existing systems and legacy architectures.',
       icon: APIDevIcon,
@@ -98,6 +104,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
   const cat2 = [
     {
       id: 'srv-aiml',
+      serviceUrl: '/services/machine-learning',
       title: 'AI & Machine Learning',
       desc: 'Custom AI and predictive models that automate manual tasks, make accurate forecasts, and deliver actionable business insights.',
       icon: AIMLIcon,
@@ -108,6 +115,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
     },
     {
       id: 'srv-nlp',
+      serviceUrl: '/services/ai-chatbots',
       title: 'Smart Chatbots & Virtual Assistants',
       desc: 'Smart AI assistants for WhatsApp and your website that answer customer questions and handle bookings 24/7.',
       icon: NLPIcon,
@@ -118,6 +126,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
     },
     {
       id: 'srv-computervision',
+      serviceUrl: '/services/computer-vision',
       title: 'Computer Vision & Camera AI',
       desc: 'Smart camera AI that detects objects, spots production defects, and automates visual inspections in real time.',
       icon: ComputerVisionIcon,
@@ -128,6 +137,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
     },
     {
       id: 'srv-agenticai',
+      serviceUrl: '/services/ai-agents',
       title: 'AI Agents & AI Automations',
       desc: 'Autonomous multi-agent workflows, tool-calling loops, and custom AI automations engineered with LangGraph to execute complex business tasks 24/7.',
       icon: AgenticAIIcon,
@@ -199,9 +209,25 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                         <IconComp className="w-8 h-8 text-white transition-transform duration-300 group-hover:scale-110" />
                       </div>
 
-                      <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-2.5">
-                        {service.title}
-                      </h3>
+                      {navigate && service.serviceUrl ? (
+                        <a
+                          href={service.serviceUrl}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate(service.serviceUrl);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="no-underline block"
+                        >
+                          <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-2.5">
+                            {service.title}
+                          </h3>
+                        </a>
+                      ) : (
+                        <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-2.5">
+                          {service.title}
+                        </h3>
+                      )}
 
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">
                         {service.desc}
@@ -216,6 +242,21 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                         </div>
                       ))}
 
+                      {navigate && service.serviceUrl && (
+                        <a
+                          href={service.serviceUrl}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate(service.serviceUrl);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="mt-3 pt-3 border-t border-cyan-500/15 text-xs font-bold text-cyan-300 hover:text-white flex items-center justify-between transition-colors cursor-pointer group/detail no-underline"
+                        >
+                          <span>Explore Dedicated Service Page</span>
+                          <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5 text-cyan-400 group-hover/detail:translate-x-1 transition-transform" />
+                        </a>
+                      )}
+
                       {navigate && service.caseStudyLink && (
                         <a
                           href={service.caseStudyLink}
@@ -224,7 +265,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                             navigate(service.caseStudyLink);
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                           }}
-                          className="pt-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link no-underline"
+                          className="pt-1 text-xs font-mono text-cyan-400/80 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link no-underline"
                         >
                           <span>{service.caseStudyTitle}</span>
                           <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5 text-cyan-400 group-hover/link:translate-x-1 transition-transform" />
@@ -276,9 +317,25 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                         <IconComp className="w-8 h-8 text-white transition-transform duration-300 group-hover:scale-110" />
                       </div>
 
-                      <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-2.5">
-                        {service.title}
-                      </h3>
+                      {navigate && service.serviceUrl ? (
+                        <a
+                          href={service.serviceUrl}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate(service.serviceUrl);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="no-underline block"
+                        >
+                          <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-2.5">
+                            {service.title}
+                          </h3>
+                        </a>
+                      ) : (
+                        <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-2.5">
+                          {service.title}
+                        </h3>
+                      )}
 
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-5">
                         {service.desc}
@@ -293,6 +350,21 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                         </div>
                       ))}
 
+                      {navigate && service.serviceUrl && (
+                        <a
+                          href={service.serviceUrl}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate(service.serviceUrl);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="mt-3 pt-3 border-t border-cyan-500/15 text-xs font-bold text-cyan-300 hover:text-white flex items-center justify-between transition-colors cursor-pointer group/detail no-underline"
+                        >
+                          <span>Explore Dedicated Service Page</span>
+                          <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5 text-cyan-400 group-hover/detail:translate-x-1 transition-transform" />
+                        </a>
+                      )}
+
                       {navigate && service.caseStudyLink && (
                         <a
                           href={service.caseStudyLink}
@@ -301,7 +373,7 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                             navigate(service.caseStudyLink);
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                           }}
-                          className="pt-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link no-underline"
+                          className="pt-1 text-xs font-mono text-cyan-400/80 hover:text-cyan-300 flex items-center gap-1.5 transition-colors cursor-pointer group/link no-underline"
                         >
                           <span>{service.caseStudyTitle}</span>
                           <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5 text-cyan-400 group-hover/link:translate-x-1 transition-transform" />
@@ -367,6 +439,21 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                     <span><strong>SQL Database Analytics:</strong> Complex aggregation queries, window functions, relational joins, and database reporting across PostgreSQL &amp; MySQL.</span>
                   </div>
                 </div>
+
+                <div className="pt-3 border-t border-cyan-500/20">
+                  <a
+                    href="/services/data-analytics"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/services/data-analytics');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="inline-flex items-center gap-2 text-xs font-bold text-cyan-300 hover:text-white transition-colors cursor-pointer no-underline group/link"
+                  >
+                    <span>Explore Dedicated Data Analytics Service Page</span>
+                    <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5 text-cyan-400 group-hover/link:translate-x-1 transition-transform" />
+                  </a>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -412,6 +499,21 @@ export const ServicesPage = ({ navigate, openConsultation }) => {
                     <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 shadow-[0_0_8px_#00f0ff] mt-1.5 flex-shrink-0"></div>
                     <span><strong>Automated Scheduled Pipelines:</strong> Scheduled cron extraction, differential incremental scraping, and structured database synchronization via PostgreSQL, JSON feeds, or Excel.</span>
                   </div>
+                </div>
+
+                <div className="pt-3 border-t border-cyan-500/20">
+                  <a
+                    href="/services/web-scraping"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/services/web-scraping');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="inline-flex items-center gap-2 text-xs font-bold text-cyan-300 hover:text-white transition-colors cursor-pointer no-underline group/link"
+                  >
+                    <span>Explore Dedicated Web Scraping Service Page</span>
+                    <FontAwesomeIcon icon={faArrowRight} className="w-3.5 h-3.5 text-cyan-400 group-hover/link:translate-x-1 transition-transform" />
+                  </a>
                 </div>
               </div>
             </div>

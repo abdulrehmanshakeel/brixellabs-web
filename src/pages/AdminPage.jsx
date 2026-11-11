@@ -36,6 +36,23 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
+    // Strictly enforce noindex & nofollow directives for search engine crawlers
+    document.title = 'Admin Command Center | BrixelLabs Portal';
+
+    const setMetaTag = (name, content) => {
+      let tag = document.querySelector(`meta[name="${name}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.name = name;
+        document.head.appendChild(tag);
+      }
+      tag.content = content;
+    };
+
+    setMetaTag('robots', 'noindex, nofollow, noarchive, nosnippet');
+    setMetaTag('googlebot', 'noindex, nofollow, noarchive, nosnippet');
+    setMetaTag('bingbot', 'noindex, nofollow, noarchive, nosnippet');
+
     refreshData();
     window.scrollTo(0, 0);
   }, [isAuthenticated]);

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { trackPageView } from '../../utils/analytics';
+import { getServiceBySlug } from '../../data/servicesData';
 
 const BASE_URL = 'https://brixellabs.com';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
@@ -312,11 +313,8 @@ export const routeMetadata = {
     canonical: `${BASE_URL}/admin`,
     ogImage: DEFAULT_OG_IMAGE,
     ogType: 'website',
-    robots: 'noindex, nofollow',
-    breadcrumbs: [
-      { name: 'Home', url: `${BASE_URL}/` },
-      { name: 'Admin', url: `${BASE_URL}/admin` }
-    ],
+    robots: 'noindex, nofollow, noarchive, nosnippet',
+    breadcrumbs: [],
     schemaType: 'admin'
   },
   '404': {
@@ -371,7 +369,34 @@ const FAQ_ITEMS = [
 
 export const SEOHead = ({ currentPath = '/' }) => {
   useEffect(() => {
-    const meta = routeMetadata[currentPath] || routeMetadata['404'] || routeMetadata['/'];
+    let meta = routeMetadata[currentPath];
+
+    // Dynamic Service Landing Page Metadata
+    if (!meta && currentPath.startsWith('/services/')) {
+      const service = getServiceBySlug(currentPath);
+      if (service) {
+        meta = {
+          title: service.metaTitle,
+          description: service.metaDescription,
+          canonical: `${BASE_URL}/services/${service.slug}`,
+          ogImage: DEFAULT_OG_IMAGE,
+          ogType: 'website',
+          robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+          breadcrumbs: [
+            { name: 'Home', url: `${BASE_URL}/` },
+            { name: 'Services', url: `${BASE_URL}/services` },
+            { name: service.shortTitle, url: `${BASE_URL}/services/${service.slug}` }
+          ],
+          schemaType: 'service',
+          serviceData: service
+        };
+      }
+    }
+
+    if (!meta) {
+      meta = routeMetadata['404'] || routeMetadata['/'];
+    }
+
     const canonicalUrl = meta.canonical || `${BASE_URL}${currentPath === '/' ? '' : currentPath}`;
 
     // 1. Update Document Title
@@ -424,26 +449,32 @@ export const SEOHead = ({ currentPath = '/' }) => {
     setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', meta.ogImage || DEFAULT_OG_IMAGE);
     setMetaTag('meta[name="twitter:image:alt"]', 'name', 'twitter:image:alt', 'BrixelLabs: Next-Generation Tech & AI Engineering');
 
-    // 6. Dynamic Breadcrumbs JSON-LD Schema
-    const breadcrumbsSchema = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": (meta.breadcrumbs || []).map((item, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "name": item.name,
-        "item": item.url
-      }))
-    };
-
+    // 6. Dynamic Breadcrumbs JSON-LD Schema (Skipped for /admin and noindex pages)
     let breadcrumbScript = document.getElementById('dynamic-breadcrumb-schema');
-    if (!breadcrumbScript) {
-      breadcrumbScript = document.createElement('script');
-      breadcrumbScript.id = 'dynamic-breadcrumb-schema';
-      breadcrumbScript.type = 'application/ld+json';
-      document.head.appendChild(breadcrumbScript);
+    if (currentPath === '/admin' || (meta.robots && meta.robots.includes('noindex')) || !meta.breadcrumbs || meta.breadcrumbs.length === 0) {
+      if (breadcrumbScript) {
+        breadcrumbScript.remove();
+      }
+    } else {
+      const breadcrumbsSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": (meta.breadcrumbs || []).map((item, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "name": item.name,
+          "item": item.url
+        }))
+      };
+
+      if (!breadcrumbScript) {
+        breadcrumbScript = document.createElement('script');
+        breadcrumbScript.id = 'dynamic-breadcrumb-schema';
+        breadcrumbScript.type = 'application/ld+json';
+        document.head.appendChild(breadcrumbScript);
+      }
+      breadcrumbScript.textContent = JSON.stringify(breadcrumbsSchema);
     }
-    breadcrumbScript.textContent = JSON.stringify(breadcrumbsSchema);
 
     // 7. Dynamic Page-Specific Schema Markup (FAQPage, Article, AboutPage, ContactPage, etc.)
     let pageSpecificSchema = null;
@@ -461,6 +492,38 @@ export const SEOHead = ({ currentPath = '/' }) => {
             "text": faq.answer
           }
         }))
+      };
+    } else if (meta.schemaType === 'service' && meta.serviceData) {
+      // Combined Service & FAQPage Rich Schema for Dedicated Service Landing Pages
+      pageSpecificSchema = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Service",
+            "name": meta.serviceData.title,
+            "description": meta.serviceData.metaDescription,
+            "provider": {
+              "@type": "Organization",
+              "name": "BrixelLabs",
+              "url": BASE_URL,
+              "logo": `${BASE_URL}/assets/logo/logo.png`
+            },
+            "serviceType": meta.serviceData.category,
+            "areaServed": "Worldwide",
+            "url": canonicalUrl
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": (meta.serviceData.faqs || []).map((faq) => ({
+              "@type": "Question",
+              "name": faq.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.answer
+              }
+            }))
+          }
+        ]
       };
     } else if (meta.schemaType === 'article') {
       pageSpecificSchema = {
@@ -559,8 +622,10 @@ export const SEOHead = ({ currentPath = '/' }) => {
       pageSpecificScript.remove();
     }
 
-    // 8. Track Google Analytics SPA Page View
-    trackPageView(currentPath, meta.title);
+    // 8. Track Google Analytics SPA Page View (Exclude admin portal from public traffic analytics)
+    if (currentPath !== '/admin') {
+      trackPageView(currentPath, meta.title);
+    }
 
   }, [currentPath]);
 

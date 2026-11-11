@@ -36,6 +36,7 @@ const CookiePolicyPage = lazy(() => import('./pages/CookiePolicyPage').then(m =>
 const DataDeletionPage = lazy(() => import('./pages/DataDeletionPage').then(m => ({ default: m.DataDeletionPage })));
 const UnsubscribePage = lazy(() => import('./pages/UnsubscribePage').then(m => ({ default: m.UnsubscribePage })));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+const ServiceDetailPage = lazy(() => import('./pages/ServiceDetailPage').then(m => ({ default: m.ServiceDetailPage })));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 // Futuristic Lightweight Loading Fallback
@@ -133,7 +134,42 @@ export function App() {
     '/delete-my-data': '/data-deletion',
     '/gdpr-erasure': '/data-deletion',
     '/opt-out': '/unsubscribe',
-    '/optout': '/unsubscribe'
+    '/optout': '/unsubscribe',
+    '/services/shopify': '/services/shopify-development',
+    '/services/shopify-store-development': '/services/shopify-development',
+    '/services/custom-shopify-development': '/services/shopify-development',
+    '/services/chatbots': '/services/ai-chatbots',
+    '/services/ai-chatbot': '/services/ai-chatbots',
+    '/services/chatbot': '/services/ai-chatbots',
+    '/services/smart-chatbots': '/services/ai-chatbots',
+    '/services/camera-ai': '/services/computer-vision',
+    '/services/computer-vision-solutions': '/services/computer-vision',
+    '/services/vision-ai': '/services/computer-vision',
+    '/services/webdev': '/services/web-development',
+    '/services/custom-web-development': '/services/web-development',
+    '/services/agentic-ai': '/services/ai-agents',
+    '/services/ai-agent-automation': '/services/ai-agents',
+    '/services/scraping': '/services/web-scraping',
+    '/services/automated-data-extraction': '/services/web-scraping',
+    '/services/data-scraping': '/services/web-scraping',
+    '/services/mobile': '/services/mobile-development',
+    '/services/mobile-app-development': '/services/mobile-development',
+    '/services/flutter-development': '/services/mobile-development',
+    '/services/api': '/services/api-development',
+    '/services/api-engineering': '/services/api-development',
+    '/services/rest-api-development': '/services/api-development',
+    '/services/uiux': '/services/ui-ux-design',
+    '/services/ui-ux': '/services/ui-ux-design',
+    '/services/product-design': '/services/ui-ux-design',
+    '/services/saas': '/services/custom-software',
+    '/services/saas-development': '/services/custom-software',
+    '/services/custom-software-development': '/services/custom-software',
+    '/services/aiml': '/services/machine-learning',
+    '/services/ai-ml': '/services/machine-learning',
+    '/services/ai-machine-learning': '/services/machine-learning',
+    '/services/analytics': '/services/data-analytics',
+    '/services/business-intelligence': '/services/data-analytics',
+    '/services/python-data-analytics': '/services/data-analytics'
   };
 
   // Normalize path (lowercase, strip trailing slash except root, strip hash & query, remap aliases)
@@ -162,16 +198,31 @@ export function App() {
     }
   }, [currentPath]);
 
-  // If on Admin Portal route, render standalone Admin Command Center
+  // If on Admin Portal route, render standalone Admin Command Center with strict noindex directives
   if (normalizedPath === '/admin') {
     return (
-      <Suspense fallback={<PageLoader />}>
-        <AdminPage />
-      </Suspense>
+      <>
+        <SEOHead currentPath="/admin" />
+        <Suspense fallback={<PageLoader />}>
+          <AdminPage />
+        </Suspense>
+      </>
     );
   }
 
   const renderPage = () => {
+    // Dedicated Landing Pages for each core service under /services/:slug
+    if (normalizedPath.startsWith('/services/')) {
+      const serviceSlug = normalizedPath.replace('/services/', '');
+      return (
+        <ServiceDetailPage 
+          serviceSlug={serviceSlug} 
+          navigate={navigate} 
+          openConsultation={() => setIsConsultationOpen(true)} 
+        />
+      );
+    }
+
     switch (normalizedPath) {
       case '/':
         return (

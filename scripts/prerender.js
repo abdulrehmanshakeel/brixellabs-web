@@ -80,6 +80,378 @@ const ROUTES = [
     breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }]
   },
   {
+    path: '/services/shopify-development',
+    title: 'Custom Shopify Development & E-Commerce Engineering | BrixelLabs',
+    description: 'High-converting custom Shopify stores, Liquid theme engineering, headless Hydrogen commerce, sub-second load times, and custom checkout apps.',
+    canonical: `${BASE_URL}/services/shopify-development`,
+    h1: 'Custom Shopify Development & E-Commerce Engineering',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">Shopify Development</li>
+          </ol>
+        </nav>
+        <h1>Custom Shopify Development & E-Commerce Engineering</h1>
+        <p>BrixelLabs engineers high-performance, bespoke Shopify stores built from scratch with clean Liquid code, custom checkout extensions, headless Hydrogen architectures, and zero third-party app bloat.</p>
+        <section>
+          <h2>Core Shopify Capabilities</h2>
+          <ul>
+            <li>Bespoke Liquid Theme Engineering & Pixel-Perfect Responsive UI</li>
+            <li>Headless Shopify Storefronts with React, Next.js, and Hydrogen</li>
+            <li>Custom Private Shopify Apps for ERP, Warehouse & Inventory Sync</li>
+            <li>Checkout Extensibility, Custom Bundles & Shopify Functions</li>
+            <li>Core Web Vitals Optimization & Sub-Second Mobile Page Speeds</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'Shopify Development', url: `${BASE_URL}/services/shopify-development` }]
+  },
+  {
+    path: '/services/ai-chatbots',
+    title: 'AI Chatbot Development & Conversational Assistants | BrixelLabs',
+    description: 'Production-ready AI chatbots for WhatsApp, Telegram, and web. Custom LLMs, verified document RAG, sub-second replies, and seamless human agent handover.',
+    canonical: `${BASE_URL}/services/ai-chatbots`,
+    h1: 'AI Chatbot Development & Conversational Virtual Assistants',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">AI Chatbots</li>
+          </ol>
+        </nav>
+        <h1>AI Chatbot Development & Conversational Virtual Assistants</h1>
+        <p>BrixelLabs develops intelligent conversational systems anchored strictly to your business PDFs, product catalogs, and databases. Every response is grounded in truth, with automated sentiment analysis and smooth human agent escalation.</p>
+        <section>
+          <h2>Core Chatbot Capabilities</h2>
+          <ul>
+            <li>Official Meta WhatsApp Cloud API Direct Integration</li>
+            <li>Document-Grounded RAG (Retrieval-Augmented Generation) with Vector Search</li>
+            <li>CRM, Calendar & Database Synchronization (HubSpot, Salesforce, PostgreSQL)</li>
+            <li>Context-Aware Multilingual Natural Language Processing</li>
+            <li>Live Human Supervisor Console & Instant Fallback Handover</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'AI Chatbots', url: `${BASE_URL}/services/ai-chatbots` }]
+  },
+  {
+    path: '/services/computer-vision',
+    title: 'Computer Vision Solutions & Edge AI Camera Inspection | BrixelLabs',
+    description: 'Industrial computer vision systems, sub-14ms defect detection, YOLOv8/YOLOv9 object tracking, edge deployment on NVIDIA Jetson, and automated visual QA.',
+    canonical: `${BASE_URL}/services/computer-vision`,
+    h1: 'Computer Vision Solutions & Real-Time Edge AI Inspection',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">Computer Vision</li>
+          </ol>
+        </nav>
+        <h1>Computer Vision Solutions & Real-Time Edge AI Inspection</h1>
+        <p>We train proprietary neural architectures tailored specifically to your visual datasets. Models are compiled into optimized TensorRT engines and deployed directly on edge devices (NVIDIA Jetson, industrial IPCs) with sub-14ms latency.</p>
+        <section>
+          <h2>Core Vision Capabilities</h2>
+          <ul>
+            <li>Real-Time Defect Inspection & High-Speed Quality Assurance (up to 120 FPS)</li>
+            <li>Multi-Object Tracking & High-Accuracy Industrial Counting (ByteTrack)</li>
+            <li>Custom YOLOv8 / YOLOv9 Fine-Tuning & Synthetic Data Augmentation</li>
+            <li>NVIDIA TensorRT Edge Compilation (FP16/INT8 Quantization)</li>
+            <li>Basler, FLIR & Industrial GigE Vision Hardware Camera Integration</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'Computer Vision', url: `${BASE_URL}/services/computer-vision` }]
+  },
+  {
+    path: '/services/web-development',
+    title: 'Custom Web Development & Cloud SaaS Engineering | BrixelLabs',
+    description: 'Full-stack web applications, React & Next.js architectures, Django microservices, sub-200ms API response times, and scalable enterprise web platforms.',
+    canonical: `${BASE_URL}/services/web-development`,
+    h1: 'Custom Full-Stack Web Development & High-Scale Cloud SaaS',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">Web Development</li>
+          </ol>
+        </nav>
+        <h1>Custom Full-Stack Web Development & High-Scale Cloud SaaS</h1>
+        <p>BrixelLabs architects full-stack web applications using React, Next.js, Django, and PostgreSQL engineered for enterprise reliability, high conversion rates, and sub-200ms API response times.</p>
+        <section>
+          <h2>Core Web Capabilities</h2>
+          <ul>
+            <li>Custom React & Next.js Web Applications & Client Portals</li>
+            <li>High-Scale Python Django & FastAPI Microservice Backends</li>
+            <li>PostgreSQL Database Schema Modeling & Redis In-Memory Caching</li>
+            <li>Progressive Web Apps (PWAs) with Offline Caching</li>
+            <li>Enterprise Security, OAuth 2.0 & Role-Based Access Control (RBAC)</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'Web Development', url: `${BASE_URL}/services/web-development` }]
+  },
+  {
+    path: '/services/ai-agents',
+    title: 'Autonomous AI Agents & LangGraph Workflow Automation | BrixelLabs',
+    description: 'Stateful multi-agent systems, LangGraph swarms, autonomous tool-calling loops, document synthesis, and self-operating AI business automations.',
+    canonical: `${BASE_URL}/services/ai-agents`,
+    h1: 'Autonomous AI Agents & Enterprise Workflow Automations',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">AI Agents</li>
+          </ol>
+        </nav>
+        <h1>Autonomous AI Agents & Enterprise Workflow Automations</h1>
+        <p>BrixelLabs architects autonomous multi-agent systems using LangGraph and LangChain that collaborate, critique each other, call external APIs, and execute end-to-end business operations autonomously.</p>
+        <section>
+          <h2>Core AI Agent Capabilities</h2>
+          <ul>
+            <li>LangGraph State Machine Multi-Agent Orchestration</li>
+            <li>Autonomous Tool-Calling, Web Research & SQL Database Queries</li>
+            <li>Self-Correction, Automated Verification & Critique Loops</li>
+            <li>Automated Long-Form Document & Technical Synthesis</li>
+            <li>Persistent PostgreSQL State Checkpointing & Audit Logging</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'AI Agents', url: `${BASE_URL}/services/ai-agents` }]
+  },
+  {
+    path: '/services/web-scraping',
+    title: 'Enterprise Web Scraping & Automated Data Pipelines | BrixelLabs',
+    description: 'Industrial web scraping clusters, Playwright/Scrapy automation, Cloudflare Turnstile bypass, rotating proxy pools, and structured ETL database loading.',
+    canonical: `${BASE_URL}/services/web-scraping`,
+    h1: 'Enterprise Web Scraping & Automated Data Extraction Pipelines',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">Web Scraping</li>
+          </ol>
+        </nav>
+        <h1>Enterprise Web Scraping & Automated Data Extraction Pipelines</h1>
+        <p>BrixelLabs develops industrial-grade scraping infrastructure utilizing Playwright, Scrapy, and rotating residential IP pools to harvest high-volume records with 99%+ reliability and clean structured database insertion.</p>
+        <section>
+          <h2>Core Scraping Capabilities</h2>
+          <ul>
+            <li>High-Throughput Asynchronous Crawling Clusters (Scrapy, aiohttp)</li>
+            <li>Headless Browser Single-Page App (SPA) Rendering (Playwright, Puppeteer)</li>
+            <li>Cloudflare Turnstile, Perimeter Firewalls & Anti-Bot Bypass</li>
+            <li>Scheduled Incremental Cron Extraction Pipelines</li>
+            <li>Automated Data Cleansing, Normalization & PostgreSQL/BigQuery Sync</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'Web Scraping', url: `${BASE_URL}/services/web-scraping` }]
+  },
+  {
+    path: '/services/mobile-development',
+    title: 'Mobile App Development (iOS & Android) | BrixelLabs',
+    description: 'Production-grade cross-platform mobile apps built with Flutter and React Native. Smooth 60 FPS animations, native hardware access, and offline-first cloud sync.',
+    canonical: `${BASE_URL}/services/mobile-development`,
+    h1: 'Mobile App Development for iOS & Android (Flutter & React Native)',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">Mobile Development</li>
+          </ol>
+        </nav>
+        <h1>Mobile App Development for iOS & Android (Flutter & React Native)</h1>
+        <p>BrixelLabs engineers high-performance cross-platform mobile applications using Flutter and React Native that deliver 100% native look-and-feel, hardware sensor access, and seamless app store releases.</p>
+        <section>
+          <h2>Core Mobile Capabilities</h2>
+          <ul>
+            <li>Cross-Platform Flutter & React Native Single-Codebase Engineering</li>
+            <li>Native Device Hardware & Sensor Integration (Camera, BLE, GPS, NFC)</li>
+            <li>Offline-First SQLite Architecture with Automated Cloud Reconciliation</li>
+            <li>Push Notifications (FCM) & Universal Deep Linking</li>
+            <li>Apple App Store & Google Play Store Submission Management</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'Mobile Development', url: `${BASE_URL}/services/mobile-development` }]
+  },
+  {
+    path: '/services/api-development',
+    title: 'High-Throughput API Development & System Integration | BrixelLabs',
+    description: 'High-performance REST & GraphQL APIs, microservice architectures, sub-50ms endpoint latencies, rate limiting, and legacy enterprise integrations.',
+    canonical: `${BASE_URL}/services/api-development`,
+    h1: 'High-Throughput API Development & System Integration',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">API Development</li>
+          </ol>
+        </nav>
+        <h1>High-Throughput API Development & System Integration</h1>
+        <p>BrixelLabs designs and deploys high-throughput RESTful and GraphQL APIs using FastAPI, Django, and Node.js built for sub-50ms response times, automated OpenAPI documentation, and strict security.</p>
+        <section>
+          <h2>Core API Capabilities</h2>
+          <ul>
+            <li>Custom RESTful & GraphQL High-Speed API Engineering</li>
+            <li>Legacy Enterprise System Integration & Database Bridges</li>
+            <li>Real-Time WebSockets & Event Streaming Hubs</li>
+            <li>Token Bucket Rate Limiting, DDoS Defense & OWASP Security</li>
+            <li>Self-Documenting Interactive OpenAPI (Swagger) Sandbox Specs</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'API Development', url: `${BASE_URL}/services/api-development` }]
+  },
+  {
+    path: '/services/ui-ux-design',
+    title: 'UI/UX Design & Design Token Systems | BrixelLabs',
+    description: 'Human-centered UI/UX design, interactive Figma prototypes, design token systems, user research, wireframing, and conversion-optimized interfaces.',
+    canonical: `${BASE_URL}/services/ui-ux-design`,
+    h1: 'UI/UX Design, Interactive Prototypes & Scalable Design Systems',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">UI/UX Design</li>
+          </ol>
+        </nav>
+        <h1>UI/UX Design, Interactive Prototypes & Scalable Design Systems</h1>
+        <p>BrixelLabs delivers human-centered UI/UX design from discovery research and user journey mapping to interactive Figma prototypes and scalable design token systems that seamlessly translate into production code.</p>
+        <section>
+          <h2>Core UI/UX Capabilities</h2>
+          <ul>
+            <li>User Research, Customer Journey Mapping & Friction Audit</li>
+            <li>Low-Fidelity Wireframing & Information Architecture</li>
+            <li>Pixel-Perfect Clickable Figma Interactive Prototypes</li>
+            <li>Scalable Atomic Design Systems & Token Architecture (Tailwind CSS aligned)</li>
+            <li>WCAG 2.1 AA/AAA Accessibility & Multi-Device Usability Calibration</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'UI/UX Design', url: `${BASE_URL}/services/ui-ux-design` }]
+  },
+  {
+    path: '/services/custom-software',
+    title: 'Custom Software & Cloud SaaS Development | BrixelLabs',
+    description: 'End-to-end bespoke software engineering, multi-tenant SaaS architectures, distributed microservices, 99.99% uptime, and scalable cloud databases.',
+    canonical: `${BASE_URL}/services/custom-software`,
+    h1: 'Custom Software & Cloud-Native SaaS Engineering',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">Custom Software</li>
+          </ol>
+        </nav>
+        <h1>Custom Software & Cloud-Native SaaS Engineering</h1>
+        <p>BrixelLabs engineers custom, proprietary software systems and multi-tenant SaaS platforms tailored to your business rules, built for durability, security, and exponential commercial growth.</p>
+        <section>
+          <h2>Core Software Capabilities</h2>
+          <ul>
+            <li>Multi-Tenant SaaS Platform Architecture & Automated Client Provisioning</li>
+            <li>Custom Internal ERP, CRM & Operational Business Systems</li>
+            <li>High-Concurrency Cloud Microservices with Docker Containerization</li>
+            <li>Legacy Software Modernization & Zero-Downtime Migration</li>
+            <li>100% Intellectual Property Ownership & Dedicated SLA Maintenance</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'Custom Software', url: `${BASE_URL}/services/custom-software` }]
+  },
+  {
+    path: '/services/machine-learning',
+    title: 'Custom AI & Applied Machine Learning Solutions | BrixelLabs',
+    description: 'Predictive machine learning models, custom neural networks, automated retraining pipelines, XGBoost, PyTorch, and production AI deployments.',
+    canonical: `${BASE_URL}/services/machine-learning`,
+    h1: 'Custom AI & Applied Machine Learning Solutions',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">Machine Learning</li>
+          </ol>
+        </nav>
+        <h1>Custom AI & Applied Machine Learning Solutions</h1>
+        <p>BrixelLabs engineers custom machine learning models trained specifically on your company data using PyTorch, Scikit-Learn, and XGBoost to predict customer churn, automate underwriting, and forecast demand.</p>
+        <section>
+          <h2>Core ML Capabilities</h2>
+          <ul>
+            <li>Predictive Customer Churn, LTV & Behavioral Forecasting</li>
+            <li>Time-Series Demand Forecasting & Inventory Optimization (Prophet, XGBoost)</li>
+            <li>Automated Natural Language Document Parsing & Text Classification</li>
+            <li>Production Continuous MLOps Retraining Pipelines & Drift Telemetry</li>
+            <li>Private On-Premise Model Training with Zero Data Leaks</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'Machine Learning', url: `${BASE_URL}/services/machine-learning` }]
+  },
+  {
+    path: '/services/data-analytics',
+    title: 'Data Analytics & Custom Executive KPI Dashboards | BrixelLabs',
+    description: 'Transform raw database records into executive clarity. Python data science, advanced Excel models, PostgreSQL/SQL analytics, and automated dashboards.',
+    canonical: `${BASE_URL}/services/data-analytics`,
+    h1: 'Data Analytics, SQL Reporting & Executive KPI Dashboards',
+    content: `
+      <main id="main-content">
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li> /
+            <li><a href="/services">Services</a></li> /
+            <li aria-current="page">Data Analytics</li>
+          </ol>
+        </nav>
+        <h1>Data Analytics, SQL Reporting & Executive KPI Dashboards</h1>
+        <p>BrixelLabs transforms fragmented numbers into clean statistical models, automated KPI dashboards, and high-clarity reporting decks built with Python, SQL, and Microsoft Excel.</p>
+        <section>
+          <h2>Core Analytics Capabilities</h2>
+          <ul>
+            <li>Python Statistical Modeling & Automated Data Wrangling (Pandas, NumPy)</li>
+            <li>Complex SQL Query Optimization, Indexing & Materialized Views</li>
+            <li>Advanced Multi-Scenario Dynamic Excel Financial Models</li>
+            <li>Interactive Real-Time Web KPI Dashboards with Custom Filters</li>
+            <li>Automated Reconciliation Pipelines & Discrepancy Auditing</li>
+          </ul>
+        </section>
+      </main>
+    `,
+    breadcrumbs: [{ name: 'Home', url: `${BASE_URL}/` }, { name: 'Services', url: `${BASE_URL}/services` }, { name: 'Data Analytics', url: `${BASE_URL}/services/data-analytics` }]
+  },
+  {
     path: '/process',
     title: 'Our Engineering Process & 4-Stage Agile Framework | BrixelLabs',
     description: 'Discover how BrixelLabs delivers successful digital products: 4-stage agile framework from Discover & Scope to Design, Build, and Launch with 24/7 SLA.',

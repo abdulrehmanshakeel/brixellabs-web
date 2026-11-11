@@ -74,13 +74,103 @@ const SEARCH_DATABASE = [
     type: 'Action', 
     icon: faCalendarCheck 
   },
-  { 
-    title: 'Admin Command Center', 
-    desc: 'Secure management portal for inquiries, services, portfolio & settings', 
-    path: '/admin', 
-    category: 'Navigation', 
-    type: 'Admin', 
-    icon: faLock 
+
+  // Dedicated Service Landing Pages
+  {
+    title: 'Custom Shopify Development',
+    desc: 'Custom Liquid themes, headless Hydrogen stores & sub-second checkout speeds',
+    path: '/services/shopify-development',
+    category: 'Services',
+    type: 'Service',
+    icon: faCartShopping
+  },
+  {
+    title: 'AI Chatbot Development',
+    desc: 'Conversational WhatsApp & web AI bots with verified document RAG and sub-second replies',
+    path: '/services/ai-chatbots',
+    category: 'Services',
+    type: 'Service',
+    icon: faRobot
+  },
+  {
+    title: 'Computer Vision Solutions',
+    desc: 'Industrial camera defect inspection, YOLOv8 object tracking & NVIDIA Jetson edge AI',
+    path: '/services/computer-vision',
+    category: 'Services',
+    type: 'Service',
+    icon: faCamera
+  },
+  {
+    title: 'Custom Web Development',
+    desc: 'Full-stack React, Next.js, and Django microservice architectures engineered for scale',
+    path: '/services/web-development',
+    category: 'Services',
+    type: 'Service',
+    icon: faCode
+  },
+  {
+    title: 'Autonomous AI Agents',
+    desc: 'LangGraph multi-agent swarms executing complex multi-step business workflows',
+    path: '/services/ai-agents',
+    category: 'Services',
+    type: 'Service',
+    icon: faNetworkWired
+  },
+  {
+    title: 'Enterprise Web Scraping',
+    desc: 'High-throughput Playwright & Scrapy clusters with Cloudflare bypass & clean database sync',
+    path: '/services/web-scraping',
+    category: 'Services',
+    type: 'Service',
+    icon: faDatabase
+  },
+  {
+    title: 'Mobile App Development',
+    desc: 'Cross-platform iOS and Android apps with 60 FPS animations using Flutter & React Native',
+    path: '/services/mobile-development',
+    category: 'Services',
+    type: 'Service',
+    icon: faMobileScreen
+  },
+  {
+    title: 'High-Throughput API Development',
+    desc: 'FastAPI and GraphQL endpoints with sub-50ms latencies and legacy enterprise integration',
+    path: '/services/api-development',
+    category: 'Services',
+    type: 'Service',
+    icon: faCode
+  },
+  {
+    title: 'UI/UX Design & Prototypes',
+    desc: 'Human-centered Figma wireframes, interactive prototypes & design token systems',
+    path: '/services/ui-ux-design',
+    category: 'Services',
+    type: 'Service',
+    icon: faLayerGroup
+  },
+  {
+    title: 'Custom Software & SaaS',
+    desc: 'Bespoke multi-tenant SaaS platforms and enterprise operations software',
+    path: '/services/custom-software',
+    category: 'Services',
+    type: 'Service',
+    icon: faCode
+  },
+  {
+    title: 'AI & Machine Learning',
+    desc: 'Predictive intelligence models, customer churn forecasting & automated MLOps pipelines',
+    path: '/services/machine-learning',
+    category: 'Services',
+    type: 'Service',
+    icon: faBrain
+  },
+  {
+    title: 'Data Analytics & Dashboards',
+    desc: 'Python data analysis, complex SQL query optimization & executive Excel financial dashboards',
+    path: '/services/data-analytics',
+    category: 'Services',
+    type: 'Service',
+    icon: faChartLine
   },
 
   // Case Studies

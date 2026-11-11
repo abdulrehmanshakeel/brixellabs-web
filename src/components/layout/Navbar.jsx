@@ -32,7 +32,7 @@ export const Navbar = ({ currentPath, navigate, openConsultation, onOpenSearch }
 
   // Exact 5 navigation links
   const navItems = [
-    { label: 'Services', path: '/services' },
+    { label: 'Services', path: '/services', matchPrefix: true },
     { label: 'Process', path: '/process' },
     { label: 'Case Studies', path: '/case-studies', matchPrefix: true },
     { label: 'About', path: '/about' },

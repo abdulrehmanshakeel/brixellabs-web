@@ -176,47 +176,56 @@ export const Footer = ({ navigate }) => {
             <ul className="space-y-2 text-sm text-slate-400">
               <li>
                 <a 
-                  href="/services#srv-shopify" 
-                  onClick={(e) => { e.preventDefault(); handleNav('/services#srv-shopify'); }}
+                  href="/services/shopify-development" 
+                  onClick={(e) => { e.preventDefault(); handleNav('/services/shopify-development'); }}
                   className="hover:text-cyan-300 transition-colors cursor-pointer text-left text-slate-400 no-underline block"
                 >
-                  Shopify Stores
+                  Shopify Development
                 </a>
               </li>
               <li>
                 <a 
-                  href="/services#srv-webscraping" 
-                  onClick={(e) => { e.preventDefault(); handleNav('/services#srv-webscraping'); }}
+                  href="/services/ai-chatbots" 
+                  onClick={(e) => { e.preventDefault(); handleNav('/services/ai-chatbots'); }}
                   className="hover:text-cyan-300 transition-colors cursor-pointer text-left text-slate-400 no-underline block"
                 >
-                  Web Scraping
+                  AI Chatbots &amp; Assistants
                 </a>
               </li>
               <li>
                 <a 
-                  href="/services#srv-apidev" 
-                  onClick={(e) => { e.preventDefault(); handleNav('/services#srv-apidev'); }}
+                  href="/services/computer-vision" 
+                  onClick={(e) => { e.preventDefault(); handleNav('/services/computer-vision'); }}
                   className="hover:text-cyan-300 transition-colors cursor-pointer text-left text-slate-400 no-underline block"
                 >
-                  API Integrations
+                  Computer Vision AI
                 </a>
               </li>
               <li>
                 <a 
-                  href="/services#srv-aiml" 
-                  onClick={(e) => { e.preventDefault(); handleNav('/services#srv-aiml'); }}
+                  href="/services/web-development" 
+                  onClick={(e) => { e.preventDefault(); handleNav('/services/web-development'); }}
                   className="hover:text-cyan-300 transition-colors cursor-pointer text-left text-slate-400 no-underline block"
                 >
-                  AI &amp; Machine Learning
+                  Web &amp; SaaS Engineering
                 </a>
               </li>
               <li>
                 <a 
-                  href="/services#srv-computervision" 
-                  onClick={(e) => { e.preventDefault(); handleNav('/services#srv-computervision'); }}
+                  href="/services/ai-agents" 
+                  onClick={(e) => { e.preventDefault(); handleNav('/services/ai-agents'); }}
                   className="hover:text-cyan-300 transition-colors cursor-pointer text-left text-slate-400 no-underline block"
                 >
-                  Computer Vision
+                  AI Agents &amp; Automations
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="/services/web-scraping" 
+                  onClick={(e) => { e.preventDefault(); handleNav('/services/web-scraping'); }}
+                  className="hover:text-cyan-300 transition-colors cursor-pointer text-left text-slate-400 no-underline block"
+                >
+                  Web Scraping Pipelines
                 </a>
               </li>
             </ul>
@@ -486,6 +495,7 @@ export const Footer = ({ navigate }) => {
             <span className="text-slate-600">·</span>
             <a 
               href="/admin"
+              rel="nofollow noindex"
               onClick={(e) => { e.preventDefault(); handleNav('/admin'); }}
               className="text-slate-400 hover:text-cyan-300 transition-colors cursor-pointer no-underline font-medium inline-flex items-center gap-1.5"
               title="BrixelLabs Admin Command Center"

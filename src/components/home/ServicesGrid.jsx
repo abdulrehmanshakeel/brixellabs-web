@@ -22,6 +22,7 @@ import { motion, useInView } from 'framer-motion';
 export const servicesData = [
   {
     id: 'uiux',
+    path: '/services/ui-ux-design',
     title: 'UI/UX Design',
     description: 'Figma wireframes, interactive prototypes, and design token systems.',
     icon: faObjectGroup,
@@ -30,6 +31,7 @@ export const servicesData = [
   },
   {
     id: 'webdev',
+    path: '/services/web-development',
     title: 'Web Development',
     description: 'High-speed React, Next.js, and scalable cloud microservices.',
     icon: faCode,
@@ -38,6 +40,7 @@ export const servicesData = [
   },
   {
     id: 'customsoftware',
+    path: '/services/custom-software',
     title: 'Custom Software & SaaS',
     description: 'Bespoke multi-tenant software platforms engineered for 10x scale.',
     icon: faCubes,
@@ -46,6 +49,7 @@ export const servicesData = [
   },
   {
     id: 'apidev',
+    path: '/services/api-development',
     title: 'API Engineering',
     description: 'High-throughput REST/GraphQL APIs and secure database pipelines.',
     icon: faPlug,
@@ -54,6 +58,7 @@ export const servicesData = [
   },
   {
     id: 'mobiledev',
+    path: '/services/mobile-development',
     title: 'Mobile Development',
     description: 'Cross-platform iOS and Android apps built with Flutter and React Native.',
     icon: faMobileScreenButton,
@@ -62,6 +67,7 @@ export const servicesData = [
   },
   {
     id: 'shopifydev',
+    path: '/services/shopify-development',
     title: 'Shopify Store Development',
     description: 'Custom Shopify themes, instant page speeds, and optimized checkout.',
     icon: faShopify,
@@ -70,6 +76,7 @@ export const servicesData = [
   },
   {
     id: 'aiml',
+    path: '/services/machine-learning',
     title: 'AI & Machine Learning',
     description: 'Custom predictive intelligence models and automated retraining pipelines.',
     icon: faBrain,
@@ -78,6 +85,7 @@ export const servicesData = [
   },
   {
     id: 'nlp',
+    path: '/services/ai-chatbots',
     title: 'Smart Chatbots & Assistants',
     description: 'Bilingual WhatsApp and web conversational agents with sub-second replies.',
     icon: faComments,
@@ -86,6 +94,7 @@ export const servicesData = [
   },
   {
     id: 'computervision',
+    path: '/services/computer-vision',
     title: 'Computer Vision & Camera AI',
     description: 'Sub-14ms camera defect inspection and edge AI on NVIDIA Jetson.',
     icon: faEye,
@@ -94,6 +103,7 @@ export const servicesData = [
   },
   {
     id: 'agenticai',
+    path: '/services/ai-agents',
     title: 'AI Agents & Automations',
     description: 'Autonomous LangGraph multi-agent swarms executing business operations.',
     icon: faNetworkWired,
@@ -102,6 +112,7 @@ export const servicesData = [
   },
   {
     id: 'dataanalytics',
+    path: '/services/data-analytics',
     title: 'Data Analytics & Dashboards',
     description: 'Executive KPI reporting and statistical modeling in Python, SQL, and Excel.',
     icon: faChartSimple,
@@ -110,6 +121,7 @@ export const servicesData = [
   },
   {
     id: 'webscraping',
+    path: '/services/web-scraping',
     title: 'Web Scraping & Pipelines',
     description: 'High-volume web data extraction delivered directly into your databases.',
     icon: faSpider,
@@ -210,7 +222,7 @@ export const ServicesGrid = ({ navigate }) => {
           return (
             <motion.a
               key={service.id}
-              href="/services"
+              href={service.path || "/services"}
               initial={{ opacity: 0, y: 30 }}
               animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{
@@ -221,7 +233,7 @@ export const ServicesGrid = ({ navigate }) => {
               onClick={(e) => {
                 if (navigate) {
                   e.preventDefault();
-                  navigate('/services');
+                  navigate(service.path || '/services');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
               }}

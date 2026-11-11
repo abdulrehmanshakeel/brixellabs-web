@@ -9,17 +9,18 @@ For full detailed technical documentation and system architecture specifications
 
 ## Core Capabilities & Services
 
-- [UI/UX Design](https://brixellabs.com/services): User research, interactive wireframing, high-fidelity Figma prototypes, and design token systems.
-- [Web Development](https://brixellabs.com/services): Scalable React, Next.js, Django, Node.js microservices, distributed PostgreSQL databases, and Redis caching.
-- [Custom Software & SaaS Development](https://brixellabs.com/services): Bespoke custom software engineering, multi-tenant cloud SaaS architectures, and enterprise business tools.
-- [API Development & Integration](https://brixellabs.com/services): High-throughput REST & GraphQL APIs, secure database connectors, and seamless integration into existing legacy or modern systems.
-- [Shopify Store Development](https://brixellabs.com/services): Custom Shopify themes, high-converting checkout flows, and e-commerce integrations.
-- [Mobile Development](https://brixellabs.com/services): High-performance native and cross-platform mobile apps using Flutter and React Native.
-- [AI & Machine Learning](https://brixellabs.com/services): Custom deep neural networks, predictive intelligence, neural classification, and automated model retraining pipelines.
-- [NLP, Chatbots & RAG](https://brixellabs.com/services): Multi-channel conversational AI bots (WhatsApp, Telegram, Web), contextual RAG pipelines, semantic search, and LLM fine-tuning.
-- [Computer Vision](https://brixellabs.com/services): Real-time defect detection under 14ms inference speed, YOLOv8/YOLOv9 segmentation, OpenCV streams, and NVIDIA Jetson edge AI.
-- [AI Agents & AI Automations](https://brixellabs.com/services): Stateful LangGraph multi-agent workflows, autonomous tool-calling loops, custom CRM/ERP connectors, self-operating task queues, and intelligent business process automations.
-- [Data Analytics & Dashboards](https://brixellabs.com/services): Advanced statistical modeling and executive BI dashboards built through Python (Pandas/NumPy), SQL, and Microsoft Excel.
+- [Custom Shopify Development](https://brixellabs.com/services/shopify-development): High-converting custom Shopify stores, Liquid theme engineering, headless Hydrogen commerce, sub-second load times, and custom checkout apps.
+- [AI Chatbot Development](https://brixellabs.com/services/ai-chatbots): Production-ready AI chatbots for WhatsApp, Telegram, and web with verified document RAG, sub-second replies, and human agent handover.
+- [Computer Vision Solutions](https://brixellabs.com/services/computer-vision): Industrial computer vision systems, sub-14ms defect detection, YOLOv8/YOLOv9 object tracking, edge deployment on NVIDIA Jetson, and automated visual QA.
+- [Web Development](https://brixellabs.com/services/web-development): Scalable React, Next.js, Django, Node.js microservices, distributed PostgreSQL databases, and Redis caching.
+- [Autonomous AI Agents](https://brixellabs.com/services/ai-agents): Stateful LangGraph multi-agent workflows, autonomous tool-calling loops, custom CRM/ERP connectors, self-operating task queues, and intelligent business process automations.
+- [Enterprise Web Scraping](https://brixellabs.com/services/web-scraping): Industrial web scraping clusters, Playwright/Scrapy automation, Cloudflare Turnstile bypass, rotating proxy pools, and structured ETL database loading.
+- [Mobile App Development](https://brixellabs.com/services/mobile-development): High-performance native and cross-platform mobile apps using Flutter and React Native with 60 FPS animations.
+- [API Development & Integration](https://brixellabs.com/services/api-development): High-throughput REST & GraphQL APIs, secure database connectors, and seamless integration into existing legacy or modern systems.
+- [UI/UX Design & Prototypes](https://brixellabs.com/services/ui-ux-design): User research, interactive wireframing, high-fidelity Figma prototypes, and design token systems.
+- [Custom Software & SaaS Development](https://brixellabs.com/services/custom-software): Bespoke custom software engineering, multi-tenant cloud SaaS architectures, and enterprise business tools.
+- [AI & Machine Learning](https://brixellabs.com/services/machine-learning): Custom deep neural networks, predictive intelligence, neural classification, and automated model retraining pipelines.
+- [Data Analytics & Dashboards](https://brixellabs.com/services/data-analytics): Advanced statistical modeling and executive BI dashboards built through Python (Pandas/NumPy), SQL, and Microsoft Excel.
 
 ## Verified Production Case Studies
 

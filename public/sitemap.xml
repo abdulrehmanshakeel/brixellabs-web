@@ -19,6 +19,102 @@
     <priority>0.9</priority>
   </url>
 
+  <!-- Dedicated Service: Custom Shopify Development -->
+  <url>
+    <loc>https://brixellabs.com/services/shopify-development</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: AI Chatbot Development -->
+  <url>
+    <loc>https://brixellabs.com/services/ai-chatbots</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: Computer Vision Solutions -->
+  <url>
+    <loc>https://brixellabs.com/services/computer-vision</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: Custom Web Development -->
+  <url>
+    <loc>https://brixellabs.com/services/web-development</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: Autonomous AI Agents -->
+  <url>
+    <loc>https://brixellabs.com/services/ai-agents</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: Enterprise Web Scraping -->
+  <url>
+    <loc>https://brixellabs.com/services/web-scraping</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: Mobile App Development -->
+  <url>
+    <loc>https://brixellabs.com/services/mobile-development</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: API Development & Integration -->
+  <url>
+    <loc>https://brixellabs.com/services/api-development</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: UI/UX Design & Prototypes -->
+  <url>
+    <loc>https://brixellabs.com/services/ui-ux-design</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: Custom Software & SaaS Development -->
+  <url>
+    <loc>https://brixellabs.com/services/custom-software</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: AI & Machine Learning Solutions -->
+  <url>
+    <loc>https://brixellabs.com/services/machine-learning</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Dedicated Service: Data Analytics & Dashboards -->
+  <url>
+    <loc>https://brixellabs.com/services/data-analytics</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
   <!-- Engineering Process Page -->
   <url>
     <loc>https://brixellabs.com/process</loc>
