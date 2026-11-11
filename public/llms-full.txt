@@ -35,6 +35,56 @@
 - Machine Learning Models: XGBoost, LightGBM, Random Forest, SHAP (SHapley Additive exPlanations) for explainability
 - Visualization: Chart.js, Recharts, Matplotlib, Seaborn
 
+## Dedicated Service Landing Pages & Capabilities
+
+1. Custom Shopify Development & E-Commerce Engineering
+- URL: https://brixellabs.com/services/shopify-development
+- Focus: Custom Liquid themes, headless Hydrogen stores, custom Shopify checkout extensions, sub-second speeds.
+
+2. AI Chatbot Development & Conversational Assistants
+- URL: https://brixellabs.com/services/ai-chatbots
+- Focus: WhatsApp Business API bots, verified document RAG, sub-second response times, human supervisor failover.
+
+3. Computer Vision Solutions & Real-Time Edge AI
+- URL: https://brixellabs.com/services/computer-vision
+- Focus: Industrial camera defect detection under 14ms latency, YOLOv8/YOLOv9 segmentation, NVIDIA Jetson edge inference.
+
+4. Full-Stack Web Development & High-Scale SaaS
+- URL: https://brixellabs.com/services/web-development
+- Focus: Scalable React & Next.js web applications, Django REST/FastAPI microservices, sub-200ms API latency.
+
+5. Autonomous AI Agents & LangGraph Automations
+- URL: https://brixellabs.com/services/ai-agents
+- Focus: Stateful multi-agent swarms, self-correcting tool-calling loops, automated document synthesis.
+
+6. Enterprise Web Scraping & Data Extraction
+- URL: https://brixellabs.com/services/web-scraping
+- Focus: Distributed Playwright/Scrapy crawlers, Cloudflare Turnstile bypass, rotating proxy pools, automated ETL database sync.
+
+7. Mobile App Development (iOS & Android)
+- URL: https://brixellabs.com/services/mobile-development
+- Focus: Cross-platform Flutter & React Native mobile apps with 60 FPS animations, native device sensors, offline-first sync.
+
+8. High-Throughput API Development & Integration
+- URL: https://brixellabs.com/services/api-development
+- Focus: FastAPI and GraphQL microservices, sub-50ms endpoint latencies, legacy enterprise database integration.
+
+9. UI/UX Design, Figma Prototypes & Design Systems
+- URL: https://brixellabs.com/services/ui-ux-design
+- Focus: Human-centered user research, interactive Figma prototypes, WCAG 2.1 accessibility, design token systems.
+
+10. Custom Software & SaaS Platform Engineering
+- URL: https://brixellabs.com/services/custom-software
+- Focus: Multi-tenant cloud SaaS architectures, bespoke business ERPs, 99.99% uptime, 100% intellectual property ownership.
+
+11. Custom AI & Applied Machine Learning
+- URL: https://brixellabs.com/services/machine-learning
+- Focus: Predictive intelligence models, PyTorch, customer churn forecasting, continuous MLOps retraining pipelines.
+
+12. Data Analytics & Executive Dashboards
+- URL: https://brixellabs.com/services/data-analytics
+- Focus: Python data analysis, complex SQL query tuning, executive Excel financial models, interactive web KPI dashboards.
+
 ## Deep Dive into Verified Deployments
 
 ### A. Noesis: Autonomous AI Study Assistant
